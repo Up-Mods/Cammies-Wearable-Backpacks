@@ -5,7 +5,7 @@
 	"compatibilityLevel": "JAVA_8",
 	"mixins": [
 		"ItemEntityMixin",
-		"PlayerScreenHandlerMixin"
+		"ArmourSlotMixin"
 	],
 	"client": [
 		"ClientPlayerInteractionManagerMixin",
