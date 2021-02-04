@@ -1,0 +1,36 @@
+{
+	"schemaVersion": 1,
+	"id": "camsbackpacks",
+	"version": "${version}",
+	"name": "Cammie's Wearable Backpacks",
+	"description": "Just a backpack that lets you carry more items with you. Requires an empty chest slot though.",
+	"authors": [
+		"Cammie"
+	],
+	"contact": {
+		"homepage": "",
+		"sources": ""
+	},
+	"license": "MIT",
+	"icon": "assets/camsbackpacks/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"dev.cammiescorner.camsbackpacks.CamsBackpacks"
+		],
+		"client": [
+			"dev.cammiescorner.camsbackpacks.client.CamsBackpacksClient"
+		]
+	},
+	"mixins": [
+		"camsbackpacks.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.7.4",
+		"fabric": "*",
+		"minecraft": "1.16.5"
+	},
+	"suggests": {
+		"flamingo": "*"
+	}
+}

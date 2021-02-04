@@ -1,0 +1,18 @@
+{
+	"required": true,
+	"minVersion": "0.8",
+	"package": "dev.cammiescorner.camsbackpacks.core.mixin",
+	"compatibilityLevel": "JAVA_8",
+	"mixins": [
+		"ItemEntityMixin",
+		"PlayerScreenHandlerMixin"
+	],
+	"client": [
+		"ClientPlayerInteractionManagerMixin",
+		"DyeColourAccessor",
+		"PlayerEntityRendererMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

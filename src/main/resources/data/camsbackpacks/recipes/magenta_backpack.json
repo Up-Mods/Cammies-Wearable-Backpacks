@@ -1,0 +1,25 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"ILI",
+		"LCL",
+		"WWW"
+	],
+	"key": {
+		"C": {
+			"item": "minecraft:chest"
+		},
+		"I": {
+			"item": "minecraft:iron_ingot"
+		},
+		"L": {
+			"item": "minecraft:leather"
+		},
+		"W": {
+			"item": "minecraft:magenta_wool"
+		}
+	},
+	"result": {
+		"item": "camsbackpacks:magenta_backpack"
+	}
+}

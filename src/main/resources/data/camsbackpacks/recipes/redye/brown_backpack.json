@@ -1,0 +1,14 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"tag": "camsbackpacks:backpacks"
+		},
+		{
+			"tag": "c:brown_dyes"
+		}
+	],
+	"result": {
+		"item": "camsbackpacks:brown_backpack"
+	}
+}
