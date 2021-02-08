@@ -1,6 +1,5 @@
 package dev.cammiescorner.camsbackpacks.common.blocks.entities;
 
-import dev.cammiescorner.camsbackpacks.common.screen.BackpackScreenHandler;
 import dev.cammiescorner.camsbackpacks.core.registry.ModBlockEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -11,6 +10,7 @@ import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.screen.GenericContainerScreenHandler;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
@@ -106,6 +106,6 @@ public class BackpackBlockEntity extends BlockEntity implements Inventory, Named
 	@Override
 	public @Nullable ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player)
 	{
-		return new BackpackScreenHandler(syncId, inv, this);
+		return GenericContainerScreenHandler.createGeneric9x3(syncId, inv, this);
 	}
 }
