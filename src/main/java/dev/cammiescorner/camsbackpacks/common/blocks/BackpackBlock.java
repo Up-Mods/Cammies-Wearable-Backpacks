@@ -6,6 +6,8 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemPlacementContext;
@@ -16,6 +18,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.*;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -24,9 +27,10 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
-public class BackpackBlock extends BlockWithEntity
+public class BackpackBlock extends BlockWithEntity implements Waterloggable
 {
 	private DyeColor colour;
 	public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
@@ -113,9 +117,9 @@ public class BackpackBlock extends BlockWithEntity
 	}
 
 	@Override
-	protected void appendProperties(StateManager.Builder<Block, BlockState> builder)
+	public FluidState getFluidState(BlockState state)
 	{
-		builder.add(FACING);
+		return state.get(Properties.WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
 	}
 
 	@Override
@@ -140,7 +144,7 @@ public class BackpackBlock extends BlockWithEntity
 	@Override
 	public BlockState getPlacementState(ItemPlacementContext ctx)
 	{
-		return getDefaultState().with(FACING, ctx.getPlayerFacing());
+		return super.getPlacementState(ctx).with(FACING, ctx.getPlayerFacing()).with(Properties.WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
 	}
 
 	@Override
@@ -165,6 +169,21 @@ public class BackpackBlock extends BlockWithEntity
 	public @Nullable BlockEntity createBlockEntity(BlockView world)
 	{
 		return new BackpackBlockEntity();
+	}
+
+	@Override
+	public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState newState, WorldAccess world, BlockPos pos, BlockPos posFrom)
+	{
+		if(state.get(Properties.WATERLOGGED))
+			world.getFluidTickScheduler().schedule(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+
+		return super.getStateForNeighborUpdate(state, direction, newState, world, pos, posFrom);
+	}
+
+	@Override
+	protected void appendProperties(StateManager.Builder<Block, BlockState> builder)
+	{
+		builder.add(FACING, Properties.WATERLOGGED);
 	}
 
 	public DyeColor getColour()
