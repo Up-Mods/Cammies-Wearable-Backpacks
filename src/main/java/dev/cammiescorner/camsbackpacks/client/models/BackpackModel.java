@@ -5,8 +5,7 @@ import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.entity.model.AnimalModel;
 import net.minecraft.entity.LivingEntity;
 
-public class BackpackModel<T extends LivingEntity> extends AnimalModel<T>
-{
+public class BackpackModel<T extends LivingEntity> extends AnimalModel<T> {
 	private final ModelPart root;
 	private final ModelPart straps;
 	private final ModelPart backpack;
@@ -14,8 +13,7 @@ public class BackpackModel<T extends LivingEntity> extends AnimalModel<T>
 	private final ModelPart pocketLeft;
 	private final ModelPart backPocket;
 
-	public BackpackModel()
-	{
+	public BackpackModel() {
 		textureWidth = 64;
 		textureHeight = 32;
 		root = new ModelPart(this);
@@ -48,29 +46,24 @@ public class BackpackModel<T extends LivingEntity> extends AnimalModel<T>
 	}
 
 	@Override
-	public void setAngles(T entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch)
-	{
-		if(entity.isInSneakingPose())
-		{
+	public void setAngles(T entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
+		if(entity.isInSneakingPose()) {
 			root.pitch = 0.5F;
 			root.pivotY = 3.2F;
 		}
-		else
-		{
+		else {
 			root.pitch = 0.0F;
 			root.pivotY = 0.0F;
 		}
 	}
 
 	@Override
-	protected Iterable<ModelPart> getHeadParts()
-	{
+	protected Iterable<ModelPart> getHeadParts() {
 		return ImmutableList.of();
 	}
 
 	@Override
-	protected Iterable<ModelPart> getBodyParts()
-	{
+	protected Iterable<ModelPart> getBodyParts() {
 		return ImmutableList.of(root);
 	}
 }

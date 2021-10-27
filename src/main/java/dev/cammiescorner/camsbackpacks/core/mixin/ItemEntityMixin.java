@@ -18,29 +18,23 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ItemEntity.class)
-public abstract class ItemEntityMixin extends Entity
-{
-	@Shadow
-	@Final
-	private static TrackedData<ItemStack> STACK;
+public abstract class ItemEntityMixin extends Entity {
+	@Shadow @Final private static TrackedData<ItemStack> STACK;
 
-	public ItemEntityMixin(EntityType<?> type, World world) { super(type, world); }
+	public ItemEntityMixin(EntityType<?> type, World world) {
+		super(type, world);
+	}
 
 	@Inject(method = "tick", at = @At("HEAD"))
-	public void tick(CallbackInfo info)
-	{
+	public void tick(CallbackInfo info) {
 		ItemStack stack = getDataTracker().get(STACK);
 
-		if(stack.getItem() instanceof BackpackItem)
-		{
-			if(isOnGround())
-			{
-				DefaultedList<ItemStack> inventory = DefaultedList.ofSize(27, ItemStack.EMPTY);
-				Inventories.fromTag(stack.getOrCreateTag(), inventory);
-				stack.setTag(null);
-				ItemScatterer.spawn(world, getBlockPos(), inventory);
-				inventory.clear();
-			}
+		if(stack.getItem() instanceof BackpackItem && isOnGround()) {
+			DefaultedList<ItemStack> inventory = DefaultedList.ofSize(27, ItemStack.EMPTY);
+			Inventories.fromTag(stack.getOrCreateTag(), inventory);
+			stack.setTag(null);
+			ItemScatterer.spawn(world, getBlockPos(), inventory);
+			inventory.clear();
 		}
 	}
 }

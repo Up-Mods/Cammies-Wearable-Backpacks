@@ -23,31 +23,24 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class PlaceBackpackPacket
-{
+public class PlaceBackpackPacket {
 	public static final Identifier ID = new Identifier(CamsBackpacks.MOD_ID, "place_backpack");
 
-	public static void send(BlockHitResult hitResult)
-	{
+	public static void send(BlockHitResult hitResult) {
 		PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-
 		buf.writeBlockHitResult(hitResult);
-
 		ClientPlayNetworking.send(ID, buf);
 	}
 
-	public static void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler network, PacketByteBuf buf, PacketSender sender)
-	{
+	public static void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler network, PacketByteBuf buf, PacketSender sender) {
 		BlockHitResult hitResult = buf.readBlockHitResult();
 
-		server.execute(() ->
-		{
+		server.execute(() -> {
 			World world = player.world;
 			BlockPos pos = world.getBlockState(hitResult.getBlockPos()).getMaterial() == Material.REPLACEABLE_PLANT || world.getBlockState(hitResult.getBlockPos()).getMaterial() == Material.REPLACEABLE_UNDERWATER_PLANT ? hitResult.getBlockPos() : hitResult.getBlockPos().offset(hitResult.getSide());
 			ItemStack stack = player.getEquippedStack(EquipmentSlot.CHEST);
 
-			if(world.isAir(pos) || (world.getBlockState(pos).getMaterial() == Material.REPLACEABLE_PLANT || world.getBlockState(pos).getMaterial() == Material.REPLACEABLE_UNDERWATER_PLANT) || !world.getFluidState(pos).isEmpty())
-			{
+			if(world.isAir(pos) || (world.getBlockState(pos).getMaterial() == Material.REPLACEABLE_PLANT || world.getBlockState(pos).getMaterial() == Material.REPLACEABLE_UNDERWATER_PLANT) || !world.getFluidState(pos).isEmpty()) {
 				world.playSound(null, pos, SoundEvents.BLOCK_WOOL_PLACE, SoundCategory.BLOCKS, 1F, 1F);
 				world.setBlockState(pos, ((BackpackItem) stack.getItem()).getBlock().getDefaultState().with(BackpackBlock.FACING, player.getHorizontalFacing()).with(Properties.WATERLOGGED, !world.getFluidState(pos).isEmpty()));
 				BackpackBlockEntity be = (BackpackBlockEntity) world.getBlockEntity(pos);

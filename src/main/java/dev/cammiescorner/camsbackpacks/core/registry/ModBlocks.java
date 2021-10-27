@@ -13,8 +13,7 @@ import net.minecraft.util.registry.Registry;
 
 import java.util.LinkedHashMap;
 
-public class ModBlocks
-{
+public class ModBlocks {
 	//-----Block Map-----//
 	public static final LinkedHashMap<Block, Identifier> BLOCKS = new LinkedHashMap<>();
 
@@ -53,23 +52,18 @@ public class ModBlocks
 			Material.WOOL).sounds(BlockSoundGroup.WOOL).strength(0.2F).nonOpaque()));
 
 	//-----Registry-----//
-	public static void register()
-	{
+	public static void register() {
 		BLOCKS.keySet().forEach(block -> Registry.register(Registry.BLOCK, BLOCKS.get(block), block));
 
 		for(Block block : BLOCKS.keySet())
-		{
 			Registry.register(Registry.ITEM, BLOCKS.get(block), getItem((BackpackBlock) block));
-		}
 	}
 
-	public static BackpackItem getItem(BackpackBlock block)
-	{
+	public static BackpackItem getItem(BackpackBlock block) {
 		return new BackpackItem(block);
 	}
 
-	private static <T extends Block> T create(String name, T block)
-	{
+	private static <T extends Block> T create(String name, T block) {
 		BLOCKS.put(block, new Identifier(CamsBackpacks.MOD_ID, name));
 		return block;
 	}

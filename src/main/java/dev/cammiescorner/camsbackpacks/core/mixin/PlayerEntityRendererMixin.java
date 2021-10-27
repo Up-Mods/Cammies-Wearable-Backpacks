@@ -12,16 +12,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerEntityRenderer.class)
-public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>>
-{
-	public PlayerEntityRendererMixin(EntityRenderDispatcher dispatcher, PlayerEntityModel model, float shadowRadius)
-	{
+public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>> {
+	public PlayerEntityRendererMixin(EntityRenderDispatcher dispatcher, PlayerEntityModel<AbstractClientPlayerEntity> model, float shadowRadius) {
 		super(dispatcher, model, shadowRadius);
 	}
 
 	@Inject(method = "<init>(Lnet/minecraft/client/render/entity/EntityRenderDispatcher;Z)V", at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "net/minecraft/client/render/entity/PlayerEntityRenderer.addFeature(Lnet/minecraft/client/render/entity/feature/FeatureRenderer;)Z", ordinal = 6))
-	public void init(EntityRenderDispatcher dispatcher, boolean bl, CallbackInfo info)
-	{
-		this.addFeature(new BackpackRenderer(this));
+	public void init(EntityRenderDispatcher dispatcher, boolean bl, CallbackInfo info) {
+		this.addFeature(new BackpackRenderer<>(this));
 	}
 }

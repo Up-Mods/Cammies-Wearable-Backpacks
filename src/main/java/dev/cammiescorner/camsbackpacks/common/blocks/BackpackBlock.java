@@ -30,28 +30,23 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
-public class BackpackBlock extends BlockWithEntity implements Waterloggable
-{
-	private DyeColor colour;
+public class BackpackBlock extends BlockWithEntity implements Waterloggable {
+	private final DyeColor colour;
 	public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
 	public static final VoxelShape NORTH_SHAPE = VoxelShapes.union(createCuboidShape(3.5, 0, 5, 12.5, 16, 11), createCuboidShape(1.5, 1, 6, 14.5, 6, 10), createCuboidShape(5, 4, 11, 11, 12, 13));
 	public static final VoxelShape EAST_SHAPE = VoxelShapes.union(createCuboidShape(5, 0, 3.5, 11, 16, 12.5), createCuboidShape(6, 1, 1.5, 10, 6, 14.5), createCuboidShape(3, 4, 5, 5, 12, 11));
 	public static final VoxelShape SOUTH_SHAPE = VoxelShapes.union(createCuboidShape(3.5, 0, 5, 12.5, 16, 11), createCuboidShape(1.5, 1, 6, 14.5, 6, 10), createCuboidShape(5, 4, 3, 11, 12, 5));
 	public static final VoxelShape WEST_SHAPE = VoxelShapes.union(createCuboidShape(5, 0, 3.5, 11, 16, 12.5), createCuboidShape(6, 1, 1.5, 10, 6, 14.5), createCuboidShape(11, 4, 5, 13, 12, 11));
 
-	public BackpackBlock(DyeColor colour, Settings settings)
-	{
+	public BackpackBlock(DyeColor colour, Settings settings) {
 		super(settings);
 		this.setDefaultState(getDefaultState().with(FACING, Direction.NORTH));
-
 		this.colour = colour;
 	}
 
 	@Override
-	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
-	{
-		switch(state.get(FACING))
-		{
+	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+		switch(state.get(FACING)) {
 			default:
 				return NORTH_SHAPE;
 			case EAST:
@@ -64,14 +59,10 @@ public class BackpackBlock extends BlockWithEntity implements Waterloggable
 	}
 
 	@Override
-	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
-	{
-		if(!world.isClient())
-		{
-			if(player.isSneaking() && player.getEquippedStack(EquipmentSlot.CHEST).isEmpty())
-			{
-				if(world.getBlockEntity(pos) instanceof BackpackBlockEntity)
-				{
+	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+		if(!world.isClient()) {
+			if(player.isSneaking() && player.getEquippedStack(EquipmentSlot.CHEST).isEmpty()) {
+				if(world.getBlockEntity(pos) instanceof BackpackBlockEntity) {
 					BackpackBlockEntity blockEntity = (BackpackBlockEntity) world.getBlockEntity(pos);
 					ItemStack stack = new ItemStack(this);
 					CompoundTag tag = stack.getOrCreateTag();
@@ -82,12 +73,10 @@ public class BackpackBlock extends BlockWithEntity implements Waterloggable
 					player.equipStack(EquipmentSlot.CHEST, stack);
 				}
 			}
-			else
-			{
+			else {
 				NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
 
-				if(screenHandlerFactory != null)
-				{
+				if(screenHandlerFactory != null) {
 					world.playSound(null, pos, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, SoundCategory.BLOCKS, 1F, 1F);
 					player.openHandledScreen(screenHandlerFactory);
 				}
@@ -98,16 +87,12 @@ public class BackpackBlock extends BlockWithEntity implements Waterloggable
 	}
 
 	@Override
-	public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
-	{
-		if(!((BackpackBlockEntity) world.getBlockEntity(pos)).wasPickedUp)
-		{
-			if(!world.isClient() && state.getBlock() != newState.getBlock())
-			{
+	public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+		if(!((BackpackBlockEntity) world.getBlockEntity(pos)).wasPickedUp) {
+			if(!world.isClient() && state.getBlock() != newState.getBlock()) {
 				BlockEntity blockEntity = world.getBlockEntity(pos);
 
-				if(blockEntity instanceof Inventory)
-				{
+				if(blockEntity instanceof Inventory) {
 					ItemScatterer.spawn(world, pos, (Inventory) blockEntity);
 				}
 			}
@@ -117,63 +102,53 @@ public class BackpackBlock extends BlockWithEntity implements Waterloggable
 	}
 
 	@Override
-	public FluidState getFluidState(BlockState state)
-	{
+	public FluidState getFluidState(BlockState state) {
 		return state.get(Properties.WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
 	}
 
 	@Override
-	public BlockRenderType getRenderType(BlockState state)
-	{
+	public BlockRenderType getRenderType(BlockState state) {
 		return BlockRenderType.MODEL;
 	}
 
 	@Override
-	public boolean isTranslucent(BlockState state, BlockView world, BlockPos pos)
-	{
+	public boolean isTranslucent(BlockState state, BlockView world, BlockPos pos) {
 		return true;
 	}
 
 	@Override
-	public boolean hasSidedTransparency(BlockState state)
-	{
+	public boolean hasSidedTransparency(BlockState state) {
 		return true;
 	}
 
 	@Nullable
 	@Override
-	public BlockState getPlacementState(ItemPlacementContext ctx)
-	{
+	public BlockState getPlacementState(ItemPlacementContext ctx) {
 		return super.getPlacementState(ctx).with(FACING, ctx.getPlayerFacing()).with(Properties.WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
 	}
 
 	@Override
-	public BlockState rotate(BlockState state, BlockRotation rotation)
-	{
+	public BlockState rotate(BlockState state, BlockRotation rotation) {
 		return state.with(FACING, rotation.rotate(state.get(FACING)));
 	}
 
 	@Override
-	public BlockState mirror(BlockState state, BlockMirror mirror)
-	{
+	public BlockState mirror(BlockState state, BlockMirror mirror) {
 		return state.rotate(mirror.getRotation(state.get(FACING)));
 	}
 
 	@Override
-	public PistonBehavior getPistonBehavior(BlockState state)
-	{
+	public PistonBehavior getPistonBehavior(BlockState state) {
 		return PistonBehavior.BLOCK;
 	}
 
 	@Override
-	public @Nullable BlockEntity createBlockEntity(BlockView world)
-	{
+	public @Nullable BlockEntity createBlockEntity(BlockView world) {
 		return new BackpackBlockEntity();
 	}
 
 	@Override
-	public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState newState, WorldAccess world, BlockPos pos, BlockPos posFrom)
-	{
+	public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState newState, WorldAccess world, BlockPos pos, BlockPos posFrom) {
 		if(state.get(Properties.WATERLOGGED))
 			world.getFluidTickScheduler().schedule(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
 
@@ -181,13 +156,11 @@ public class BackpackBlock extends BlockWithEntity implements Waterloggable
 	}
 
 	@Override
-	protected void appendProperties(StateManager.Builder<Block, BlockState> builder)
-	{
+	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
 		builder.add(FACING, Properties.WATERLOGGED);
 	}
 
-	public DyeColor getColour()
-	{
+	public DyeColor getColour() {
 		return colour;
 	}
 }

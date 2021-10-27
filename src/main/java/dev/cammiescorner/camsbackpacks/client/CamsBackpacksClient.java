@@ -11,11 +11,9 @@ import net.minecraft.client.render.RenderLayer;
 
 import static dev.cammiescorner.camsbackpacks.core.registry.ModBlocks.*;
 
-public class CamsBackpacksClient implements ClientModInitializer
-{
+public class CamsBackpacksClient implements ClientModInitializer {
 	@Override
-	public void onInitializeClient()
-	{
+	public void onInitializeClient() {
 		//-----Colour Registry-----//
 		ColorProviderRegistryImpl.BLOCK.register((state, world, pos, tintIndex) -> ((DyeColourAccessor) (Object) ((BackpackBlock) state.getBlock()).getColour()).getColour(),
 				WHITE_BACKPACK, ORANGE_BACKPACK, MAGENTA_BACKPACK, LIGHT_BLUE_BACKPACK, YELLOW_BACKPACK, LIME_BACKPACK, PINK_BACKPACK,

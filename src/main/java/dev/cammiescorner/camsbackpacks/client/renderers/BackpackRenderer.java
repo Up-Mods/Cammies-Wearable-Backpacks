@@ -19,25 +19,20 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
-public class BackpackRenderer<T extends LivingEntity, M extends EntityModel<T>> extends FeatureRenderer<T, M>
-{
+public class BackpackRenderer<T extends LivingEntity, M extends EntityModel<T>> extends FeatureRenderer<T, M> {
 	private final BackpackModel<T> backpack = new BackpackModel<>();
 	private final Identifier texturePath = new Identifier(CamsBackpacks.MOD_ID, "textures/block/backpack.png");
 
-	public BackpackRenderer(FeatureRendererContext<T, M> context)
-	{
+	public BackpackRenderer(FeatureRendererContext<T, M> context) {
 		super(context);
 	}
 
 	@Override
-	public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, T entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch)
-	{
-		if(entity instanceof PlayerEntity)
-		{
+	public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, T entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
+		if(entity instanceof PlayerEntity) {
 			ItemStack stack = entity.getEquippedStack(EquipmentSlot.CHEST);
 
-			if(stack.getItem() instanceof BackpackItem)
-			{
+			if(stack.getItem() instanceof BackpackItem) {
 				BackpackItem item = (BackpackItem) entity.getEquippedStack(EquipmentSlot.CHEST).getItem();
 
 				int colour = ((DyeColourAccessor) (Object) item.getColour()).getColour();

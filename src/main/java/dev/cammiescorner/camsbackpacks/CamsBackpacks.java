@@ -6,13 +6,11 @@ import dev.cammiescorner.camsbackpacks.core.registry.ModBlocks;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
-public class CamsBackpacks implements ModInitializer
-{
+public class CamsBackpacks implements ModInitializer {
 	public static final String MOD_ID = "camsbackpacks";
 
 	@Override
-	public void onInitialize()
-	{
+	public void onInitialize() {
 		ServerPlayNetworking.registerGlobalReceiver(PlaceBackpackPacket.ID, PlaceBackpackPacket::handle);
 
 		ModBlocks.register();
