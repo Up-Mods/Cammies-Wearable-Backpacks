@@ -1,7 +1,7 @@
 {
 	// Info
-	"info.camsbackpacks.instructions": "1) Take off Elytra/Chestplate.\n2) Place backpack on ground.\n3) Place item(s) in backpack.\n4) Shift + Right click on backpack to pick it up and put on back.",
-	"info.camsbackpacks.more_info": "Press <Shift> for more information.",
+	"info.camsbackpacks.instructions": "1) Take off Elytra/Chestplate.\n2) Place Backpack on ground.\n3) Place item(s) in Backpack.\n4) %s + %s on Backpack to put on back.",
+	"info.camsbackpacks.more_info": "Press %s for Instructions.",
 
 	// Blocks
 	"block.camsbackpacks.white_backpack": "White Backpack",

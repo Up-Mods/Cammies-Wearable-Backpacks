@@ -4,11 +4,12 @@
 	"package": "dev.cammiescorner.camsbackpacks.core.mixin",
 	"compatibilityLevel": "JAVA_8",
 	"mixins": [
-		"ItemEntityMixin",
-		"ArmourSlotMixin"
+		"ArmourSlotMixin",
+		"ItemEntityMixin"
 	],
 	"client": [
 		"client.ClientPlayerInteractionManagerMixin",
+		"client.KeyBindingAccessor",
 		"client.PlayerEntityRendererMixin"
 	],
 	"injectors": {
