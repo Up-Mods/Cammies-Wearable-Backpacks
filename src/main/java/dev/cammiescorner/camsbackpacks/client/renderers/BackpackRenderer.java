@@ -1,9 +1,9 @@
 package dev.cammiescorner.camsbackpacks.client.renderers;
 
 import dev.cammiescorner.camsbackpacks.CamsBackpacks;
+import dev.cammiescorner.camsbackpacks.client.CamsBackpacksClient;
 import dev.cammiescorner.camsbackpacks.client.models.BackpackModel;
 import dev.cammiescorner.camsbackpacks.common.items.BackpackItem;
-import dev.cammiescorner.camsbackpacks.core.mixin.DyeColourAccessor;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
@@ -11,6 +11,7 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.render.entity.model.EntityModel;
+import net.minecraft.client.render.entity.model.EntityModelLoader;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EquipmentSlot;
@@ -20,11 +21,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
 public class BackpackRenderer<T extends LivingEntity, M extends EntityModel<T>> extends FeatureRenderer<T, M> {
-	private final BackpackModel<T> backpack = new BackpackModel<>();
+	private final BackpackModel<T> backpack;
 	private final Identifier texturePath = new Identifier(CamsBackpacks.MOD_ID, "textures/block/backpack.png");
 
-	public BackpackRenderer(FeatureRendererContext<T, M> context) {
+	public BackpackRenderer(FeatureRendererContext<T, M> context, EntityModelLoader loader) {
 		super(context);
+		backpack = new BackpackModel<>(loader.getModelPart(CamsBackpacksClient.BACKPACK));
 	}
 
 	@Override
@@ -32,13 +34,11 @@ public class BackpackRenderer<T extends LivingEntity, M extends EntityModel<T>> 
 		if(entity instanceof PlayerEntity) {
 			ItemStack stack = entity.getEquippedStack(EquipmentSlot.CHEST);
 
-			if(stack.getItem() instanceof BackpackItem) {
-				BackpackItem item = (BackpackItem) entity.getEquippedStack(EquipmentSlot.CHEST).getItem();
-
-				int colour = ((DyeColourAccessor) (Object) item.getColour()).getColour();
-				float r = (float) (colour >> 16 & 255) / 255F;
-				float g = (float) (colour >> 8 & 255) / 255F;
-				float b = (float) (colour & 255) / 255F;
+			if(stack.getItem() instanceof BackpackItem item) {
+				float[] colour = item.getColour().getColorComponents();
+				float r = colour[0];
+				float g = colour[1];
+				float b = colour[2];
 
 				matrices.push();
 				matrices.translate(0.0D, 0.0D, 0.025D);

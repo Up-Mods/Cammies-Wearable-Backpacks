@@ -1,25 +1,35 @@
 package dev.cammiescorner.camsbackpacks.client;
 
+import dev.cammiescorner.camsbackpacks.CamsBackpacks;
+import dev.cammiescorner.camsbackpacks.client.models.BackpackModel;
 import dev.cammiescorner.camsbackpacks.common.blocks.BackpackBlock;
 import dev.cammiescorner.camsbackpacks.common.items.BackpackItem;
-import dev.cammiescorner.camsbackpacks.core.mixin.DyeColourAccessor;
+import dev.cammiescorner.camsbackpacks.core.util.ColourHelper;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.impl.client.rendering.ColorProviderRegistryImpl;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.entity.model.EntityModelLayer;
+import net.minecraft.util.Identifier;
 
 import static dev.cammiescorner.camsbackpacks.core.registry.ModBlocks.*;
 
 public class CamsBackpacksClient implements ClientModInitializer {
+	public static final EntityModelLayer BACKPACK = new EntityModelLayer(new Identifier(CamsBackpacks.MOD_ID, "backpack"), "main");
+
 	@Override
 	public void onInitializeClient() {
+		//-----Entity Model Layers Registry-----//
+		EntityModelLayerRegistry.registerModelLayer(BACKPACK, BackpackModel::getTexturedModelData);
+
 		//-----Colour Registry-----//
-		ColorProviderRegistryImpl.BLOCK.register((state, world, pos, tintIndex) -> ((DyeColourAccessor) (Object) ((BackpackBlock) state.getBlock()).getColour()).getColour(),
+		ColorProviderRegistryImpl.BLOCK.register((state, world, pos, tintIndex) -> ColourHelper.dyeToDecimal(((BackpackBlock) state.getBlock()).getColour()),
 				WHITE_BACKPACK, ORANGE_BACKPACK, MAGENTA_BACKPACK, LIGHT_BLUE_BACKPACK, YELLOW_BACKPACK, LIME_BACKPACK, PINK_BACKPACK,
 				GRAY_BACKPACK, LIGHT_GRAY_BACKPACK, CYAN_BACKPACK, PURPLE_BACKPACK, BLUE_BACKPACK, BROWN_BACKPACK, GREEN_BACKPACK,
 				RED_BACKPACK, BLACK_BACKPACK);
-		ColorProviderRegistry.ITEM.register((stack, tintIndex) -> ((DyeColourAccessor) (Object) ((BackpackItem) stack.getItem()).getColour()).getColour(),
+		ColorProviderRegistry.ITEM.register((stack, tintIndex) -> ColourHelper.dyeToDecimal(((BackpackItem) stack.getItem()).getColour()),
 				WHITE_BACKPACK.asItem(), ORANGE_BACKPACK.asItem(), MAGENTA_BACKPACK.asItem(), LIGHT_BLUE_BACKPACK.asItem(),
 				YELLOW_BACKPACK.asItem(), LIME_BACKPACK.asItem(), PINK_BACKPACK.asItem(), GRAY_BACKPACK.asItem(),
 				LIGHT_GRAY_BACKPACK.asItem(), CYAN_BACKPACK.asItem(), PURPLE_BACKPACK.asItem(), BLUE_BACKPACK.asItem(),

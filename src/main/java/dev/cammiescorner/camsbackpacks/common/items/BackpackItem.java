@@ -18,17 +18,15 @@ import java.util.List;
 
 public class BackpackItem extends BlockItem {
 	public BackpackItem(BackpackBlock block) {
-		super(block, new Settings().group(ItemGroup.TOOLS));
+		super(block, new Settings().group(ItemGroup.TOOLS).maxCount(1));
 	}
 
 	@Override
 	public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-		if(MinecraftClient.getInstance().options.keySneak.isPressed()) {
+		if(MinecraftClient.getInstance().options.keySneak.isPressed())
 			tooltip.add(new TranslatableText("info." + CamsBackpacks.MOD_ID + ".instructions"));
-		}
-		else {
+		else
 			tooltip.add(new TranslatableText("info." + CamsBackpacks.MOD_ID + ".more_info").formatted(Formatting.YELLOW));
-		}
 	}
 
 	public DyeColor getColour() {

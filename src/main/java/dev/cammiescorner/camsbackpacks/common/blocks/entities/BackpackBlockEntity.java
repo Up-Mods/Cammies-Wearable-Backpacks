@@ -3,45 +3,41 @@ package dev.cammiescorner.camsbackpacks.common.blocks.entities;
 import dev.cammiescorner.camsbackpacks.core.registry.ModBlockEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.GenericContainerScreenHandler;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
 public class BackpackBlockEntity extends BlockEntity implements Inventory, NamedScreenHandlerFactory {
 	public final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(54, ItemStack.EMPTY);
 	public boolean wasPickedUp = false;
 
-	public BackpackBlockEntity(BlockEntityType<?> type) {
-		super(type);
-	}
-
-	public BackpackBlockEntity() {
-		this(ModBlockEntities.BACKPACK);
+	public BackpackBlockEntity(BlockPos pos, BlockState state) {
+		super(ModBlockEntities.BACKPACK, pos, state);
 	}
 
 	@Override
-	public void fromTag(BlockState state, CompoundTag tag) {
-		super.fromTag(state, tag);
-		Inventories.fromTag(tag, inventory);
+	public void readNbt(NbtCompound tag) {
+		super.readNbt(tag);
+		Inventories.readNbt(tag, inventory);
 		wasPickedUp = tag.getBoolean("PickedUp");
 	}
 
 	@Override
-	public CompoundTag toTag(CompoundTag tag) {
-		Inventories.toTag(tag, inventory);
+	public NbtCompound writeNbt(NbtCompound tag) {
+		Inventories.writeNbt(tag, inventory);
 		tag.putBoolean("PickedUp", wasPickedUp);
-		return super.toTag(tag);
+		return super.writeNbt(tag);
 	}
 
 	@Override

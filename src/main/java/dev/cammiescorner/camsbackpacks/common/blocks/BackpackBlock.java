@@ -9,10 +9,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -62,11 +61,10 @@ public class BackpackBlock extends BlockWithEntity implements Waterloggable {
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 		if(!world.isClient()) {
 			if(player.isSneaking() && player.getEquippedStack(EquipmentSlot.CHEST).isEmpty()) {
-				if(world.getBlockEntity(pos) instanceof BackpackBlockEntity) {
-					BackpackBlockEntity blockEntity = (BackpackBlockEntity) world.getBlockEntity(pos);
+				if(world.getBlockEntity(pos) instanceof BackpackBlockEntity blockEntity) {
 					ItemStack stack = new ItemStack(this);
-					CompoundTag tag = stack.getOrCreateTag();
-					Inventories.toTag(tag, blockEntity.inventory);
+					NbtCompound tag = stack.getOrCreateNbt();
+					Inventories.writeNbt(tag, blockEntity.inventory);
 
 					blockEntity.wasPickedUp = true;
 					world.breakBlock(pos, false, player);
@@ -88,13 +86,9 @@ public class BackpackBlock extends BlockWithEntity implements Waterloggable {
 
 	@Override
 	public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
-		if(!((BackpackBlockEntity) world.getBlockEntity(pos)).wasPickedUp) {
+		if(world.getBlockEntity(pos) instanceof BackpackBlockEntity blockEntity && !blockEntity.wasPickedUp) {
 			if(!world.isClient() && state.getBlock() != newState.getBlock()) {
-				BlockEntity blockEntity = world.getBlockEntity(pos);
-
-				if(blockEntity instanceof Inventory) {
-					ItemScatterer.spawn(world, pos, (Inventory) blockEntity);
-				}
+				ItemScatterer.spawn(world, pos, blockEntity);
 			}
 		}
 
@@ -142,9 +136,10 @@ public class BackpackBlock extends BlockWithEntity implements Waterloggable {
 		return PistonBehavior.BLOCK;
 	}
 
+	@Nullable
 	@Override
-	public @Nullable BlockEntity createBlockEntity(BlockView world) {
-		return new BackpackBlockEntity();
+	public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+		return new BackpackBlockEntity(pos, state);
 	}
 
 	@Override

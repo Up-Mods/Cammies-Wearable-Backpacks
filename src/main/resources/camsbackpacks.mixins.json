@@ -8,9 +8,8 @@
 		"ArmourSlotMixin"
 	],
 	"client": [
-		"ClientPlayerInteractionManagerMixin",
-		"DyeColourAccessor",
-		"PlayerEntityRendererMixin"
+		"client.ClientPlayerInteractionManagerMixin",
+		"client.PlayerEntityRendererMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

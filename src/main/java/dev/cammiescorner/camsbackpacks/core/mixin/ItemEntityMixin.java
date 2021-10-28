@@ -31,8 +31,8 @@ public abstract class ItemEntityMixin extends Entity {
 
 		if(stack.getItem() instanceof BackpackItem && isOnGround()) {
 			DefaultedList<ItemStack> inventory = DefaultedList.ofSize(27, ItemStack.EMPTY);
-			Inventories.fromTag(stack.getOrCreateTag(), inventory);
-			stack.setTag(null);
+			Inventories.readNbt(stack.getOrCreateNbt(), inventory);
+			stack.setNbt(null);
 			ItemScatterer.spawn(world, getBlockPos(), inventory);
 			inventory.clear();
 		}

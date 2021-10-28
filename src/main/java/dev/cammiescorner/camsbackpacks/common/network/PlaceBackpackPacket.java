@@ -43,8 +43,10 @@ public class PlaceBackpackPacket {
 			if(world.isAir(pos) || (world.getBlockState(pos).getMaterial() == Material.REPLACEABLE_PLANT || world.getBlockState(pos).getMaterial() == Material.REPLACEABLE_UNDERWATER_PLANT) || !world.getFluidState(pos).isEmpty()) {
 				world.playSound(null, pos, SoundEvents.BLOCK_WOOL_PLACE, SoundCategory.BLOCKS, 1F, 1F);
 				world.setBlockState(pos, ((BackpackItem) stack.getItem()).getBlock().getDefaultState().with(BackpackBlock.FACING, player.getHorizontalFacing()).with(Properties.WATERLOGGED, !world.getFluidState(pos).isEmpty()));
-				BackpackBlockEntity be = (BackpackBlockEntity) world.getBlockEntity(pos);
-				Inventories.fromTag(stack.getOrCreateTag(), be.inventory);
+
+				if(world.getBlockEntity(pos) instanceof BackpackBlockEntity backpack)
+					Inventories.readNbt(stack.getOrCreateNbt(), backpack.inventory);
+
 				player.getEquippedStack(EquipmentSlot.CHEST).decrement(1);
 			}
 		});

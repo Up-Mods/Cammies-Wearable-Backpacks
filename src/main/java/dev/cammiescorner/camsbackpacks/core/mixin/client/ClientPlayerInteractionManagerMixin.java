@@ -1,4 +1,4 @@
-package dev.cammiescorner.camsbackpacks.core.mixin;
+package dev.cammiescorner.camsbackpacks.core.mixin.client;
 
 import dev.cammiescorner.camsbackpacks.common.items.BackpackItem;
 import dev.cammiescorner.camsbackpacks.common.network.PlaceBackpackPacket;

@@ -2,6 +2,7 @@ package dev.cammiescorner.camsbackpacks.core.registry;
 
 import dev.cammiescorner.camsbackpacks.CamsBackpacks;
 import dev.cammiescorner.camsbackpacks.common.blocks.entities.BackpackBlockEntity;
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.Identifier;
@@ -14,7 +15,7 @@ public class ModBlockEntities {
 	//-----Block Entity Type Map-----//
 	private static final Map<BlockEntityType<?>, Identifier> BLOCK_ENTITY_TYPES = new LinkedHashMap<>();
 
-	public static final BlockEntityType<BackpackBlockEntity> BACKPACK = create("backpack", BlockEntityType.Builder.create(BackpackBlockEntity::new, ModBlocks.BROWN_BACKPACK).build(null));
+	public static final BlockEntityType<BackpackBlockEntity> BACKPACK = create("backpack", FabricBlockEntityTypeBuilder.create(BackpackBlockEntity::new, ModBlocks.BROWN_BACKPACK).build());
 
 	//-----Registry-----//
 	public static void register() {
