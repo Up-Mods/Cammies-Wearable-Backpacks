@@ -1,9 +1,7 @@
 {
-	// Info
 	"info.camsbackpacks.instructions": "1) Снимите элитры/нагрудник.\n2) Поместите рюкзак на землю.\n3) Поместите предмет(ы) в рюкзак.\n4) Оденьте рюкзак при помощи %s + %s.",
 	"info.camsbackpacks.more_info": "Нажмите %s для подробностей.",
 
-	// Blocks
 	"block.camsbackpacks.white_backpack": "Белый рюкзак",
 	"block.camsbackpacks.orange_backpack": "Оранжевый рюкзак",
 	"block.camsbackpacks.magenta_backpack": "Пурпурный рюкзак",
