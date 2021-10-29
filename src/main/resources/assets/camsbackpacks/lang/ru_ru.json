@@ -1,0 +1,21 @@
+{
+	"info.camsbackpacks.instructions": "1) Снимите элитры/нагрудник.\n2) Поместите рюкзак на землю.\n3) Поместите предмет(ы) в рюкзак.\n4) Оденьте рюкзак при помощи %s + %s.",
+	"info.camsbackpacks.more_info": "Нажмите %s для подробностей.",
+
+	"block.camsbackpacks.white_backpack": "Белый рюкзак",
+	"block.camsbackpacks.orange_backpack": "Оранжевый рюкзак",
+	"block.camsbackpacks.magenta_backpack": "Пурпурный рюкзак",
+	"block.camsbackpacks.light_blue_backpack": "Голубой рюкзак",
+	"block.camsbackpacks.yellow_backpack": "Жёлтый рюкзак",
+	"block.camsbackpacks.lime_backpack": "Лаймовый рюкзак",
+	"block.camsbackpacks.pink_backpack": "Розовый рюкзак",
+	"block.camsbackpacks.gray_backpack": "Серый рюкзак",
+	"block.camsbackpacks.light_gray_backpack": "Светло-серый рюкзак",
+	"block.camsbackpacks.cyan_backpack": "Бирюзовый рюкзак",
+	"block.camsbackpacks.purple_backpack": "Фиолетовый рюкзак",
+	"block.camsbackpacks.blue_backpack": "Синий рюкзак",
+	"block.camsbackpacks.brown_backpack": "Коричневый рюкзак",
+	"block.camsbackpacks.green_backpack": "Зелёный рюкзак",
+	"block.camsbackpacks.red_backpack": "Красный рюкзак",
+	"block.camsbackpacks.black_backpack": "Чёрный рюкзак"
+}
