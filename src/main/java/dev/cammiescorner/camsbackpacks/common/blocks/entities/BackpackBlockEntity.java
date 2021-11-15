@@ -1,6 +1,8 @@
 package dev.cammiescorner.camsbackpacks.common.blocks.entities;
 
+import dev.cammiescorner.camsbackpacks.common.screen.BackpackScreenHandler;
 import dev.cammiescorner.camsbackpacks.core.registry.ModBlockEntities;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -9,17 +11,18 @@ import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.screen.GenericContainerScreenHandler;
-import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.ScreenHandlerContext;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
-public class BackpackBlockEntity extends BlockEntity implements Inventory, NamedScreenHandlerFactory {
-	public final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(54, ItemStack.EMPTY);
+public class BackpackBlockEntity extends BlockEntity implements Inventory, ExtendedScreenHandlerFactory {
+	public final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(36, ItemStack.EMPTY);
 	public boolean wasPickedUp = false;
 
 	public BackpackBlockEntity(BlockPos pos, BlockState state) {
@@ -72,7 +75,7 @@ public class BackpackBlockEntity extends BlockEntity implements Inventory, Named
 
 	@Override
 	public boolean canPlayerUse(PlayerEntity player) {
-		return player.squaredDistanceTo(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) < 16;
+		return !(player.squaredDistanceTo(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) > 64.0D);
 	}
 
 	@Override
@@ -87,6 +90,11 @@ public class BackpackBlockEntity extends BlockEntity implements Inventory, Named
 
 	@Override
 	public @Nullable ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
-		return GenericContainerScreenHandler.createGeneric9x3(syncId, inv, this);
+		return new BackpackScreenHandler(syncId, inv, this, ScreenHandlerContext.create(player.world, getPos()), true);
+	}
+
+	@Override
+	public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf) {
+		buf.writeBoolean(true);
 	}
 }

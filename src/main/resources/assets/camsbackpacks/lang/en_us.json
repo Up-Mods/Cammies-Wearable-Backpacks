@@ -19,5 +19,9 @@
 	"block.camsbackpacks.brown_backpack": "Brown Backpack",
 	"block.camsbackpacks.green_backpack": "Green Backpack",
 	"block.camsbackpacks.red_backpack": "Red Backpack",
-	"block.camsbackpacks.black_backpack": "Black Backpack"
+	"block.camsbackpacks.black_backpack": "Black Backpack",
+
+	// Container stuff
+	"container.camsbackpacks.equip": "Equip",
+	"container.camsbackpacks.upequip": "Unequip"
 }
