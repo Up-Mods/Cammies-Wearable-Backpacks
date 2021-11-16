@@ -29,7 +29,7 @@ public class BackpackScreenHandler extends ScreenHandler {
 	private final CraftingResultInventory result;
 	private final ScreenHandlerContext context;
 	public final boolean isBlockEntity;
-	public final BlockPos blockPos;
+	public BlockPos blockPos;
 
 	public BackpackScreenHandler(int syncId, PlayerInventory playerInventory, BlockPos blockPos, boolean isBlockEntity) {
 		this(syncId, playerInventory, new SimpleInventory(36), ScreenHandlerContext.EMPTY, blockPos, isBlockEntity);
@@ -105,9 +105,9 @@ public class BackpackScreenHandler extends ScreenHandler {
 		// Crafting table inventory
 		for(y = 0; y < 3; ++y)
 			for(x = 0; x < 3; ++x)
-				addSlot(new Slot(input, x + y * 3, 255 + x * 18, 50 + y * 18));
+				addSlot(new Slot(input, x + y * 3, 255 + x * 18, 46 + y * 18));
 
-		addSlot(new CraftingResultSlot(player, input, result, 0, 273, 70 + 3 * 18));
+		addSlot(new CraftingResultSlot(player, input, result, 0, 273, 71 + 3 * 18));
 	}
 
 	@Override

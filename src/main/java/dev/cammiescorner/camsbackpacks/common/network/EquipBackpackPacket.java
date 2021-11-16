@@ -53,15 +53,13 @@ public class EquipBackpackPacket {
 				}
 			}
 			else {
-				BlockPos blockPos = pos.offset(player.getHorizontalFacing());
+				ItemStack stack = player.getEquippedStack(EquipmentSlot.CHEST);
 
-				if(BackpackHelper.isReplaceable(world, blockPos)) {
-					ItemStack stack = player.getEquippedStack(EquipmentSlot.CHEST);
+				if(stack.getItem() instanceof BackpackItem backpackItem && BackpackHelper.isReplaceable(world, pos) && pos.isWithinDistance(player.getBlockPos(), 3)) {
+					world.playSound(null, pos, SoundEvents.BLOCK_WOOL_PLACE, SoundCategory.BLOCKS, 1F, 1F);
+					world.setBlockState(pos, backpackItem.getBlock().getDefaultState().with(BackpackBlock.FACING, player.getHorizontalFacing()).with(Properties.WATERLOGGED, !world.getFluidState(pos).isEmpty()));
 
-					world.playSound(null, blockPos, SoundEvents.BLOCK_WOOL_PLACE, SoundCategory.BLOCKS, 1F, 1F);
-					world.setBlockState(blockPos, ((BackpackItem) stack.getItem()).getBlock().getDefaultState().with(BackpackBlock.FACING, player.getHorizontalFacing()).with(Properties.WATERLOGGED, !world.getFluidState(blockPos).isEmpty()));
-
-					if(world.getBlockEntity(blockPos) instanceof BackpackBlockEntity backpack)
+					if(world.getBlockEntity(pos) instanceof BackpackBlockEntity backpack)
 						Inventories.readNbt(stack.getOrCreateNbt(), backpack.inventory);
 
 					player.getEquippedStack(EquipmentSlot.CHEST).decrement(1);

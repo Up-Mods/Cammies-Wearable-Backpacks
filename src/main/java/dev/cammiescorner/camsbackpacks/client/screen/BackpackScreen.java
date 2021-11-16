@@ -6,7 +6,7 @@ import dev.cammiescorner.camsbackpacks.common.network.EquipBackpackPacket;
 import dev.cammiescorner.camsbackpacks.common.screen.BackpackScreenHandler;
 import dev.cammiescorner.camsbackpacks.core.util.BackpackHelper;
 import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.GameRenderer;
@@ -18,7 +18,7 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
-public class BackpackScreen extends HandledScreen<BackpackScreenHandler> {
+public class BackpackScreen extends AbstractInventoryScreen<BackpackScreenHandler> {
 	private static final Identifier TEXTURE = new Identifier(CamsBackpacks.MOD_ID, "textures/gui/backpack.png");
 	protected PlayerInventory playerInventory;
 	protected ButtonWidget equipButton;
@@ -48,7 +48,6 @@ public class BackpackScreen extends HandledScreen<BackpackScreenHandler> {
 	protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {
 		super.drawForeground(matrices, mouseX, mouseY);
 		textRenderer.draw(matrices, new TranslatableText("container.crafting"), craftingX, craftingY, 4210752);
-
 	}
 
 	@Override
@@ -56,31 +55,44 @@ public class BackpackScreen extends HandledScreen<BackpackScreenHandler> {
 		renderBackground(matrices);
 		super.render(matrices, mouseX, mouseY, delta);
 		drawMouseoverTooltip(matrices, mouseX, mouseY);
+
 		InventoryScreen.drawEntity(x + 50, y + 125, 30, (x + 50) - mouseX, (y + 125 - 50) - mouseY, player);
 
-		boolean canPlace = BackpackHelper.isReplaceable(player.world, handler.blockPos.offset(player.getHorizontalFacing()));
-		boolean canEquip = player.getEquippedStack(EquipmentSlot.CHEST).isEmpty();
-
-		if(equipButton.isHovered()) {
-			if(!handler.isBlockEntity && !canPlace)
+		if(equipButton.isHovered() && !equipButton.active) {
+			if(!handler.isBlockEntity)
 				renderTooltip(matrices, new TranslatableText("container.camsbackpacks.obstructed_block"), mouseX, mouseY);
-			if(handler.isBlockEntity && !canEquip)
+			else
 				renderTooltip(matrices, new TranslatableText("container.camsbackpacks.cant_equip"), mouseX, mouseY);
 		}
+	}
+
+	@Override
+	protected void handledScreenTick() {
+		if(!handler.isBlockEntity)
+			handler.blockPos = player.getBlockPos().offset(player.getHorizontalFacing());
 
 		if(equipButton != null)
-			equipButton.active = (!handler.isBlockEntity && canPlace) || canEquip;
+			equipButton.active = (!handler.isBlockEntity && BackpackHelper.isReplaceable(player.world, handler.blockPos)) || player.getEquippedStack(EquipmentSlot.CHEST).isEmpty();
 	}
 
 	@Override
 	protected void init() {
 		super.init();
+		x = (width - backgroundWidth) / 2;
 		titleX = 81;
 		playerInventoryTitleX = 81;
 		playerInventoryTitleY = 96;
 		craftingX = 255;
-		craftingY = 38;
+		craftingY = 34;
 		equipButton = addDrawableChild(new ButtonWidget(width / 2 + 86, height / 2 + 58, 68, 20, new TranslatableText(handler.isBlockEntity ? "container.camsbackpacks.equip" : "container.camsbackpacks.upequip"), this::doButtonShit));
+
+		if(handler.isBlockEntity)
+			drawStatusEffects = false;
+	}
+
+	@Override
+	protected void applyStatusEffectOffset() {
+		super.applyStatusEffectOffset();
 	}
 
 	private void doButtonShit(ButtonWidget button) {
