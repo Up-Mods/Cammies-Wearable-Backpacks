@@ -10,6 +10,7 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
@@ -19,6 +20,7 @@ public class BackpackScreen extends HandledScreen<BackpackScreenHandler> {
 	private static final Identifier TEXTURE = new Identifier(CamsBackpacks.MOD_ID, "textures/gui/backpack.png");
 	protected PlayerInventory playerInventory;
 	protected ButtonWidget equipButton;
+	protected PlayerEntity player;
 	protected int craftingX;
 	protected int craftingY;
 
@@ -27,6 +29,7 @@ public class BackpackScreen extends HandledScreen<BackpackScreenHandler> {
 		this.playerInventory = playerInventory;
 		this.backgroundWidth = 322;
 		this.backgroundHeight = 190;
+		this.player = playerInventory.player;
 	}
 
 	@Override
@@ -51,7 +54,7 @@ public class BackpackScreen extends HandledScreen<BackpackScreenHandler> {
 		renderBackground(matrices);
 		super.render(matrices, mouseX, mouseY, delta);
 		drawMouseoverTooltip(matrices, mouseX, mouseY);
-		InventoryScreen.drawEntity(x + 50, y + 125, 30, (x + 50) - mouseX, (y + 125 - 50) - mouseY, playerInventory.player);
+		InventoryScreen.drawEntity(x + 50, y + 125, 30, (x + 50) - mouseX, (y + 125 - 50) - mouseY, player);
 	}
 
 	@Override
@@ -64,10 +67,13 @@ public class BackpackScreen extends HandledScreen<BackpackScreenHandler> {
 		craftingY = 38;
 
 		equipButton = addDrawableChild(new ButtonWidget(width / 2 + 86, height / 2 + 58, 68, 20, new TranslatableText(handler.isBlockEntity ? "container.camsbackpacks.equip" : "container.camsbackpacks.unequip"), this::doButtonShit));
-		equipButton.active = !handler.isBlockEntity || playerInventory.player.getEquippedStack(EquipmentSlot.CHEST).isEmpty();
+		equipButton.active = !handler.isBlockEntity || player.getEquippedStack(EquipmentSlot.CHEST).isEmpty();
 	}
 
 	private void doButtonShit(ButtonWidget button) {
-		// do button shit
+		if(handler.isBlockEntity && player.getEquippedStack(EquipmentSlot.CHEST).isEmpty())
+			System.out.println("Equipping Backpack");
+		else if(!handler.isBlockEntity)
+			System.out.println("Unequipping Backpack");
 	}
 }

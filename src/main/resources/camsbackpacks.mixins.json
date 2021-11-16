@@ -6,7 +6,8 @@
 	"mixins": [
 		"ArmourSlotMixin",
 		"CraftingScreenHandlerAccessor",
-		"ItemEntityMixin"
+		"ItemEntityMixin",
+		"PlayerScreenHandlerAccessor"
 	],
 	"client": [
 		"client.ClientPlayerInteractionManagerMixin",
