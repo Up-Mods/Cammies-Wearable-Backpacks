@@ -23,5 +23,7 @@
 
 	// Container stuff
 	"container.camsbackpacks.equip": "Equip",
-	"container.camsbackpacks.upequip": "Unequip"
+	"container.camsbackpacks.upequip": "Unequip",
+	"container.camsbackpacks.obstructed_block": "Block in front of player is obstructed!",
+	"container.camsbackpacks.cant_equip": "You're already wearing something on your back!"
 }

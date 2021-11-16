@@ -90,11 +90,12 @@ public class BackpackBlockEntity extends BlockEntity implements Inventory, Exten
 
 	@Override
 	public @Nullable ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
-		return new BackpackScreenHandler(syncId, inv, this, ScreenHandlerContext.create(player.world, getPos()), true);
+		return new BackpackScreenHandler(syncId, inv, this, ScreenHandlerContext.create(player.world, getPos()), getPos(), true);
 	}
 
 	@Override
 	public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf) {
+		buf.writeBlockPos(getPos());
 		buf.writeBoolean(true);
 	}
 }

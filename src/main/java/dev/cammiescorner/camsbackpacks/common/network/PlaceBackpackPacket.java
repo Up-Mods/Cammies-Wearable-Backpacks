@@ -4,10 +4,10 @@ import dev.cammiescorner.camsbackpacks.CamsBackpacks;
 import dev.cammiescorner.camsbackpacks.common.blocks.BackpackBlock;
 import dev.cammiescorner.camsbackpacks.common.blocks.entities.BackpackBlockEntity;
 import dev.cammiescorner.camsbackpacks.common.items.BackpackItem;
+import dev.cammiescorner.camsbackpacks.core.util.BackpackHelper;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.minecraft.block.Material;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.ItemStack;
@@ -37,10 +37,10 @@ public class PlaceBackpackPacket {
 
 		server.execute(() -> {
 			World world = player.world;
-			BlockPos pos = world.getBlockState(hitResult.getBlockPos()).getMaterial() == Material.REPLACEABLE_PLANT || world.getBlockState(hitResult.getBlockPos()).getMaterial() == Material.REPLACEABLE_UNDERWATER_PLANT ? hitResult.getBlockPos() : hitResult.getBlockPos().offset(hitResult.getSide());
+			BlockPos pos = BackpackHelper.isReplaceable(world, hitResult.getBlockPos()) ? hitResult.getBlockPos() : hitResult.getBlockPos().offset(hitResult.getSide());
 			ItemStack stack = player.getEquippedStack(EquipmentSlot.CHEST);
 
-			if(world.isAir(pos) || (world.getBlockState(pos).getMaterial() == Material.REPLACEABLE_PLANT || world.getBlockState(pos).getMaterial() == Material.REPLACEABLE_UNDERWATER_PLANT) || !world.getFluidState(pos).isEmpty()) {
+			if(BackpackHelper.isReplaceable(world, pos)) {
 				world.playSound(null, pos, SoundEvents.BLOCK_WOOL_PLACE, SoundCategory.BLOCKS, 1F, 1F);
 				world.setBlockState(pos, ((BackpackItem) stack.getItem()).getBlock().getDefaultState().with(BackpackBlock.FACING, player.getHorizontalFacing()).with(Properties.WATERLOGGED, !world.getFluidState(pos).isEmpty()));
 

@@ -59,7 +59,7 @@ public class ModBlocks {
 			Registry.register(Registry.ITEM, BLOCKS.get(block), getItem((BackpackBlock) block));
 	}
 
-	public static BackpackItem getItem(BackpackBlock block) {
+	private static BackpackItem getItem(BackpackBlock block) {
 		return new BackpackItem(block);
 	}
 

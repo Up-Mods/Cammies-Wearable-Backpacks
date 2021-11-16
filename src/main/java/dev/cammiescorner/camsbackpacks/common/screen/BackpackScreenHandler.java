@@ -10,17 +10,17 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.CraftingResultInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.CraftingResultSlot;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.BlockPos;
 
 public class BackpackScreenHandler extends ScreenHandler {
 	private final PlayerEntity player;
@@ -29,12 +29,13 @@ public class BackpackScreenHandler extends ScreenHandler {
 	private final CraftingResultInventory result;
 	private final ScreenHandlerContext context;
 	public final boolean isBlockEntity;
+	public final BlockPos blockPos;
 
-	public BackpackScreenHandler(int syncId, PlayerInventory playerInventory, boolean isBlockEntity) {
-		this(syncId, playerInventory, new SimpleInventory(36), ScreenHandlerContext.EMPTY, isBlockEntity);
+	public BackpackScreenHandler(int syncId, PlayerInventory playerInventory, BlockPos blockPos, boolean isBlockEntity) {
+		this(syncId, playerInventory, new SimpleInventory(36), ScreenHandlerContext.EMPTY, blockPos, isBlockEntity);
 	}
 
-	public BackpackScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, ScreenHandlerContext context, boolean isBlockEntity) {
+	public BackpackScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, ScreenHandlerContext context, BlockPos blockPos, boolean isBlockEntity) {
 		super(CamsBackpacks.BACKPACK_SCREEN_HANDLER, syncId);
 		checkSize(inventory, 36);
 		this.player = playerInventory.player;
@@ -42,6 +43,7 @@ public class BackpackScreenHandler extends ScreenHandler {
 		this.input = new CraftingInventory(this, 3, 3);
 		this.result = new CraftingResultInventory();
 		this.context = context;
+		this.blockPos = blockPos;
 		this.isBlockEntity = isBlockEntity;
 		inventory.onOpen(player);
 
@@ -82,7 +84,7 @@ public class BackpackScreenHandler extends ScreenHandler {
 				@Override
 				public boolean canTakeItems(PlayerEntity playerEntity) {
 					ItemStack stack = getStack();
-					return (stack.isEmpty() || playerEntity.isCreative() || !EnchantmentHelper.hasBindingCurse(stack) || stack.getItem() instanceof BackpackItem) && super.canTakeItems(playerEntity);
+					return (stack.isEmpty() || playerEntity.isCreative() || !EnchantmentHelper.hasBindingCurse(stack)) && !(stack.getItem() instanceof BackpackItem) && super.canTakeItems(playerEntity);
 				}
 
 				@Override
@@ -116,7 +118,20 @@ public class BackpackScreenHandler extends ScreenHandler {
 	@Override
 	public void close(PlayerEntity player) {
 		super.close(player);
-		context.run((world, pos) -> dropInventory(player, input));
+		context.run((world, pos) -> {
+			if(!world.isClient() && !isBlockEntity) {
+				ItemStack stack = player.getEquippedStack(EquipmentSlot.CHEST);
+				NbtCompound tag = stack.getOrCreateNbt();
+				DefaultedList<ItemStack> inv = DefaultedList.ofSize(36, ItemStack.EMPTY);
+
+				for(int i = 0; i < inventory.size(); i++)
+					inv.set(i, inventory.getStack(i));
+
+				Inventories.writeNbt(tag, inv);
+			}
+
+			dropInventory(player, input);
+		});
 	}
 
 	@Override

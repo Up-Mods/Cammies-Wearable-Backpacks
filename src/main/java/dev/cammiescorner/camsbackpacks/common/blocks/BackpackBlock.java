@@ -64,11 +64,11 @@ public class BackpackBlock extends BlockWithEntity implements Waterloggable {
 				if(world.getBlockEntity(pos) instanceof BackpackBlockEntity blockEntity) {
 					ItemStack stack = new ItemStack(this);
 					NbtCompound tag = stack.getOrCreateNbt();
-					Inventories.writeNbt(tag, blockEntity.inventory);
 
+					Inventories.writeNbt(tag, blockEntity.inventory);
 					blockEntity.wasPickedUp = true;
-					world.breakBlock(pos, false, player);
 					player.equipStack(EquipmentSlot.CHEST, stack);
+					world.breakBlock(pos, false, player);
 				}
 			}
 			else {

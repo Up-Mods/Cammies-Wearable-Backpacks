@@ -2,7 +2,9 @@ package dev.cammiescorner.camsbackpacks.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import dev.cammiescorner.camsbackpacks.CamsBackpacks;
+import dev.cammiescorner.camsbackpacks.common.network.EquipBackpackPacket;
 import dev.cammiescorner.camsbackpacks.common.screen.BackpackScreenHandler;
+import dev.cammiescorner.camsbackpacks.core.util.BackpackHelper;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
@@ -55,6 +57,19 @@ public class BackpackScreen extends HandledScreen<BackpackScreenHandler> {
 		super.render(matrices, mouseX, mouseY, delta);
 		drawMouseoverTooltip(matrices, mouseX, mouseY);
 		InventoryScreen.drawEntity(x + 50, y + 125, 30, (x + 50) - mouseX, (y + 125 - 50) - mouseY, player);
+
+		boolean canPlace = BackpackHelper.isReplaceable(player.world, handler.blockPos.offset(player.getHorizontalFacing()));
+		boolean canEquip = player.getEquippedStack(EquipmentSlot.CHEST).isEmpty();
+
+		if(equipButton.isHovered()) {
+			if(!handler.isBlockEntity && !canPlace)
+				renderTooltip(matrices, new TranslatableText("container.camsbackpacks.obstructed_block"), mouseX, mouseY);
+			if(handler.isBlockEntity && !canEquip)
+				renderTooltip(matrices, new TranslatableText("container.camsbackpacks.cant_equip"), mouseX, mouseY);
+		}
+
+		if(equipButton != null)
+			equipButton.active = (!handler.isBlockEntity && canPlace) || canEquip;
 	}
 
 	@Override
@@ -65,15 +80,13 @@ public class BackpackScreen extends HandledScreen<BackpackScreenHandler> {
 		playerInventoryTitleY = 96;
 		craftingX = 255;
 		craftingY = 38;
-
 		equipButton = addDrawableChild(new ButtonWidget(width / 2 + 86, height / 2 + 58, 68, 20, new TranslatableText(handler.isBlockEntity ? "container.camsbackpacks.equip" : "container.camsbackpacks.upequip"), this::doButtonShit));
-		equipButton.active = !handler.isBlockEntity || player.getEquippedStack(EquipmentSlot.CHEST).isEmpty();
 	}
 
 	private void doButtonShit(ButtonWidget button) {
 		if(handler.isBlockEntity && player.getEquippedStack(EquipmentSlot.CHEST).isEmpty())
-			System.out.println("Equipping Backpack");
+			EquipBackpackPacket.send(true, handler.blockPos);
 		else if(!handler.isBlockEntity)
-			System.out.println("Unequipping Backpack");
+			EquipBackpackPacket.send(false, handler.blockPos);
 	}
 }
