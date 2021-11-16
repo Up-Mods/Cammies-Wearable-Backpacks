@@ -66,7 +66,7 @@ public class BackpackScreen extends HandledScreen<BackpackScreenHandler> {
 		craftingX = 255;
 		craftingY = 38;
 
-		equipButton = addDrawableChild(new ButtonWidget(width / 2 + 86, height / 2 + 58, 68, 20, new TranslatableText(handler.isBlockEntity ? "container.camsbackpacks.equip" : "container.camsbackpacks.unequip"), this::doButtonShit));
+		equipButton = addDrawableChild(new ButtonWidget(width / 2 + 86, height / 2 + 58, 68, 20, new TranslatableText(handler.isBlockEntity ? "container.camsbackpacks.equip" : "container.camsbackpacks.upequip"), this::doButtonShit));
 		equipButton.active = !handler.isBlockEntity || player.getEquippedStack(EquipmentSlot.CHEST).isEmpty();
 	}
 

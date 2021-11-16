@@ -12,6 +12,7 @@
 	"client": [
 		"client.ClientPlayerInteractionManagerMixin",
 		"client.KeyBindingAccessor",
+		"client.MinecraftClientMixin",
 		"client.PlayerEntityRendererMixin"
 	],
 	"injectors": {
