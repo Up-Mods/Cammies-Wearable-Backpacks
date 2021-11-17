@@ -8,7 +8,6 @@ import dev.cammiescorner.camsbackpacks.common.screen.BackpackScreenHandler;
 import dev.cammiescorner.camsbackpacks.core.util.BackpackHelper;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.SkullBlockEntity;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
@@ -25,7 +24,9 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
+import org.lwjgl.glfw.GLFW;
 
+@SuppressWarnings("ConstantConditions")
 public class BackpackScreen extends AbstractInventoryScreen<BackpackScreenHandler> {
 	public static final Identifier TEXTURE = new Identifier(CamsBackpacks.MOD_ID, "textures/gui/backpack.png");
 	protected PlayerInventory playerInventory;
@@ -96,9 +97,9 @@ public class BackpackScreen extends AbstractInventoryScreen<BackpackScreenHandle
 		}
 
 		if(!handler.isBlockEntity) {
-			if(isPointWithinBounds(2, 1, 28, 28, mouseX, mouseY))
+			if(isPointWithinBounds(3, 1, 26, 28, mouseX, mouseY))
 				renderTooltip(matrices, new TranslatableText("container.camsbackpacks.player_inv"), mouseX, mouseY);
-			else if(isPointWithinBounds(32, 1, 28, 28, mouseX, mouseY))
+			else if(isPointWithinBounds(32, 1, 26, 28, mouseX, mouseY))
 				renderTooltip(matrices, new TranslatableText("container.camsbackpacks.backpack_inv"), mouseX, mouseY);
 		}
 	}
@@ -146,8 +147,11 @@ public class BackpackScreen extends AbstractInventoryScreen<BackpackScreenHandle
 
 	private void openVanillaInventory(ButtonWidget button) {
 		CamsBackpacksClient.backpackScreenIsOpen = false;
+		double x = client.mouse.getX();
+		double y = client.mouse.getY();
 		client.player.closeHandledScreen();
-		MinecraftClient.getInstance().setScreen(new InventoryScreen(player));
+		client.setScreen(new InventoryScreen(player));
+		GLFW.glfwSetCursorPos(client.getWindow().getHandle(), x, y);
 	}
 
 	public static ItemStack getPlayerHead(PlayerEntity player) {

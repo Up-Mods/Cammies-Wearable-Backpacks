@@ -23,6 +23,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+@SuppressWarnings("ConstantConditions")
 @Mixin(InventoryScreen.class)
 public abstract class InventoryScreenMixin extends AbstractInventoryScreen<PlayerScreenHandler> {
 	@Unique protected ItemStack playerInvIcon = ItemStack.EMPTY;
@@ -44,9 +45,9 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
 	@Inject(method = "render", at = @At("TAIL"))
 	public void camsbackpacks$render(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo info) {
 		if(equippedStack.getItem() instanceof BackpackItem) {
-			if(isPointWithinBounds(2, -27, 28, 28, mouseX, mouseY))
+			if(isPointWithinBounds(3, -27, 26, 28, mouseX, mouseY))
 				renderTooltip(matrices, new TranslatableText("container.camsbackpacks.player_inv"), mouseX, mouseY);
-			else if(isPointWithinBounds(32, -27, 28, 28, mouseX, mouseY))
+			else if(isPointWithinBounds(32, -27, 26, 28, mouseX, mouseY))
 				renderTooltip(matrices, new TranslatableText("container.camsbackpacks.backpack_inv"), mouseX, mouseY);
 		}
 	}
@@ -57,7 +58,7 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
 		equippedStack = client.player.getEquippedStack(EquipmentSlot.CHEST);
 
 		if(equippedStack.getItem() instanceof BackpackItem)
-			addSelectableChild(new ButtonWidget(x + 32, y - 27, 28, 28, new LiteralText(""), this::openBackpackScreen));
+			addSelectableChild(new ButtonWidget(x + 31, y - 27, 28, 28, new LiteralText(""), this::openBackpackScreen));
 	}
 
 	@Unique

@@ -11,10 +11,10 @@
 	],
 	"client": [
 		"client.ClientPlayerInteractionManagerMixin",
+		"client.InventoryScreenMixin",
 		"client.KeyBindingAccessor",
 		"client.MinecraftClientMixin",
-		"client.PlayerEntityRendererMixin",
-		"client.InventoryScreenMixin"
+		"client.PlayerEntityRendererMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
