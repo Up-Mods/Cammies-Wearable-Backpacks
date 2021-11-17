@@ -146,6 +146,7 @@ public class BackpackScreen extends AbstractInventoryScreen<BackpackScreenHandle
 
 	private void openVanillaInventory(ButtonWidget button) {
 		CamsBackpacksClient.backpackScreenIsOpen = false;
+		client.player.closeHandledScreen();
 		MinecraftClient.getInstance().setScreen(new InventoryScreen(player));
 	}
 
