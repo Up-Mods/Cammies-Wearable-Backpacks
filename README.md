@@ -8,7 +8,9 @@
 
 ---
 
-Just a small mod that adds 16 backpacks to the game that can be worn in the chest slot. It gives you 75% more inventory space, and can be placed down on the ground.
+Just a small mod that adds 16 backpacks to the game that can be worn in the chest slot.
+
+It gives you double the inventory space, and can be placed down on the ground as a nice decoration.
 
 **Pics for Clicks :hahayes:**
 <details>
