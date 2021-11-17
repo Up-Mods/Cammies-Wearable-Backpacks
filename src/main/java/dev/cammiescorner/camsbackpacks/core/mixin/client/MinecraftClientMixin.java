@@ -1,5 +1,6 @@
 package dev.cammiescorner.camsbackpacks.core.mixin.client;
 
+import dev.cammiescorner.camsbackpacks.client.CamsBackpacksClient;
 import dev.cammiescorner.camsbackpacks.common.items.BackpackItem;
 import dev.cammiescorner.camsbackpacks.common.network.OpenBackpackScreenPacket;
 import net.minecraft.client.MinecraftClient;
@@ -21,7 +22,7 @@ public abstract class MinecraftClientMixin {
 			ordinal = 1
 	), cancellable = true)
 	public void setScreen(CallbackInfo info) {
-		if(player != null && !player.isCreative() && player.getEquippedStack(EquipmentSlot.CHEST).getItem() instanceof BackpackItem) {
+		if(player != null && !player.isCreative() && CamsBackpacksClient.backpackScreenIsOpen && player.getEquippedStack(EquipmentSlot.CHEST).getItem() instanceof BackpackItem) {
 			OpenBackpackScreenPacket.send();
 			info.cancel();
 		}

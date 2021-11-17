@@ -13,7 +13,8 @@
 		"client.ClientPlayerInteractionManagerMixin",
 		"client.KeyBindingAccessor",
 		"client.MinecraftClientMixin",
-		"client.PlayerEntityRendererMixin"
+		"client.PlayerEntityRendererMixin",
+		"client.InventoryScreenMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

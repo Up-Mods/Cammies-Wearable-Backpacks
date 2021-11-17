@@ -2,10 +2,13 @@ package dev.cammiescorner.camsbackpacks.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import dev.cammiescorner.camsbackpacks.CamsBackpacks;
+import dev.cammiescorner.camsbackpacks.client.CamsBackpacksClient;
 import dev.cammiescorner.camsbackpacks.common.network.EquipBackpackPacket;
 import dev.cammiescorner.camsbackpacks.common.screen.BackpackScreenHandler;
 import dev.cammiescorner.camsbackpacks.core.util.BackpackHelper;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.entity.SkullBlockEntity;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
@@ -16,15 +19,20 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtHelper;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
 public class BackpackScreen extends AbstractInventoryScreen<BackpackScreenHandler> {
-	private static final Identifier TEXTURE = new Identifier(CamsBackpacks.MOD_ID, "textures/gui/backpack.png");
+	public static final Identifier TEXTURE = new Identifier(CamsBackpacks.MOD_ID, "textures/gui/backpack.png");
 	protected PlayerInventory playerInventory;
 	protected ButtonWidget equipButton;
 	protected PlayerEntity player;
+	protected ItemStack playerInvIcon;
+	protected ItemStack backpackInvIcon;
 	protected int craftingX;
 	protected int craftingY;
 	protected int playerNameX;
@@ -36,6 +44,8 @@ public class BackpackScreen extends AbstractInventoryScreen<BackpackScreenHandle
 		this.backgroundWidth = 322;
 		this.backgroundHeight = 220;
 		this.player = playerInventory.player;
+		this.playerInvIcon = getPlayerHead(player);
+		this.backpackInvIcon = getBackpack();
 	}
 
 	@Override
@@ -46,15 +56,18 @@ public class BackpackScreen extends AbstractInventoryScreen<BackpackScreenHandle
 		int x = (width - 322) / 2;
 		int y = (height - 220) / 2;
 		DrawableHelper.drawTexture(matrices, x, y, 0, 0, 0, 322, 190, 220, 322);
-		DrawableHelper.drawTexture(matrices, x + 1, y - 1, 0, 60, 190, 60, 30, 220, 322);
 
-		itemRenderer.renderInGui(getPlayerHead(), x + 8, y + 6);
-		itemRenderer.renderInGui(getBackpack(), x + 38, y + 6);
+		if(!handler.isBlockEntity) {
+			DrawableHelper.drawTexture(matrices, x + 1, y - 1, 0, 60, 190, 60, 30, 220, 322);
+			itemRenderer.renderInGui(playerInvIcon, x + 8, y + 6);
+			itemRenderer.renderInGui(backpackInvIcon, x + 38, y + 6);
+		}
 	}
 
 	@Override
 	protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {
 		super.drawForeground(matrices, mouseX, mouseY);
+
 		textRenderer.draw(matrices, new TranslatableText("container.crafting"), craftingX, craftingY, 4210752);
 
 		matrices.push();
@@ -81,6 +94,13 @@ public class BackpackScreen extends AbstractInventoryScreen<BackpackScreenHandle
 			else
 				renderTooltip(matrices, new TranslatableText("container.camsbackpacks.cant_equip"), mouseX, mouseY);
 		}
+
+		if(!handler.isBlockEntity) {
+			if(isPointWithinBounds(2, 1, 28, 28, mouseX, mouseY))
+				renderTooltip(matrices, new TranslatableText("container.camsbackpacks.player_inv"), mouseX, mouseY);
+			else if(isPointWithinBounds(32, 1, 28, 28, mouseX, mouseY))
+				renderTooltip(matrices, new TranslatableText("container.camsbackpacks.backpack_inv"), mouseX, mouseY);
+		}
 	}
 
 	@Override
@@ -103,7 +123,10 @@ public class BackpackScreen extends AbstractInventoryScreen<BackpackScreenHandle
 		craftingY = 34;
 		playerNameX = 8;
 		playerNameY = 38;
-		equipButton = addDrawableChild(new ButtonWidget(width / 2 + 86, height / 2 + 48, 68, 20, new TranslatableText(handler.isBlockEntity ? "container.camsbackpacks.equip" : "container.camsbackpacks.upequip"), this::doButtonShit));
+		equipButton = addDrawableChild(new ButtonWidget(x + 246, y + 156, 69, 20, new TranslatableText(handler.isBlockEntity ? "container.camsbackpacks.equip" : "container.camsbackpacks.upequip"), this::doEquipButtonShit));
+
+		if(!handler.isBlockEntity)
+			addSelectableChild(new ButtonWidget(x + 2, y - 1, 28, 28, new LiteralText(""), this::openVanillaInventory));
 
 		if(handler.isBlockEntity)
 			drawStatusEffects = false;
@@ -114,16 +137,22 @@ public class BackpackScreen extends AbstractInventoryScreen<BackpackScreenHandle
 		super.applyStatusEffectOffset();
 	}
 
-	private void doButtonShit(ButtonWidget button) {
+	private void doEquipButtonShit(ButtonWidget button) {
 		if(handler.isBlockEntity && player.getEquippedStack(EquipmentSlot.CHEST).isEmpty())
 			EquipBackpackPacket.send(true, handler.blockPos);
 		else if(!handler.isBlockEntity)
 			EquipBackpackPacket.send(false, handler.blockPos);
 	}
 
-	private ItemStack getPlayerHead() {
+	private void openVanillaInventory(ButtonWidget button) {
+		CamsBackpacksClient.backpackScreenIsOpen = false;
+		MinecraftClient.getInstance().setScreen(new InventoryScreen(player));
+	}
+
+	public static ItemStack getPlayerHead(PlayerEntity player) {
 		ItemStack head = new ItemStack(Blocks.PLAYER_HEAD);
-		// head.getOrCreateNbt().putString("SkullOwner", player.getEntityName());
+		NbtCompound tag = head.getOrCreateNbt();
+		SkullBlockEntity.loadProperties(player.getGameProfile(), (profile) -> tag.put("SkullOwner", NbtHelper.writeGameProfile(new NbtCompound(), profile)));
 
 		return head;
 	}

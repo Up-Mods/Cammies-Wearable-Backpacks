@@ -20,6 +20,7 @@ import static dev.cammiescorner.camsbackpacks.core.registry.ModBlocks.*;
 
 public class CamsBackpacksClient implements ClientModInitializer {
 	public static final EntityModelLayer BACKPACK = new EntityModelLayer(new Identifier(CamsBackpacks.MOD_ID, "backpack"), "main");
+	public static boolean backpackScreenIsOpen = true;
 
 	@Override
 	public void onInitializeClient() {
