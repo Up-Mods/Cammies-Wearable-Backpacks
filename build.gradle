@@ -6,12 +6,24 @@ plugins {
 version = project.mod_version
 group = project.maven_group
 
+repositories {
+    maven {
+        name = "TerraformersMC"
+        url = "https://maven.terraformersmc.com/"
+    }
+    maven {
+        name = "Ladysnake Libs"
+        url = "https://ladysnake.jfrog.io/artifactory/mods"
+    }
+}
+
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    modImplementation "dev.emi:trinkets:${project.trinkets_version}"
 }
 
 processResources {
