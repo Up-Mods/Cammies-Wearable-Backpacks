@@ -10,6 +10,20 @@
 
 Just a small mod that adds 16 backpacks to the game that can be worn in the chest slot. It gives you 75% more inventory space, and can be placed down on the ground.
 
+**Pics for Clicks :hahayes:**
+<details>
+  
+  ![Backpack on player from back](https://user-images.githubusercontent.com/16853086/142283955-60842ff4-7ee9-4c7d-ad13-5eee08c6b0ab.png)
+  ![Backpack on player from front](https://user-images.githubusercontent.com/16853086/142284019-146ca1d8-ae8d-41a4-b0c5-a0c2e708d030.png)
+  ![Backpack GUI on ground](https://user-images.githubusercontent.com/16853086/142284054-911f7586-f9a0-4a12-98f1-f7c98044e7ed.png)
+  ![Backpack GUI on player](https://user-images.githubusercontent.com/16853086/142284068-394839a8-fbea-4f93-a165-22fa42b98243.png)
+  ![Survival inventory when wearing backpack](https://user-images.githubusercontent.com/16853086/142284075-82b1ada8-fefa-4a1c-9558-dfefb78452e0.png)
+</details>
+
+**Q:** How do I craft a backpack?
+**A:** You can install REI to see all of them, but this is the format.
+![Backpack Crafting Recipe](https://user-images.githubusercontent.com/16853086/142283697-cec75a52-f783-4d0e-97c6-02da74fb23dd.png)
+
 ---
 
 <table align="center">
