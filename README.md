@@ -22,8 +22,14 @@ It gives you double the inventory space, and can be placed down on the ground as
   ![Survival inventory when wearing backpack](https://user-images.githubusercontent.com/16853086/142284075-82b1ada8-fefa-4a1c-9558-dfefb78452e0.png)
 </details>
 
+**Q:** Can you please let us put backpacks in a Trinkets slot?
+<br>
+**A:** No. It's a lot of extra effort for a feature I don't feel like implementing. It makes the inventory space free with literally 0 cost to it. If you want that, go install any other backpack mod.
+<br><br>
 **Q:** How do I craft a backpack?
+<br>
 **A:** You can install REI to see all of them, but this is the format.
+
 ![Backpack Crafting Recipe](https://user-images.githubusercontent.com/16853086/142283697-cec75a52-f783-4d0e-97c6-02da74fb23dd.png)
 
 ---
