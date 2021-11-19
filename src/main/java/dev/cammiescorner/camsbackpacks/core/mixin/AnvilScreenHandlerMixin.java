@@ -28,7 +28,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 			"pussy puncher", "lezzie", "lesbo", "leso", "muff diver", "donut puncher", "donut muffer", "fag", "faggot");
 	@Unique private static final List<String> BI_SLURS = List.of("switch hitter", "bicon");
 	@Unique private static final List<String> TRANS_SLURS = List.of("futa", "herm", "cuntboy", "dickgirl", "shemale",
-			"t girl", "t-girl", "tranny", "transbian");
+			"t girl", "t-girl", "tranny", "transbian", "trap");
 	@Unique private static final List<String> RACIST_SLURS = List.of("nigger", "nigga", "negro");
 
 	public AnvilScreenHandlerMixin(@Nullable ScreenHandlerType<?> type, int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) { super(type, syncId, playerInventory, context); }
@@ -36,18 +36,19 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 	@Inject(method = "updateResult", at = @At(value = "INVOKE",
 			target = "Lnet/minecraft/item/ItemStack;setCustomName(Lnet/minecraft/text/Text;)Lnet/minecraft/item/ItemStack;"
 	))
-	public void camsbackpacks$updateResult(CallbackInfo info) {
+	private void camsbackpacks$updateResult(CallbackInfo info) {
 		hippityHoppityYourSlursAreNowMyProperty();
 	}
 
 	@Inject(method = "setNewItemName", at = @At(value = "INVOKE",
 			target = "Lnet/minecraft/item/ItemStack;setCustomName(Lnet/minecraft/text/Text;)Lnet/minecraft/item/ItemStack;"
 	))
-	public void camsbackpacks$setNewItemName(String newItemName, CallbackInfo info) {
+	private void camsbackpacks$setNewItemName(String newItemName, CallbackInfo info) {
 		hippityHoppityYourSlursAreNowMyProperty();
 	}
 
-	public void hippityHoppityYourSlursAreNowMyProperty() {
+	@Unique
+	private void hippityHoppityYourSlursAreNowMyProperty() {
 		Item item = this.input.getStack(0).getItem();
 
 		if(item instanceof BackpackItem) {

@@ -48,6 +48,7 @@ public class EquipBackpackPacket {
 					Inventories.writeNbt(tag, blockEntity.inventory);
 					blockEntity.wasPickedUp = true;
 					player.equipStack(EquipmentSlot.CHEST, stack);
+					stack.setCustomName(blockEntity.getName());
 					world.breakBlock(pos, false, player);
 					player.closeHandledScreen();
 				}
@@ -60,8 +61,10 @@ public class EquipBackpackPacket {
 					world.setBlockState(pos, backpackItem.getBlock().getDefaultState().with(BackpackBlock.FACING, player.getHorizontalFacing()).with(Properties.WATERLOGGED, !world.getFluidState(pos).isEmpty()));
 					player.closeHandledScreen();
 
-					if(world.getBlockEntity(pos) instanceof BackpackBlockEntity backpack)
+					if(world.getBlockEntity(pos) instanceof BackpackBlockEntity backpack) {
 						Inventories.readNbt(stack.getOrCreateNbt(), backpack.inventory);
+						backpack.setName(stack.getName());
+					}
 
 					player.getEquippedStack(EquipmentSlot.CHEST).decrement(1);
 				}

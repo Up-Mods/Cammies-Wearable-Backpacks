@@ -16,6 +16,18 @@
 		"camsbackpacks:brown_backpack",
 		"camsbackpacks:green_backpack",
 		"camsbackpacks:red_backpack",
-		"camsbackpacks:black_backpack"
+		"camsbackpacks:black_backpack",
+		"camsbackpacks:gay_pride_backpack",
+		"camsbackpacks:qpoc_pride_backpack",
+		"camsbackpacks:bi_pride_backpack",
+		"camsbackpacks:pan_pride_backpack",
+		"camsbackpacks:trans_pride_backpack",
+		"camsbackpacks:genderqueer_pride_backpack",
+		"camsbackpacks:genderfluid_pride_backpack",
+		"camsbackpacks:enby_pride_backpack",
+		"camsbackpacks:ace_pride_backpack",
+		"camsbackpacks:demi_pride_backpack",
+		"camsbackpacks:aro_pride_backpack",
+		"camsbackpacks:agender_pride_backpack"
 	]
 }

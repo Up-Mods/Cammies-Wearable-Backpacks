@@ -6,7 +6,7 @@
 			"entries": [
 				{
 					"type": "minecraft:item",
-					"name": "camsbackpacks:white_backpack",
+					"name": "camsbackpacks:trans_pride_backpack",
 					"functions": [
 						{
 							"function": "minecraft:copy_nbt",

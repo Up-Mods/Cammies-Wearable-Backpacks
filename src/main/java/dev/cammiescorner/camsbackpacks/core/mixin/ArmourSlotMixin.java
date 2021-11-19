@@ -16,7 +16,7 @@ public abstract class ArmourSlotMixin extends Slot {
 	}
 
 	@Inject(method = "canTakeItems(Lnet/minecraft/entity/player/PlayerEntity;)Z", at = @At("HEAD"), cancellable = true)
-	public void canTakeItems(PlayerEntity playerEntity, CallbackInfoReturnable<Boolean> info) {
+	public void camsbackpacks$canTakeItems(PlayerEntity playerEntity, CallbackInfoReturnable<Boolean> info) {
 		if(getStack().getItem() instanceof BackpackItem)
 			info.setReturnValue(false);
 	}

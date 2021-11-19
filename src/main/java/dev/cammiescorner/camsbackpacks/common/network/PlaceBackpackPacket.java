@@ -44,8 +44,10 @@ public class PlaceBackpackPacket {
 				world.playSound(null, pos, SoundEvents.BLOCK_WOOL_PLACE, SoundCategory.BLOCKS, 1F, 1F);
 				world.setBlockState(pos, ((BackpackItem) stack.getItem()).getBlock().getDefaultState().with(BackpackBlock.FACING, player.getHorizontalFacing()).with(Properties.WATERLOGGED, !world.getFluidState(pos).isEmpty()));
 
-				if(world.getBlockEntity(pos) instanceof BackpackBlockEntity backpack)
+				if(world.getBlockEntity(pos) instanceof BackpackBlockEntity backpack) {
 					Inventories.readNbt(stack.getOrCreateNbt(), backpack.inventory);
+					backpack.setName(stack.getName());
+				}
 
 				player.getEquippedStack(EquipmentSlot.CHEST).decrement(1);
 			}

@@ -5,6 +5,7 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
@@ -46,15 +47,19 @@ public class BackpackBlock extends BlockWithEntity implements Waterloggable {
 
 	@Override
 	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-		switch(state.get(FACING)) {
-			default:
-				return NORTH_SHAPE;
-			case EAST:
-				return EAST_SHAPE;
-			case SOUTH:
-				return SOUTH_SHAPE;
-			case WEST:
-				return WEST_SHAPE;
+		return switch(state.get(FACING)) {
+			default -> NORTH_SHAPE;
+			case EAST -> EAST_SHAPE;
+			case SOUTH -> SOUTH_SHAPE;
+			case WEST -> WEST_SHAPE;
+		};
+	}
+
+	@Override
+	public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+		if(world.getBlockEntity(pos) instanceof BackpackBlockEntity backpack) {
+			System.out.println("beep");
+			backpack.setName(stack.getName());
 		}
 	}
 
@@ -68,6 +73,7 @@ public class BackpackBlock extends BlockWithEntity implements Waterloggable {
 
 					Inventories.writeNbt(tag, blockEntity.inventory);
 					blockEntity.wasPickedUp = true;
+					stack.setCustomName(blockEntity.getName());
 					player.equipStack(EquipmentSlot.CHEST, stack);
 					world.breakBlock(pos, false, player);
 				}

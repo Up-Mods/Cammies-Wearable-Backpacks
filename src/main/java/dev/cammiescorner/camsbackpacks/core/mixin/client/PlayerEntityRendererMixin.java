@@ -18,7 +18,7 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
 	}
 
 	@Inject(method = "<init>", at = @At("TAIL"))
-	public void init(EntityRendererFactory.Context context, boolean bl, CallbackInfo info) {
+	public void camsbackpacks$init(EntityRendererFactory.Context context, boolean bl, CallbackInfo info) {
 		this.addFeature(new BackpackRenderer<>(this, context.getModelLoader()));
 	}
 }

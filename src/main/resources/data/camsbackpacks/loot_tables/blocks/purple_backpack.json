@@ -5,8 +5,21 @@
 			"rolls": 1,
 			"entries": [
 				{
-					"type": "item",
-					"name": "camsbackpacks:purple_backpack"
+					"type": "minecraft:item",
+					"name": "camsbackpacks:purple_backpack",
+					"functions": [
+						{
+							"function": "minecraft:copy_nbt",
+							"source": "block_entity",
+							"ops": [
+								{
+									"source": "CustomName",
+									"target": "display.Name",
+									"op": "replace"
+								}
+							]
+						}
+					]
 				}
 			],
 			"conditions": [

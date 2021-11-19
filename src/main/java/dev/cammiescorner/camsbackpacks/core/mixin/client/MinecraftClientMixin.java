@@ -21,7 +21,7 @@ public abstract class MinecraftClientMixin {
 			target = "net/minecraft/client/MinecraftClient.setScreen(Lnet/minecraft/client/gui/screen/Screen;)V",
 			ordinal = 1
 	), cancellable = true)
-	public void setScreen(CallbackInfo info) {
+	public void camsbackpacks$setScreen(CallbackInfo info) {
 		if(player != null && !player.isCreative() && CamsBackpacksClient.backpackScreenIsOpen && player.getEquippedStack(EquipmentSlot.CHEST).getItem() instanceof BackpackItem) {
 			OpenBackpackScreenPacket.send();
 			info.cancel();

@@ -11,19 +11,21 @@ import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Nameable;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
-public class BackpackBlockEntity extends BlockEntity implements Inventory, ExtendedScreenHandlerFactory {
+public class BackpackBlockEntity extends BlockEntity implements Inventory, Nameable, ExtendedScreenHandlerFactory {
 	public final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(36, ItemStack.EMPTY);
 	public boolean wasPickedUp = false;
+	private Text name = Text.of("");
 
 	public BackpackBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.BACKPACK, pos, state);
@@ -34,12 +36,18 @@ public class BackpackBlockEntity extends BlockEntity implements Inventory, Exten
 		super.readNbt(tag);
 		Inventories.readNbt(tag, inventory);
 		wasPickedUp = tag.getBoolean("PickedUp");
+		if(tag.contains("CustomName", NbtElement.STRING_TYPE))
+			this.name = Text.Serializer.fromJson(tag.getString("CustomName"));
 	}
 
 	@Override
 	public void writeNbt(NbtCompound tag) {
 		Inventories.writeNbt(tag, inventory);
 		tag.putBoolean("PickedUp", wasPickedUp);
+
+		if(this.name != null)
+			tag.putString("CustomName", Text.Serializer.toJson(this.name));
+
 		super.writeNbt(tag);
 	}
 
@@ -84,8 +92,18 @@ public class BackpackBlockEntity extends BlockEntity implements Inventory, Exten
 	}
 
 	@Override
+	public Text getName() {
+		return name;
+	}
+
+	public void setName(Text text) {
+		this.name = text;
+		this.markDirty();
+	}
+
+	@Override
 	public Text getDisplayName() {
-		return new TranslatableText(getCachedState().getBlock().getTranslationKey());
+		return getName();
 	}
 
 	@Override

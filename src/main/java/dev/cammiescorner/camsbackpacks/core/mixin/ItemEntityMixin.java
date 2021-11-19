@@ -26,7 +26,7 @@ public abstract class ItemEntityMixin extends Entity {
 	}
 
 	@Inject(method = "tick", at = @At("HEAD"))
-	public void tick(CallbackInfo info) {
+	public void camsbackpacks$tick(CallbackInfo info) {
 		ItemStack stack = getDataTracker().get(STACK);
 
 		if(stack.getItem() instanceof BackpackItem && isOnGround()) {
