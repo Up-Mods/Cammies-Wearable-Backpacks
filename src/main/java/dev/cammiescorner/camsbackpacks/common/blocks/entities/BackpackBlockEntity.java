@@ -37,10 +37,10 @@ public class BackpackBlockEntity extends BlockEntity implements Inventory, Exten
 	}
 
 	@Override
-	public NbtCompound writeNbt(NbtCompound tag) {
+	public void writeNbt(NbtCompound tag) {
 		Inventories.writeNbt(tag, inventory);
 		tag.putBoolean("PickedUp", wasPickedUp);
-		return super.writeNbt(tag);
+		super.writeNbt(tag);
 	}
 
 	@Override

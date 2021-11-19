@@ -62,8 +62,8 @@ public class EquipBackpackPacket {
 					if(world.getBlockEntity(pos) instanceof BackpackBlockEntity backpack)
 						Inventories.readNbt(stack.getOrCreateNbt(), backpack.inventory);
 
-					player.getEquippedStack(EquipmentSlot.CHEST).decrement(1);
 					player.closeHandledScreen();
+					player.getEquippedStack(EquipmentSlot.CHEST).decrement(1);
 				}
 			}
 		});

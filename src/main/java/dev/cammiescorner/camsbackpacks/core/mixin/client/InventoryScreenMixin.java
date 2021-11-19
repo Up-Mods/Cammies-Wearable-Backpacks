@@ -35,7 +35,7 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
 	public void camsbackpacks$drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY, CallbackInfo info) {
 		if(equippedStack.getItem() instanceof BackpackItem) {
 			RenderSystem.setShaderTexture(0, BackpackScreen.TEXTURE);
-			DrawableHelper.drawTexture(matrices, x + 1, y - 27, 0, 0, 190, 60, 30, 220, 322);
+			DrawableHelper.drawTexture(matrices, x + 1, y - 27, 0, 0, 190, 60, 30, 322, 220);
 			itemRenderer.renderInGui(playerInvIcon, x + 8, y - 20);
 			itemRenderer.renderInGui(equippedStack, x + 38, y - 20);
 			RenderSystem.setShaderTexture(0, BACKGROUND_TEXTURE);

@@ -56,10 +56,10 @@ public class BackpackScreen extends AbstractInventoryScreen<BackpackScreenHandle
 		RenderSystem.setShaderTexture(0, TEXTURE);
 		int x = (width - 322) / 2;
 		int y = (height - 220) / 2;
-		DrawableHelper.drawTexture(matrices, x, y, 0, 0, 0, 322, 190, 220, 322);
+		DrawableHelper.drawTexture(matrices, x, y, 0, 0, 0, 322, 190, 322, 220);
 
 		if(!handler.isBlockEntity) {
-			DrawableHelper.drawTexture(matrices, x + 1, y - 1, 0, 60, 190, 60, 30, 220, 322);
+			DrawableHelper.drawTexture(matrices, x + 1, y - 1, 0, 60, 190, 60, 30, 322, 220);
 			itemRenderer.renderInGui(playerInvIcon, x + 8, y + 6);
 			itemRenderer.renderInGui(backpackInvIcon, x + 38, y + 6);
 		}
@@ -128,14 +128,6 @@ public class BackpackScreen extends AbstractInventoryScreen<BackpackScreenHandle
 
 		if(!handler.isBlockEntity)
 			addSelectableChild(new ButtonWidget(x + 2, y - 1, 28, 28, new LiteralText(""), this::openVanillaInventory));
-
-		if(handler.isBlockEntity)
-			drawStatusEffects = false;
-	}
-
-	@Override
-	protected void applyStatusEffectOffset() {
-		super.applyStatusEffectOffset();
 	}
 
 	private void doEquipButtonShit(ButtonWidget button) {
