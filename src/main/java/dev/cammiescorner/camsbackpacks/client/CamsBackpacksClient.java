@@ -14,12 +14,11 @@ import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.fabricmc.fabric.impl.client.rendering.ColorProviderRegistryImpl;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
-import net.minecraft.util.Identifier;
 
 import static dev.cammiescorner.camsbackpacks.core.registry.ModBlocks.*;
 
 public class CamsBackpacksClient implements ClientModInitializer {
-	public static final EntityModelLayer BACKPACK = new EntityModelLayer(new Identifier(CamsBackpacks.MOD_ID, "backpack"), "main");
+	public static final EntityModelLayer BACKPACK = new EntityModelLayer(CamsBackpacks.id("backpack"), "main");
 	public static boolean backpackScreenIsOpen = true;
 
 	@Override
@@ -44,6 +43,8 @@ public class CamsBackpacksClient implements ClientModInitializer {
 		//-----Block Layers Registry-----//
 		BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), WHITE_BACKPACK, ORANGE_BACKPACK, MAGENTA_BACKPACK,
 				LIGHT_BLUE_BACKPACK, YELLOW_BACKPACK, LIME_BACKPACK, PINK_BACKPACK, GRAY_BACKPACK, LIGHT_GRAY_BACKPACK, CYAN_BACKPACK,
-				PURPLE_BACKPACK, BLUE_BACKPACK, BROWN_BACKPACK, GREEN_BACKPACK, RED_BACKPACK, BLACK_BACKPACK);
+				PURPLE_BACKPACK, BLUE_BACKPACK, BROWN_BACKPACK, GREEN_BACKPACK, RED_BACKPACK, BLACK_BACKPACK, GAY_BACKPACK,
+				QPOC_BACKPACK, BI_BACKPACK, PAN_BACKPACK, TRANS_BACKPACK, GENDERQUEER_BACKPACK, GENDERFLUID_BACKPACK,
+				ENBY_BACKPACK, ACE_BACKPACK, DEMI_BACKPACK, ARO_BACKPACK, AGENDER_BACKPACK);
 	}
 }

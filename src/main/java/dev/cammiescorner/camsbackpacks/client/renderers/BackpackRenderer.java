@@ -4,6 +4,7 @@ import dev.cammiescorner.camsbackpacks.CamsBackpacks;
 import dev.cammiescorner.camsbackpacks.client.CamsBackpacksClient;
 import dev.cammiescorner.camsbackpacks.client.models.BackpackModel;
 import dev.cammiescorner.camsbackpacks.common.items.BackpackItem;
+import dev.cammiescorner.camsbackpacks.core.registry.ModBlocks;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
@@ -22,7 +23,7 @@ import net.minecraft.util.Identifier;
 
 public class BackpackRenderer<T extends LivingEntity, M extends EntityModel<T>> extends FeatureRenderer<T, M> {
 	private final BackpackModel<T> backpack;
-	private final Identifier texturePath = new Identifier(CamsBackpacks.MOD_ID, "textures/block/backpack.png");
+	private static Identifier texturePath = CamsBackpacks.id("textures/block/backpack.png");
 
 	public BackpackRenderer(FeatureRendererContext<T, M> context, EntityModelLoader loader) {
 		super(context);
@@ -39,6 +40,31 @@ public class BackpackRenderer<T extends LivingEntity, M extends EntityModel<T>> 
 				float r = colour[0];
 				float g = colour[1];
 				float b = colour[2];
+
+				if(stack.isOf(ModBlocks.GAY_BACKPACK.asItem()))
+					texturePath = CamsBackpacks.id("textures/block/gay_pride_backpack.png");
+				if(stack.isOf(ModBlocks.QPOC_BACKPACK.asItem()))
+					texturePath = CamsBackpacks.id("textures/block/qpoc_pride_backpack.png");
+				if(stack.isOf(ModBlocks.BI_BACKPACK.asItem()))
+					texturePath = CamsBackpacks.id("textures/block/bi_pride_backpack.png");
+				if(stack.isOf(ModBlocks.PAN_BACKPACK.asItem()))
+					texturePath = CamsBackpacks.id("textures/block/pan_pride_backpack.png");
+				if(stack.isOf(ModBlocks.TRANS_BACKPACK.asItem()))
+					texturePath = CamsBackpacks.id("textures/block/trans_pride_backpack.png");
+				if(stack.isOf(ModBlocks.GENDERQUEER_BACKPACK.asItem()))
+					texturePath = CamsBackpacks.id("textures/block/genderqueer_pride_backpack.png");
+				if(stack.isOf(ModBlocks.GENDERFLUID_BACKPACK.asItem()))
+					texturePath = CamsBackpacks.id("textures/block/genderfluid_pride_backpack.png");
+				if(stack.isOf(ModBlocks.ENBY_BACKPACK.asItem()))
+					texturePath = CamsBackpacks.id("textures/block/enby_pride_backpack.png");
+				if(stack.isOf(ModBlocks.ACE_BACKPACK.asItem()))
+					texturePath = CamsBackpacks.id("textures/block/ace_pride_backpack.png");
+				if(stack.isOf(ModBlocks.DEMI_BACKPACK.asItem()))
+					texturePath = CamsBackpacks.id("textures/block/demi_pride_backpack.png");
+				if(stack.isOf(ModBlocks.ARO_BACKPACK.asItem()))
+					texturePath = CamsBackpacks.id("textures/block/aro_pride_backpack.png");
+				if(stack.isOf(ModBlocks.AGENDER_BACKPACK.asItem()))
+					texturePath = CamsBackpacks.id("textures/block/agender_pride_backpack.png");
 
 				matrices.push();
 				matrices.translate(0.0D, 0.0D, 0.025D);

@@ -13,6 +13,7 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
@@ -37,8 +38,8 @@ public class BackpackBlock extends BlockWithEntity implements Waterloggable {
 	public static final VoxelShape SOUTH_SHAPE = VoxelShapes.union(createCuboidShape(3.5, 0, 5, 12.5, 16, 11), createCuboidShape(1.5, 1, 6, 14.5, 6, 10), createCuboidShape(5, 4, 3, 11, 12, 5));
 	public static final VoxelShape WEST_SHAPE = VoxelShapes.union(createCuboidShape(5, 0, 3.5, 11, 16, 12.5), createCuboidShape(6, 1, 1.5, 10, 6, 14.5), createCuboidShape(11, 4, 5, 13, 12, 11));
 
-	public BackpackBlock(DyeColor colour, Settings settings) {
-		super(settings);
+	public BackpackBlock(DyeColor colour) {
+		super(AbstractBlock.Settings.of(Material.WOOL).sounds(BlockSoundGroup.WOOL).strength(0.2F).nonOpaque());
 		this.setDefaultState(getDefaultState().with(FACING, Direction.NORTH));
 		this.colour = colour;
 	}

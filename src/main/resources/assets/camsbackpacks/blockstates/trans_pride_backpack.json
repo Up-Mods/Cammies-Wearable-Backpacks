@@ -1,0 +1,19 @@
+{
+	"variants": {
+		"facing=north": {
+			"model": "camsbackpacks:block/trans_pride_backpack"
+		},
+		"facing=east": {
+			"model": "camsbackpacks:block/trans_pride_backpack",
+			"y": 90
+		},
+		"facing=south": {
+			"model": "camsbackpacks:block/trans_pride_backpack",
+			"y": 180
+		},
+		"facing=west": {
+			"model": "camsbackpacks:block/trans_pride_backpack",
+			"y": 270
+		}
+	}
+}

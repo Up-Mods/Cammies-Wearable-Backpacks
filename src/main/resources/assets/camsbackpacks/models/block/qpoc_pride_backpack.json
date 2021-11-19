@@ -1,0 +1,7 @@
+{
+	"parent": "camsbackpacks:block/backpack",
+	"textures": {
+		"0": "camsbackpacks:block/qpoc_pride_backpack",
+		"particle": "camsbackpacks:item/qpoc_pride_backpack"
+	}
+}

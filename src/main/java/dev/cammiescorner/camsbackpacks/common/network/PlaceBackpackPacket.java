@@ -24,7 +24,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class PlaceBackpackPacket {
-	public static final Identifier ID = new Identifier(CamsBackpacks.MOD_ID, "place_backpack");
+	public static final Identifier ID = CamsBackpacks.id("place_backpack");
 
 	public static void send(BlockHitResult hitResult) {
 		PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());

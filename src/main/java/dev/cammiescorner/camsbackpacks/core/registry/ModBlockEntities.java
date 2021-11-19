@@ -23,7 +23,7 @@ public class ModBlockEntities {
 	}
 
 	private static <T extends BlockEntity> BlockEntityType<T> create(String name, BlockEntityType<T> type) {
-		BLOCK_ENTITY_TYPES.put(type, new Identifier(CamsBackpacks.MOD_ID, name));
+		BLOCK_ENTITY_TYPES.put(type, CamsBackpacks.id(name));
 		return type;
 	}
 }

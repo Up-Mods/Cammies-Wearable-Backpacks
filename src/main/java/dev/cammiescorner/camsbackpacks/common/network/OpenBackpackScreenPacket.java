@@ -24,7 +24,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 
 public class OpenBackpackScreenPacket {
-	public static final Identifier ID = new Identifier(CamsBackpacks.MOD_ID, "open_backpack");
+	public static final Identifier ID = CamsBackpacks.id("open_backpack");
 
 	public static void send() {
 		PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());

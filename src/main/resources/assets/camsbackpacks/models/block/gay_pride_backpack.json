@@ -1,0 +1,7 @@
+{
+	"parent": "camsbackpacks:block/backpack",
+	"textures": {
+		"0": "camsbackpacks:block/gay_pride_backpack",
+		"particle": "camsbackpacks:item/gay_pride_backpack"
+	}
+}

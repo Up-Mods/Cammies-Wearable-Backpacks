@@ -20,6 +20,18 @@
 	"block.camsbackpacks.green_backpack": "Green Backpack",
 	"block.camsbackpacks.red_backpack": "Red Backpack",
 	"block.camsbackpacks.black_backpack": "Black Backpack",
+	"block.camsbackpacks.gay_pride_backpack": "Gay Pride Backpack",
+	"block.camsbackpacks.qpoc_pride_backpack": "Queer People of Color Pride Backpack",
+	"block.camsbackpacks.bi_pride_backpack": "Bi Pride Backpack",
+	"block.camsbackpacks.pan_pride_backpack": "Pan Pride Backpack",
+	"block.camsbackpacks.trans_pride_backpack": "Trans Pride Backpack",
+	"block.camsbackpacks.genderqueer_pride_backpack": "Genderqueer Pride Backpack",
+	"block.camsbackpacks.genderfluid_pride_backpack": "Genderfluid Pride Backpack",
+	"block.camsbackpacks.enby_pride_backpack": "Enby Pride Backpack",
+	"block.camsbackpacks.ace_pride_backpack": "Ace Pride Backpack",
+	"block.camsbackpacks.demi_pride_backpack": "Demi Pride Backpack",
+	"block.camsbackpacks.aro_pride_backpack": "Aro Pride Backpack",
+	"block.camsbackpacks.agender_pride_backpack": "Agender Pride Backpack",
 
 	// Container stuff
 	"container.camsbackpacks.equip": "Equip",

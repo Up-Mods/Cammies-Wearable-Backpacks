@@ -1,0 +1,6 @@
+{
+	"parent": "minecraft:item/generated",
+	"textures": {
+		"layer0": "camsbackpacks:item/gay_pride_backpack"
+	}
+}

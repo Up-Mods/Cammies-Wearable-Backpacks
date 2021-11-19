@@ -28,7 +28,7 @@ import org.lwjgl.glfw.GLFW;
 
 @SuppressWarnings("ConstantConditions")
 public class BackpackScreen extends AbstractInventoryScreen<BackpackScreenHandler> {
-	public static final Identifier TEXTURE = new Identifier(CamsBackpacks.MOD_ID, "textures/gui/backpack.png");
+	public static final Identifier TEXTURE = CamsBackpacks.id("textures/gui/backpack.png");
 	protected PlayerInventory playerInventory;
 	protected ButtonWidget equipButton;
 	protected PlayerEntity player;

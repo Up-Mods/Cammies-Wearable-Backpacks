@@ -14,7 +14,7 @@ import net.minecraft.util.Identifier;
 
 public class CamsBackpacks implements ModInitializer {
 	public static final String MOD_ID = "camsbackpacks";
-	public static final ScreenHandlerType<BackpackScreenHandler> BACKPACK_SCREEN_HANDLER = ScreenHandlerRegistry.registerExtended(new Identifier(MOD_ID, "backpack"), (syncId, inventory, buf) -> new BackpackScreenHandler(syncId, inventory, buf.readBlockPos(), buf.readBoolean()));
+	public static final ScreenHandlerType<BackpackScreenHandler> BACKPACK_SCREEN_HANDLER = ScreenHandlerRegistry.registerExtended(id("backpack"), (syncId, inventory, buf) -> new BackpackScreenHandler(syncId, inventory, buf.readBlockPos(), buf.readBoolean()));
 
 	@Override
 	public void onInitialize() {
@@ -24,5 +24,9 @@ public class CamsBackpacks implements ModInitializer {
 
 		ModBlocks.register();
 		ModBlockEntities.register();
+	}
+
+	public static Identifier id(String path) {
+		return new Identifier(MOD_ID, path);
 	}
 }
