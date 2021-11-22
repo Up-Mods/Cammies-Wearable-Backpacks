@@ -11,7 +11,7 @@
 		"homepage": "https://www.curseforge.com/minecraft/mc-mods/cammies-wearable-backpacks",
 		"sources": "https://github.com/CammiePone/Cam-s-Wearable-Backpacks/"
 	},
-	"license": "MIT",
+	"license": "Custom License",
 	"icon": "assets/camsbackpacks/icon.png",
 	"environment": "*",
 	"entrypoints": {
