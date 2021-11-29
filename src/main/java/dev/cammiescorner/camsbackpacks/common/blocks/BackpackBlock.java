@@ -57,10 +57,8 @@ public class BackpackBlock extends BlockWithEntity implements Waterloggable {
 
 	@Override
 	public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-		if(world.getBlockEntity(pos) instanceof BackpackBlockEntity backpack) {
-			System.out.println("beep");
+		if(world.getBlockEntity(pos) instanceof BackpackBlockEntity backpack)
 			backpack.setName(stack.getName());
-		}
 	}
 
 	@Override
@@ -73,7 +71,10 @@ public class BackpackBlock extends BlockWithEntity implements Waterloggable {
 
 					Inventories.writeNbt(tag, blockEntity.inventory);
 					blockEntity.wasPickedUp = true;
-					stack.setCustomName(blockEntity.getName());
+
+					if(blockEntity.hasCustomName())
+						stack.setCustomName(blockEntity.getName());
+
 					player.equipStack(EquipmentSlot.CHEST, stack);
 					world.breakBlock(pos, false, player);
 				}

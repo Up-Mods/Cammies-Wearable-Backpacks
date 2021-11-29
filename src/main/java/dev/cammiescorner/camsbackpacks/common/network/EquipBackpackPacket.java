@@ -48,7 +48,10 @@ public class EquipBackpackPacket {
 					Inventories.writeNbt(tag, blockEntity.inventory);
 					blockEntity.wasPickedUp = true;
 					player.equipStack(EquipmentSlot.CHEST, stack);
-					stack.setCustomName(blockEntity.getName());
+
+					if(blockEntity.hasCustomName())
+						stack.setCustomName(blockEntity.getName());
+
 					world.breakBlock(pos, false, player);
 					player.closeHandledScreen();
 				}
