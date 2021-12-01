@@ -1,0 +1,35 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"tag": "camsbackpacks:backpacks"
+		},
+		{
+			"tag": "c:black_dyes"
+		},
+		{
+			"tag": "c:brown_dyes"
+		},
+		{
+			"tag": "c:red_dyes"
+		},
+		{
+			"tag": "c:orange_dyes"
+		},
+		{
+			"tag": "c:yellow_dyes"
+		},
+		{
+			"tag": "c:green_dyes"
+		},
+		{
+			"tag": "c:blue_dyes"
+		},
+		{
+			"tag": "c:purple_dyes"
+		}
+	],
+	"result": {
+		"item": "camsbackpacks:qpoc_pride_backpack"
+	}
+}

@@ -1,0 +1,20 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"tag": "camsbackpacks:backpacks"
+		},
+		{
+			"tag": "c:pink_dyes"
+		},
+		{
+			"tag": "c:yellow_dyes"
+		},
+		{
+			"tag": "c:blue_dyes"
+		}
+	],
+	"result": {
+		"item": "camsbackpacks:pan_pride_backpack"
+	}
+}
