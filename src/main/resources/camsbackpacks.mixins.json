@@ -7,6 +7,7 @@
 		"AnvilScreenHandlerMixin",
 		"ArmourSlotMixin",
 		"CraftingScreenHandlerAccessor",
+		"PlayerEntityMixin",
 		"PlayerScreenHandlerAccessor"
 	],
 	"client": [
