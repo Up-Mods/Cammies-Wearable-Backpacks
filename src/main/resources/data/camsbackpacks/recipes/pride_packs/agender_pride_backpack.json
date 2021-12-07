@@ -1,0 +1,32 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"tag": "camsbackpacks:backpacks"
+		},
+		{
+			"tag": "c:black_dyes"
+		},
+		{
+			"tag": "c:gray_dyes"
+		},
+		{
+			"tag": "c:white_dyes"
+		},
+		{
+			"tag": "c:lime_dyes"
+		},
+		{
+			"tag": "c:white_dyes"
+		},
+		{
+			"tag": "c:gray_dyes"
+		},
+		{
+			"tag": "c:black_dyes"
+		}
+	],
+	"result": {
+		"item": "camsbackpacks:agender_pride_backpack"
+	}
+}

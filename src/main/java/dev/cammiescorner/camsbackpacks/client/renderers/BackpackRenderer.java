@@ -43,6 +43,8 @@ public class BackpackRenderer<T extends LivingEntity, M extends EntityModel<T>> 
 
 				if(stack.isOf(ModBlocks.GAY_BACKPACK.asItem()))
 					texturePath = CamsBackpacks.id("textures/block/gay_pride_backpack.png");
+				if(stack.isOf(ModBlocks.LESBIAN_BACKPACK.asItem()))
+					texturePath = CamsBackpacks.id("textures/block/lesbian_pride_backpack.png");
 				if(stack.isOf(ModBlocks.QPOC_BACKPACK.asItem()))
 					texturePath = CamsBackpacks.id("textures/block/qpoc_pride_backpack.json.png");
 				if(stack.isOf(ModBlocks.BI_BACKPACK.asItem()))

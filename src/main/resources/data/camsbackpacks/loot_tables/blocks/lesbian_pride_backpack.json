@@ -1,0 +1,32 @@
+{
+	"type": "block",
+	"pools": [
+		{
+			"rolls": 1,
+			"entries": [
+				{
+					"type": "minecraft:item",
+					"name": "camsbackpacks:lesbian_pride_backpack",
+					"functions": [
+						{
+							"function": "minecraft:copy_nbt",
+							"source": "block_entity",
+							"ops": [
+								{
+									"source": "CustomName",
+									"target": "display.Name",
+									"op": "replace"
+								}
+							]
+						}
+					]
+				}
+			],
+			"conditions": [
+				{
+					"condition": "survives_explosion"
+				}
+			]
+		}
+	]
+}

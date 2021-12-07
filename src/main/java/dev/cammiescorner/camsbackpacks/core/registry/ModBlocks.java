@@ -32,6 +32,7 @@ public class ModBlocks {
 	public static final Block RED_BACKPACK = create("red_backpack", new BackpackBlock(DyeColor.RED));
 	public static final Block BLACK_BACKPACK = create("black_backpack", new BackpackBlock(DyeColor.BLACK));
 	public static final Block GAY_BACKPACK = create("gay_pride_backpack", new BackpackBlock(DyeColor.WHITE));
+	public static final Block LESBIAN_BACKPACK = create("lesbian_pride_backpack", new BackpackBlock(DyeColor.WHITE));
 	public static final Block QPOC_BACKPACK = create("qpoc_pride_backpack", new BackpackBlock(DyeColor.WHITE));
 	public static final Block BI_BACKPACK = create("bi_pride_backpack", new BackpackBlock(DyeColor.WHITE));
 	public static final Block PAN_BACKPACK = create("pan_pride_backpack", new BackpackBlock(DyeColor.WHITE));
