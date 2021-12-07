@@ -2,6 +2,7 @@
 	// Info
 	"info.camsbackpacks.instructions": "1) Take off Elytra/Chestplate.\n2) Place Backpack on ground.\n3) Place item(s) in Backpack.\n4) %s + %s on Backpack to put on back.",
 	"info.camsbackpacks.more_info": "Press %s for Instructions.",
+	"info.camsbackpacks.backpack_pos": "Backpack placed at",
 
 	// Blocks
 	"block.camsbackpacks.white_backpack": "White Backpack",

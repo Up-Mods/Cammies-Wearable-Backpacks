@@ -6,9 +6,11 @@ import dev.cammiescorner.camsbackpacks.common.network.PlaceBackpackPacket;
 import dev.cammiescorner.camsbackpacks.common.screen.BackpackScreenHandler;
 import dev.cammiescorner.camsbackpacks.core.registry.ModBlockEntities;
 import dev.cammiescorner.camsbackpacks.core.registry.ModBlocks;
+import dev.cammiescorner.camsbackpacks.core.util.EventHandler;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
 
@@ -24,6 +26,9 @@ public class CamsBackpacks implements ModInitializer {
 
 		ModBlocks.register();
 		ModBlockEntities.register();
+
+		if(FabricLoader.getInstance().isModLoaded("universal-graves"))
+			EventHandler.gravesEvents();
 	}
 
 	public static Identifier id(String path) {
