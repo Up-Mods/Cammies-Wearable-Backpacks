@@ -17,6 +17,7 @@ import net.minecraft.util.DyeColor;
 import net.minecraft.util.Formatting;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
 
@@ -29,10 +30,11 @@ public class BackpackItem extends BlockItem {
 	public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
 		MinecraftClient client = MinecraftClient.getInstance();
 		InputUtil.Key sneakKey = ((KeyBindingAccessor) client.options.keySneak).getKey();
-		MutableText sneakName = new TranslatableText(sneakKey.getTranslationKey()).formatted(Formatting.AQUA);
+		MutableText sneakName = ((MutableText) sneakKey.getLocalizedText()).formatted(Formatting.AQUA);
 		MutableText useName = new TranslatableText(client.options.keyUse.getBoundKeyTranslationKey()).formatted(Formatting.AQUA);
+		long handle = client.getWindow().getHandle();
 
-		if(InputUtil.isKeyPressed(client.getWindow().getHandle(), sneakKey.getCode())) {
+		if(sneakKey.getCategory() == InputUtil.Type.MOUSE ? GLFW.glfwGetMouseButton(handle, sneakKey.getCode()) == 1 : GLFW.glfwGetKey(handle, sneakKey.getCode()) == 1) {
 			tooltip.add(new LiteralText("-------------------------------").formatted(Formatting.GOLD));
 
 			String[] instructions = new TranslatableText("info." + CamsBackpacks.MOD_ID + ".instructions", sneakName, useName).getString().split("\n");
