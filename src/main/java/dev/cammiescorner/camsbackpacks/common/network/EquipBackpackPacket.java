@@ -4,10 +4,12 @@ import dev.cammiescorner.camsbackpacks.CamsBackpacks;
 import dev.cammiescorner.camsbackpacks.common.blocks.BackpackBlock;
 import dev.cammiescorner.camsbackpacks.common.blocks.entities.BackpackBlockEntity;
 import dev.cammiescorner.camsbackpacks.common.items.BackpackItem;
+import dev.cammiescorner.camsbackpacks.common.screen.BackpackScreenHandler;
 import dev.cammiescorner.camsbackpacks.core.util.BackpackHelper;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.ItemStack;
@@ -53,7 +55,10 @@ public class EquipBackpackPacket {
 						stack.setCustomName(blockEntity.getName());
 
 					world.breakBlock(pos, false, player);
-					player.closeHandledScreen();
+					PlayerLookup.tracking(blockEntity).forEach(playerEntity -> {
+						if(playerEntity.currentScreenHandler instanceof BackpackScreenHandler handler && handler.blockPos.equals(pos))
+							playerEntity.closeHandledScreen();
+					});
 				}
 			}
 			else {
