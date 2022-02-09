@@ -23,8 +23,7 @@ import net.minecraft.util.Identifier;
 
 public class BackpackRenderer<T extends LivingEntity, M extends EntityModel<T>> extends FeatureRenderer<T, M> {
 	private final BackpackModel<T> backpack;
-	private static Identifier texturePath = CamsBackpacks.id("textures/block/backpack.png");
-
+	
 	public BackpackRenderer(FeatureRendererContext<T, M> context, EntityModelLoader loader) {
 		super(context);
 		backpack = new BackpackModel<>(loader.getModelPart(CamsBackpacksClient.BACKPACK));
@@ -33,6 +32,7 @@ public class BackpackRenderer<T extends LivingEntity, M extends EntityModel<T>> 
 	@Override
 	public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, T entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
 		if(entity instanceof PlayerEntity) {
+			Identifier texturePath = CamsBackpacks.id("textures/block/backpack.png");
 			ItemStack stack = entity.getEquippedStack(EquipmentSlot.CHEST);
 
 			if(stack.getItem() instanceof BackpackItem item) {
