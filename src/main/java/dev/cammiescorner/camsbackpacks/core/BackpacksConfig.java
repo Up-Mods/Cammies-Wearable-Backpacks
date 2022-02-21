@@ -6,10 +6,10 @@ import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 
 @Config(name = CamsBackpacks.MOD_ID)
-public class CamsConfig implements ConfigData {
+public class BackpacksConfig implements ConfigData {
     public boolean sneakPlaceBackpack = true;
 
-    public static CamsConfig get() {
-        return AutoConfig.getConfigHolder(CamsConfig.class).getConfig();
+    public static BackpacksConfig get() {
+        return AutoConfig.getConfigHolder(BackpacksConfig.class).getConfig();
     }
 }

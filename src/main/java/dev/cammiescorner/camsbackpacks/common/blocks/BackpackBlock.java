@@ -1,6 +1,7 @@
 package dev.cammiescorner.camsbackpacks.common.blocks;
 
 import dev.cammiescorner.camsbackpacks.common.blocks.entities.BackpackBlockEntity;
+import dev.cammiescorner.camsbackpacks.core.BackpacksConfig;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.piston.PistonBehavior;
@@ -66,7 +67,7 @@ public class BackpackBlock extends BlockWithEntity implements Waterloggable {
 	@Override
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 		if(!world.isClient()) {
-			if(player.isSneaking() && player.getEquippedStack(EquipmentSlot.CHEST).isEmpty()) {
+			if(BackpacksConfig.get().sneakPlaceBackpack && player.isSneaking() && player.getEquippedStack(EquipmentSlot.CHEST).isEmpty()) {
 				if(world.getBlockEntity(pos) instanceof BackpackBlockEntity blockEntity) {
 					ItemStack stack = new ItemStack(this);
 					NbtCompound tag = stack.getOrCreateNbt();
