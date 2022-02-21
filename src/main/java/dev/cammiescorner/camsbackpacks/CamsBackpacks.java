@@ -4,9 +4,12 @@ import dev.cammiescorner.camsbackpacks.common.network.EquipBackpackPacket;
 import dev.cammiescorner.camsbackpacks.common.network.OpenBackpackScreenPacket;
 import dev.cammiescorner.camsbackpacks.common.network.PlaceBackpackPacket;
 import dev.cammiescorner.camsbackpacks.common.screen.BackpackScreenHandler;
+import dev.cammiescorner.camsbackpacks.core.CamsConfig;
 import dev.cammiescorner.camsbackpacks.core.registry.ModBlockEntities;
 import dev.cammiescorner.camsbackpacks.core.registry.ModBlocks;
 import dev.cammiescorner.camsbackpacks.core.util.EventHandler;
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
@@ -17,6 +20,7 @@ import net.minecraft.util.Identifier;
 public class CamsBackpacks implements ModInitializer {
 	public static final String MOD_ID = "camsbackpacks";
 	public static final ScreenHandlerType<BackpackScreenHandler> BACKPACK_SCREEN_HANDLER = ScreenHandlerRegistry.registerExtended(id("backpack"), (syncId, inventory, buf) -> new BackpackScreenHandler(syncId, inventory, buf.readBlockPos(), buf.readBoolean()));
+	public static CamsConfig config;
 
 	@Override
 	public void onInitialize() {
@@ -29,6 +33,9 @@ public class CamsBackpacks implements ModInitializer {
 
 		if(FabricLoader.getInstance().isModLoaded("universal-graves"))
 			EventHandler.gravesEvents();
+
+		AutoConfig.register(CamsConfig.class, GsonConfigSerializer::new);
+		config = AutoConfig.getConfigHolder(CamsConfig.class).getConfig();
 	}
 
 	public static Identifier id(String path) {
