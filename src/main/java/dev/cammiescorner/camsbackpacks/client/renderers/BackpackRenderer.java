@@ -23,7 +23,7 @@ import net.minecraft.util.Identifier;
 
 public class BackpackRenderer<T extends LivingEntity, M extends EntityModel<T>> extends FeatureRenderer<T, M> {
 	private final BackpackModel<T> backpack;
-	
+
 	public BackpackRenderer(FeatureRendererContext<T, M> context, EntityModelLoader loader) {
 		super(context);
 		backpack = new BackpackModel<>(loader.getModelPart(CamsBackpacksClient.BACKPACK));
