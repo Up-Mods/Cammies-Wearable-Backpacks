@@ -24,6 +24,7 @@ import net.minecraft.util.math.BlockPos;
 
 public class BackpackScreenHandler extends ScreenHandler {
 	private final PlayerEntity player;
+	private final PlayerInventory playerInventory;
 	private final Inventory inventory;
 	private final CraftingInventory input;
 	private final CraftingResultInventory result;
@@ -39,6 +40,7 @@ public class BackpackScreenHandler extends ScreenHandler {
 		super(CamsBackpacks.BACKPACK_SCREEN_HANDLER, syncId);
 		checkSize(inventory, 36);
 		this.player = playerInventory.player;
+		this.playerInventory = playerInventory;
 		this.inventory = inventory;
 		this.input = new CraftingInventory(this, 3, 3);
 		this.result = new CraftingResultInventory();
@@ -162,8 +164,10 @@ public class BackpackScreenHandler extends ScreenHandler {
 				if(!this.insertItem(oldStack, 76, 77, false))
 					return ItemStack.EMPTY;
 			}
-			else if(!insertItem(oldStack, 0, inventory.size(), false))
+			else if(!insertItem(oldStack, 0, inventory.size() + playerInventory.size(), false)){
 				return ItemStack.EMPTY;
+			}
+
 
 			if(oldStack.isEmpty())
 				slot.setStack(ItemStack.EMPTY);
