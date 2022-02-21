@@ -20,6 +20,9 @@
 		],
 		"client": [
 			"dev.cammiescorner.camsbackpacks.client.CamsBackpacksClient"
+		],
+		"modmenu": [
+			"dev.cammiescorner.camsbackpacks.client.compat.CamsModMenu"
 		]
 	},
 	"mixins": [
