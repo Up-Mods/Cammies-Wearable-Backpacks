@@ -2,6 +2,7 @@ package dev.cammiescorner.camsbackpacks.core.mixin.client;
 
 import dev.cammiescorner.camsbackpacks.common.items.BackpackItem;
 import dev.cammiescorner.camsbackpacks.common.network.PlaceBackpackPacket;
+import dev.cammiescorner.camsbackpacks.core.CamsConfig;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.client.world.ClientWorld;
@@ -22,7 +23,7 @@ public class ClientPlayerInteractionManagerMixin {
 			ordinal = 2
 	), cancellable = true)
 	public void camsbackpacks$interactBlock(ClientPlayerEntity player, ClientWorld world, Hand hand, BlockHitResult hitResult, CallbackInfoReturnable<ActionResult> info) {
-		if(player.isSneaking() && player.getEquippedStack(EquipmentSlot.CHEST).getItem() instanceof BackpackItem && player.getStackInHand(hand).isEmpty()) {
+		if(player.isSneaking() && player.getEquippedStack(EquipmentSlot.CHEST).getItem() instanceof BackpackItem && player.getOffHandStack().isEmpty() && player.getMainHandStack().isEmpty() && CamsConfig.get().sneakPlaceBackpack) {
 			PlaceBackpackPacket.send(hitResult);
 			info.setReturnValue(ActionResult.SUCCESS);
 		}
