@@ -8,6 +8,7 @@ import me.shedaniel.autoconfig.annotation.Config;
 @Config(name = CamsBackpacks.MOD_ID)
 public class BackpacksConfig implements ConfigData {
     public boolean sneakPlaceBackpack = true;
+    public boolean hideToolTip = false;
 
     public static BackpacksConfig get() {
         return AutoConfig.getConfigHolder(BackpacksConfig.class).getConfig();

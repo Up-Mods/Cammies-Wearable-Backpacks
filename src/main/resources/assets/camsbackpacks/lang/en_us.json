@@ -43,7 +43,8 @@
 	"container.camsbackpacks.player_inv": "Inventory",
 	"container.camsbackpacks.backpack_inv": "Backpack",
 
-	// Text
-	"text.autoconfig.camsbackpacks.option.sneakPlaceBackpack": "Enable Sneak-place backpack",
-	"text.autoconfig.camsbackpacks.title": "CamsBackpacks"
+	// Config
+	"text.autoconfig.camsbackpacks.title": "CamsBackpacks",
+	"text.autoconfig.camsbackpacks.option.sneakPlaceBackpack": "Enable Sneak-Placing Backpacks",
+	"text.autoconfig.camsbackpacks.option.hideToolTip": "Hide Backpack Tooltip"
 }
