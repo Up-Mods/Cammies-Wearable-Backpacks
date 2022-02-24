@@ -24,7 +24,6 @@ import net.minecraft.util.math.BlockPos;
 
 public class BackpackScreenHandler extends ScreenHandler {
 	private final PlayerEntity player;
-	private final PlayerInventory playerInventory;
 	private final Inventory inventory;
 	private final CraftingInventory input;
 	private final CraftingResultInventory result;
@@ -40,7 +39,6 @@ public class BackpackScreenHandler extends ScreenHandler {
 		super(CamsBackpacks.BACKPACK_SCREEN_HANDLER, syncId);
 		checkSize(inventory, 36);
 		this.player = playerInventory.player;
-		this.playerInventory = playerInventory;
 		this.inventory = inventory;
 		this.input = new CraftingInventory(this, 3, 3);
 		this.result = new CraftingResultInventory();
@@ -163,19 +161,25 @@ public class BackpackScreenHandler extends ScreenHandler {
 			else if (equipmentSlot == EquipmentSlot.OFFHAND && !slots.get(76).hasStack()) {
 				if(!this.insertItem(oldStack, 76, 77, false))
 					return ItemStack.EMPTY;
+			}else if(index == 0){
+				if(!insertItem(oldStack, 0, inventory.size() + player.getInventory().size(), false)){
+					return ItemStack.EMPTY;
+				}
 			}
-			else if(!insertItem(oldStack, 0, inventory.size() + playerInventory.size(), false)){
+			else if(!insertItem(oldStack, 0, inventory.size(), false)){
 				return ItemStack.EMPTY;
 			}
 
 
 			if(oldStack.isEmpty())
 				slot.setStack(ItemStack.EMPTY);
-			else
+			else{
 				slot.markDirty();
+			}
 
-			if(oldStack.getCount() == newStack.getCount())
+			if(oldStack.getCount() == newStack.getCount()){
 				return ItemStack.EMPTY;
+			}
 
 			slot.onTakeItem(player, oldStack);
 		}
