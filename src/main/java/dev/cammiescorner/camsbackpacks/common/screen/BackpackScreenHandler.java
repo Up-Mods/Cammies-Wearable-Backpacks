@@ -1,10 +1,10 @@
 package dev.cammiescorner.camsbackpacks.common.screen;
 
 import com.mojang.datafixers.util.Pair;
-import dev.cammiescorner.camsbackpacks.CamsBackpacks;
 import dev.cammiescorner.camsbackpacks.common.items.BackpackItem;
 import dev.cammiescorner.camsbackpacks.core.mixin.CraftingScreenHandlerAccessor;
 import dev.cammiescorner.camsbackpacks.core.mixin.PlayerScreenHandlerAccessor;
+import dev.cammiescorner.camsbackpacks.core.registry.ModScreenHandlers;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.mob.MobEntity;
@@ -36,7 +36,7 @@ public class BackpackScreenHandler extends ScreenHandler {
 	}
 
 	public BackpackScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, ScreenHandlerContext context, BlockPos blockPos, boolean isBlockEntity) {
-		super(CamsBackpacks.BACKPACK_SCREEN_HANDLER, syncId);
+		super(ModScreenHandlers.BACKPACK_SCREEN_HANDLER, syncId);
 		checkSize(inventory, 36);
 		this.player = playerInventory.player;
 		this.inventory = inventory;

@@ -13,9 +13,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.property.Properties;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -45,7 +43,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 				pos = pos.move(0, 1, 0);
 
 			world.setBlockState(pos.toImmutable(), state);
-			sendMessage(new TranslatableText("info." + CamsBackpacks.MOD_ID + ".backpack_pos").append(new LiteralText(" " + pos.getX() + ", " + pos.getY() + ", " + pos.getZ())), false);
+			sendMessage(Text.translatable("info." + CamsBackpacks.MOD_ID + ".backpack_pos").append(Text.literal(" " + pos.getX() + ", " + pos.getY() + ", " + pos.getZ())), false);
 
 			if(world.getBlockEntity(pos) instanceof BackpackBlockEntity backpack)
 				Inventories.readNbt(stack.getOrCreateNbt(), backpack.inventory);

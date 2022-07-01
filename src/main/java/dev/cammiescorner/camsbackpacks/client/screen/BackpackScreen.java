@@ -20,9 +20,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtHelper;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 
@@ -69,7 +67,7 @@ public class BackpackScreen extends AbstractInventoryScreen<BackpackScreenHandle
 	protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {
 		super.drawForeground(matrices, mouseX, mouseY);
 
-		textRenderer.draw(matrices, new TranslatableText("container.crafting"), craftingX, craftingY, 4210752);
+		textRenderer.draw(matrices, Text.translatable("container.crafting"), craftingX, craftingY, 4210752);
 
 		matrices.push();
 		String name = player.getEntityName();
@@ -91,16 +89,16 @@ public class BackpackScreen extends AbstractInventoryScreen<BackpackScreenHandle
 
 		if(equipButton.isHovered() && !equipButton.active) {
 			if(!handler.isBlockEntity)
-				renderTooltip(matrices, new TranslatableText("container.camsbackpacks.obstructed_block"), mouseX, mouseY);
+				renderTooltip(matrices, Text.translatable("container.camsbackpacks.obstructed_block"), mouseX, mouseY);
 			else
-				renderTooltip(matrices, new TranslatableText("container.camsbackpacks.cant_equip"), mouseX, mouseY);
+				renderTooltip(matrices, Text.translatable("container.camsbackpacks.cant_equip"), mouseX, mouseY);
 		}
 
 		if(!handler.isBlockEntity) {
 			if(isPointWithinBounds(3, 1, 26, 28, mouseX, mouseY))
-				renderTooltip(matrices, new TranslatableText("container.camsbackpacks.player_inv"), mouseX, mouseY);
+				renderTooltip(matrices, Text.translatable("container.camsbackpacks.player_inv"), mouseX, mouseY);
 			else if(isPointWithinBounds(32, 1, 26, 28, mouseX, mouseY))
-				renderTooltip(matrices, new TranslatableText("container.camsbackpacks.backpack_inv"), mouseX, mouseY);
+				renderTooltip(matrices, Text.translatable("container.camsbackpacks.backpack_inv"), mouseX, mouseY);
 		}
 	}
 
@@ -124,10 +122,10 @@ public class BackpackScreen extends AbstractInventoryScreen<BackpackScreenHandle
 		craftingY = 34;
 		playerNameX = 8;
 		playerNameY = 38;
-		equipButton = addDrawableChild(new ButtonWidget(x + 246, y + 156, 69, 20, new TranslatableText(handler.isBlockEntity ? "container.camsbackpacks.equip" : "container.camsbackpacks.upequip"), this::doEquipButtonShit));
+		equipButton = addDrawableChild(new ButtonWidget(x + 246, y + 156, 69, 20, Text.translatable(handler.isBlockEntity ? "container.camsbackpacks.equip" : "container.camsbackpacks.upequip"), this::doEquipButtonShit));
 
 		if(!handler.isBlockEntity)
-			addSelectableChild(new ButtonWidget(x + 2, y - 1, 28, 28, new LiteralText(""), this::openVanillaInventory));
+			addSelectableChild(new ButtonWidget(x + 2, y - 1, 28, 28, Text.literal(""), this::openVanillaInventory));
 	}
 
 	private void doEquipButtonShit(ButtonWidget button) {

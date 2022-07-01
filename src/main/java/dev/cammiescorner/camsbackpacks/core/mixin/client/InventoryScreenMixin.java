@@ -14,9 +14,7 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.PlayerScreenHandler;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -46,9 +44,9 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
 	public void camsbackpacks$render(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo info) {
 		if(equippedStack.getItem() instanceof BackpackItem) {
 			if(isPointWithinBounds(3, -27, 26, 28, mouseX, mouseY))
-				renderTooltip(matrices, new TranslatableText("container.camsbackpacks.player_inv"), mouseX, mouseY);
+				renderTooltip(matrices, Text.translatable("container.camsbackpacks.player_inv"), mouseX, mouseY);
 			else if(isPointWithinBounds(32, -27, 26, 28, mouseX, mouseY))
-				renderTooltip(matrices, new TranslatableText("container.camsbackpacks.backpack_inv"), mouseX, mouseY);
+				renderTooltip(matrices, Text.translatable("container.camsbackpacks.backpack_inv"), mouseX, mouseY);
 		}
 	}
 
@@ -58,7 +56,7 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
 		equippedStack = client.player.getEquippedStack(EquipmentSlot.CHEST);
 
 		if(equippedStack.getItem() instanceof BackpackItem)
-			addSelectableChild(new ButtonWidget(x + 31, y - 27, 28, 28, new LiteralText(""), this::openBackpackScreen));
+			addSelectableChild(new ButtonWidget(x + 31, y - 27, 28, 28, Text.literal(""), this::openBackpackScreen));
 	}
 
 	@Unique
