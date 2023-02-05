@@ -3,7 +3,9 @@ package dev.cammiescorner.camsbackpacks.core.registry;
 import dev.cammiescorner.camsbackpacks.CamsBackpacks;
 import dev.cammiescorner.camsbackpacks.common.blocks.BackpackBlock;
 import dev.cammiescorner.camsbackpacks.common.items.BackpackItem;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemGroups;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.DyeColor;
@@ -50,8 +52,10 @@ public class ModBlocks {
 	public static void register() {
 		BLOCKS.keySet().forEach(block -> Registry.register(Registries.BLOCK, BLOCKS.get(block), block));
 
-		for(Block block : BLOCKS.keySet())
+		for (Block block : BLOCKS.keySet()) {
 			Registry.register(Registries.ITEM, BLOCKS.get(block), getItem((BackpackBlock) block));
+			ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(content -> content.add(block));
+		}
 	}
 
 	private static BackpackItem getItem(BackpackBlock block) {
