@@ -4,9 +4,10 @@ import dev.cammiescorner.camsbackpacks.CamsBackpacks;
 import dev.cammiescorner.camsbackpacks.common.blocks.BackpackBlock;
 import dev.cammiescorner.camsbackpacks.common.items.BackpackItem;
 import net.minecraft.block.Block;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.util.LinkedHashMap;
 
@@ -47,10 +48,10 @@ public class ModBlocks {
 
 	//-----Registry-----//
 	public static void register() {
-		BLOCKS.keySet().forEach(block -> Registry.register(Registry.BLOCK, BLOCKS.get(block), block));
+		BLOCKS.keySet().forEach(block -> Registry.register(Registries.BLOCK, BLOCKS.get(block), block));
 
 		for(Block block : BLOCKS.keySet())
-			Registry.register(Registry.ITEM, BLOCKS.get(block), getItem((BackpackBlock) block));
+			Registry.register(Registries.ITEM, BLOCKS.get(block), getItem((BackpackBlock) block));
 	}
 
 	private static BackpackItem getItem(BackpackBlock block) {

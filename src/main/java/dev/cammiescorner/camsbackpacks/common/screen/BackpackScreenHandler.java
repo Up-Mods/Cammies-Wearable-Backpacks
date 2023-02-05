@@ -116,31 +116,7 @@ public class BackpackScreenHandler extends ScreenHandler {
 	}
 
 	@Override
-	public void close(PlayerEntity player) {
-		super.close(player);
-		context.run((world, pos) -> {
-			if(!world.isClient() && !isBlockEntity) {
-				ItemStack stack = player.getEquippedStack(EquipmentSlot.CHEST);
-				NbtCompound tag = stack.getOrCreateNbt();
-				DefaultedList<ItemStack> inv = DefaultedList.ofSize(36, ItemStack.EMPTY);
-
-				for(int i = 0; i < inventory.size(); i++)
-					inv.set(i, inventory.getStack(i));
-
-				Inventories.writeNbt(tag, inv);
-			}
-
-			dropInventory(player, input);
-		});
-	}
-
-	@Override
-	public boolean canUse(PlayerEntity player) {
-		return inventory.canPlayerUse(player);
-	}
-
-	@Override
-	public ItemStack transferSlot(PlayerEntity player, int index) {
+	public ItemStack quickMove(PlayerEntity player, int index) {
 		ItemStack newStack = ItemStack.EMPTY;
 		Slot slot = this.slots.get(index);
 
@@ -183,5 +159,29 @@ public class BackpackScreenHandler extends ScreenHandler {
 		}
 
 		return newStack;
+	}
+
+	@Override
+	public void close(PlayerEntity player) {
+		super.close(player);
+		context.run((world, pos) -> {
+			if(!world.isClient() && !isBlockEntity) {
+				ItemStack stack = player.getEquippedStack(EquipmentSlot.CHEST);
+				NbtCompound tag = stack.getOrCreateNbt();
+				DefaultedList<ItemStack> inv = DefaultedList.ofSize(36, ItemStack.EMPTY);
+
+				for(int i = 0; i < inventory.size(); i++)
+					inv.set(i, inventory.getStack(i));
+
+				Inventories.writeNbt(tag, inv);
+			}
+
+			dropInventory(player, input);
+		});
+	}
+
+	@Override
+	public boolean canUse(PlayerEntity player) {
+		return inventory.canPlayerUse(player);
 	}
 }

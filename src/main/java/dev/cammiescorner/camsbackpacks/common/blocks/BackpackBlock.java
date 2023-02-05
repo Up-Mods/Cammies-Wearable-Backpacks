@@ -155,8 +155,9 @@ public class BackpackBlock extends BlockWithEntity implements Waterloggable {
 
 	@Override
 	public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState newState, WorldAccess world, BlockPos pos, BlockPos posFrom) {
-		if(state.get(Properties.WATERLOGGED))
-			world.createAndScheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+		if(state.get(Properties.WATERLOGGED)) {
+			world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+		}
 
 		return super.getStateForNeighborUpdate(state, direction, newState, world, pos, posFrom);
 	}
