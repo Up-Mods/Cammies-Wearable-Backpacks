@@ -55,8 +55,10 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
 		playerInvIcon = BackpackScreen.getPlayerHead(client.player);
 		equippedStack = client.player.getEquippedStack(EquipmentSlot.CHEST);
 
-		if(equippedStack.getItem() instanceof BackpackItem)
-			addSelectableChild(new ButtonWidget(x + 31, y - 27, 28, 28, Text.literal(""), this::openBackpackScreen));
+		if(equippedStack.getItem() instanceof BackpackItem) {
+			this.addSelectableChild(new ButtonWidget.Builder(Text.literal(""), this::openBackpackScreen)
+			.dimensions(this.x + 31, this.y - 27, 28, 28).build());
+		}
 	}
 
 	@Unique

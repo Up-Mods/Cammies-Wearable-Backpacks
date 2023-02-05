@@ -49,7 +49,7 @@ public class BackpackScreen extends AbstractInventoryScreen<BackpackScreenHandle
 
 	@Override
 	protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShader(GameRenderer::getPositionTexProgram);
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		RenderSystem.setShaderTexture(0, TEXTURE);
 		int x = (width - 322) / 2;
@@ -122,10 +122,11 @@ public class BackpackScreen extends AbstractInventoryScreen<BackpackScreenHandle
 		craftingY = 34;
 		playerNameX = 8;
 		playerNameY = 38;
-		equipButton = addDrawableChild(new ButtonWidget(x + 246, y + 156, 69, 20, Text.translatable(handler.isBlockEntity ? "container.camsbackpacks.equip" : "container.camsbackpacks.upequip"), this::doEquipButtonShit));
+		equipButton = this.addDrawableChild(new ButtonWidget.Builder(Text.translatable(handler.isBlockEntity ? "container.camsbackpacks.equip" : "container.camsbackpacks.upequip"), this::doEquipButtonShit).dimensions(x + 246, y + 156, 69, 20).build());
 
-		if(!handler.isBlockEntity)
-			addSelectableChild(new ButtonWidget(x + 2, y - 1, 28, 28, Text.literal(""), this::openVanillaInventory));
+		if(!handler.isBlockEntity) {
+			this.addSelectableChild(new ButtonWidget.Builder(Text.literal(""), this::openVanillaInventory).dimensions(this.x + 2, this.y - 1, 28, 28).build());
+		}
 	}
 
 	private void doEquipButtonShit(ButtonWidget button) {
