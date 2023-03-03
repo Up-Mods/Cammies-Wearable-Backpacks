@@ -1,16 +1,7 @@
 package dev.cammiescorner.camsbackpacks.core;
 
-import dev.cammiescorner.camsbackpacks.CamsBackpacks;
-import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.ConfigData;
-import me.shedaniel.autoconfig.annotation.Config;
+import eu.midnightdust.lib.config.MidnightConfig;
 
-@Config(name = CamsBackpacks.MOD_ID)
-public class BackpacksConfig implements ConfigData {
-    public boolean sneakPlaceBackpack = true;
-    public boolean hideToolTip = false;
-
-    public static BackpacksConfig get() {
-        return AutoConfig.getConfigHolder(BackpacksConfig.class).getConfig();
-    }
+public class BackpacksConfig extends MidnightConfig {
+    @Entry public static boolean sneakPlaceBackpack = true;
 }

@@ -31,8 +31,8 @@
 	"depends": {
 		"fabricloader": ">=0.14.8",
 		"fabric": "*",
-		"minecraft": "1.19.x",
-		"cloth-config2": ">=7.0.72"
+		"minecraft": "1.19.3",
+		"midnightlib": ">=1.1.0"
 	},
 	"suggests": {
 		"flamingo": "*"

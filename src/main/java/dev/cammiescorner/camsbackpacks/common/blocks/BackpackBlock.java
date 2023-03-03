@@ -67,7 +67,7 @@ public class BackpackBlock extends BlockWithEntity implements Waterloggable {
 	@Override
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 		if(!world.isClient()) {
-			if(BackpacksConfig.get().sneakPlaceBackpack && player.isSneaking() && player.getEquippedStack(EquipmentSlot.CHEST).isEmpty()) {
+			if(BackpacksConfig.sneakPlaceBackpack && player.isSneaking() && player.getEquippedStack(EquipmentSlot.CHEST).isEmpty()) {
 				if(world.getBlockEntity(pos) instanceof BackpackBlockEntity blockEntity) {
 					ItemStack stack = new ItemStack(this);
 					NbtCompound tag = stack.getOrCreateNbt();

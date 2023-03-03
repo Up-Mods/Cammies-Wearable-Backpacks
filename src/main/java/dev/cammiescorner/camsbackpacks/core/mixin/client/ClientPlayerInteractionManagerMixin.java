@@ -21,7 +21,7 @@ public class ClientPlayerInteractionManagerMixin {
 			target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;sendSequencedPacket(Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/client/network/SequencedPacketCreator;)V"
 	), cancellable = true)
 	public void camsbackpacks$interactBlock(ClientPlayerEntity player, Hand hand, BlockHitResult hitResult, CallbackInfoReturnable<ActionResult> info) {
-		if(BackpacksConfig.get().sneakPlaceBackpack && player.isSneaking() && player.getEquippedStack(EquipmentSlot.CHEST).getItem() instanceof BackpackItem && player.getOffHandStack().isEmpty() && player.getMainHandStack().isEmpty()) {
+		if(BackpacksConfig.sneakPlaceBackpack && player.isSneaking() && player.getEquippedStack(EquipmentSlot.CHEST).getItem() instanceof BackpackItem && player.getOffHandStack().isEmpty() && player.getMainHandStack().isEmpty()) {
 			PlaceBackpackPacket.send(hitResult);
 			info.setReturnValue(ActionResult.SUCCESS);
 		}
