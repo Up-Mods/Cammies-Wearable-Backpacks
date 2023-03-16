@@ -1,0 +1,49 @@
+{
+	// Info
+	"info.camsbackpacks.instructions": "1) Rimuovi le elitra/la corazza.\n2) Piazza lo zaino a terra.\n3) Inserisci gli oggetti nello zaino.\n4) %s + %s sullo zaino per indossarlo.",
+	"info.camsbackpacks.more_info": "Premi %s per le istruzioni.",
+	"info.camsbackpacks.backpack_pos": "Zaino piazzato su",
+
+	// Blocks
+	"block.camsbackpacks.white_backpack": "Zaino bianco",
+	"block.camsbackpacks.orange_backpack": "Zaino arancione",
+	"block.camsbackpacks.magenta_backpack": "Zaino magenta",
+	"block.camsbackpacks.light_blue_backpack": "Zaino azzurro",
+	"block.camsbackpacks.yellow_backpack": "Zaino giallo",
+	"block.camsbackpacks.lime_backpack": "Zaino lime",
+	"block.camsbackpacks.pink_backpack": "Zaino rosa",
+	"block.camsbackpacks.gray_backpack": "Zaino grigio",
+	"block.camsbackpacks.light_gray_backpack": "Zaino grigio chiaro",
+	"block.camsbackpacks.cyan_backpack": "Zaino ciano",
+	"block.camsbackpacks.purple_backpack": "Zaino viola",
+	"block.camsbackpacks.blue_backpack": "Zaino blu",
+	"block.camsbackpacks.brown_backpack": "Zaino marrone",
+	"block.camsbackpacks.green_backpack": "Zaino verde",
+	"block.camsbackpacks.red_backpack": "Zaino rosso",
+	"block.camsbackpacks.black_backpack": "Zaino nero",
+	"block.camsbackpacks.gay_pride_backpack": "Zaino dell'orgoglio gay",
+	"block.camsbackpacks.lesbian_pride_backpack": "Zaino dell'orgoglio lesbica",
+	"block.camsbackpacks.qpoc_pride_backpack": "Zaino dell'orgoglio delle persone queer di colore",
+	"block.camsbackpacks.bi_pride_backpack": "Zaino dell'orgoglio bi",
+	"block.camsbackpacks.pan_pride_backpack": "Zaino dell'orgoglio pan",
+	"block.camsbackpacks.trans_pride_backpack": "Zaino dell'orgoglio trans",
+	"block.camsbackpacks.genderqueer_pride_backpack": "Zaino dell'orgoglio genderqueer",
+	"block.camsbackpacks.genderfluid_pride_backpack": "Zaino dell'orgoglio genderfluid",
+	"block.camsbackpacks.enby_pride_backpack": "Zaino dell'orgoglio non binario",
+	"block.camsbackpacks.ace_pride_backpack": "Zaino dell'orgoglio ace",
+	"block.camsbackpacks.demi_pride_backpack": "Zaino dell'orgoglio demi",
+	"block.camsbackpacks.aro_pride_backpack": "Zaino dell'orgoglio aro",
+	"block.camsbackpacks.agender_pride_backpack": "Zaino dell'orgoglio agender",
+
+	// Container stuff
+	"container.camsbackpacks.equip": "Equipaggia",
+	"container.camsbackpacks.upequip": "Rimuovi",
+	"container.camsbackpacks.obstructed_block": "Il blocco davanti è ostruito!",
+	"container.camsbackpacks.cant_equip": "Stai già indossando qualcosa sulla tua schiena!",
+	"container.camsbackpacks.player_inv": "Inventario",
+	"container.camsbackpacks.backpack_inv": "Zaino",
+
+	// Config
+	"camsbackpacks.midnightconfig.title": "CamsBackpacks",
+	"camsbackpacks.midnightconfig.sneakPlaceBackpack": "Abilita il piazzamento degli zaini da chinato"
+}
