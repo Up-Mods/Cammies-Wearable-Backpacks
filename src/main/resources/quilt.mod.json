@@ -14,7 +14,11 @@
         "homepage": "https://www.curseforge.com/minecraft/mc-mods/cammies-wearable-backpacks",
         "sources": "https://github.com/CammiePone/Cam-s-Wearable-Backpacks/"
       },
-      "license": "Custom License",
+      "license": {
+        "id": "Custom License",
+        "name": "Custom License",
+        "url": "https://github.com/CammiePone/Cammies-Wearable-Backpacks/blob/1.19-dev/LICENSE"
+      },
       "icon": "assets/camsbackpacks/icon.png"
     },
     "entrypoints": {
@@ -38,7 +42,8 @@
         "id": "midnightlib",
         "versions": ">=1.4.0"
       }
-    ]
+    ],
+    "intermediate_mappings": "net.fabricmc:intermediary"
   },
   "minecraft": {
     "environment": "*"
