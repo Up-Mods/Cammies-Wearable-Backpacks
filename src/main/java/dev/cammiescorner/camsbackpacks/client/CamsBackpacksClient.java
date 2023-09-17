@@ -7,15 +7,14 @@ import dev.cammiescorner.camsbackpacks.common.blocks.BackpackBlock;
 import dev.cammiescorner.camsbackpacks.common.items.BackpackItem;
 import dev.cammiescorner.camsbackpacks.core.registry.ModScreenHandlers;
 import dev.cammiescorner.camsbackpacks.core.util.BackpackHelper;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
-import net.fabricmc.fabric.impl.client.rendering.ColorProviderRegistryImpl;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
+import org.quiltmc.qsl.block.extensions.api.client.BlockRenderLayerMap;
 
 import static dev.cammiescorner.camsbackpacks.core.registry.ModBlocks.*;
 
@@ -32,7 +31,7 @@ public class CamsBackpacksClient implements ClientModInitializer {
 		EntityModelLayerRegistry.registerModelLayer(BACKPACK, BackpackModel::getTexturedModelData);
 
 		//-----Colour Registry-----//
-		ColorProviderRegistryImpl.BLOCK.register((state, world, pos, tintIndex) -> BackpackHelper.dyeToDecimal(((BackpackBlock) state.getBlock()).getColour()),
+		ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> BackpackHelper.dyeToDecimal(((BackpackBlock) state.getBlock()).getColour()),
 				WHITE_BACKPACK, ORANGE_BACKPACK, MAGENTA_BACKPACK, LIGHT_BLUE_BACKPACK, YELLOW_BACKPACK, LIME_BACKPACK, PINK_BACKPACK,
 				GRAY_BACKPACK, LIGHT_GRAY_BACKPACK, CYAN_BACKPACK, PURPLE_BACKPACK, BLUE_BACKPACK, BROWN_BACKPACK, GREEN_BACKPACK,
 				RED_BACKPACK, BLACK_BACKPACK);
@@ -43,7 +42,7 @@ public class CamsBackpacksClient implements ClientModInitializer {
 				BROWN_BACKPACK.asItem(), GREEN_BACKPACK.asItem(), RED_BACKPACK.asItem(), BLACK_BACKPACK);
 
 		//-----Block Layers Registry-----//
-		BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), WHITE_BACKPACK, ORANGE_BACKPACK, MAGENTA_BACKPACK,
+		BlockRenderLayerMap.put(RenderLayer.getCutout(), WHITE_BACKPACK, ORANGE_BACKPACK, MAGENTA_BACKPACK,
 				LIGHT_BLUE_BACKPACK, YELLOW_BACKPACK, LIME_BACKPACK, PINK_BACKPACK, GRAY_BACKPACK, LIGHT_GRAY_BACKPACK, CYAN_BACKPACK,
 				PURPLE_BACKPACK, BLUE_BACKPACK, BROWN_BACKPACK, GREEN_BACKPACK, RED_BACKPACK, BLACK_BACKPACK, GAY_BACKPACK,
 				LESBIAN_BACKPACK, QPOC_BACKPACK, BI_BACKPACK, PAN_BACKPACK, TRANS_BACKPACK, GENDERQUEER_BACKPACK,

@@ -4,7 +4,6 @@ import dev.cammiescorner.camsbackpacks.CamsBackpacks;
 import dev.cammiescorner.camsbackpacks.common.blocks.entities.BackpackBlockEntity;
 import dev.cammiescorner.camsbackpacks.common.items.BackpackItem;
 import dev.cammiescorner.camsbackpacks.core.util.BackpackHelper;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -16,6 +15,7 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.quiltmc.loader.api.QuiltLoader;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -37,7 +37,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 		if(stack.getItem() instanceof BackpackItem item) {
 			BlockState state = item.getBlock().getDefaultState().with(Properties.WATERLOGGED, false);
 
-			if(FabricLoader.getInstance().isModLoaded("universal-graves"))
+			if(QuiltLoader.isModLoaded("universal-graves"))
 				pos = pos.move(getHorizontalFacing());
 
 			while(!BackpackHelper.isReplaceable(world, pos.toImmutable()) && pos.getY() < world.getTopY() - 1)
