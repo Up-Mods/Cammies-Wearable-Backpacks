@@ -6,7 +6,7 @@ import net.minecraft.world.World;
 
 public class BackpackHelper {
 	public static boolean isReplaceable(World world, BlockPos pos) {
-		return world.getBlockState(pos).getMaterial().isReplaceable();
+		return world.getBlockState(pos).materialReplaceable();
 	}
 
 	public static int dyeToDecimal(DyeColor colour) {
