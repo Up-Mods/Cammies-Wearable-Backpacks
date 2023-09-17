@@ -32,6 +32,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 	private void camsbackpacks$dropInventory(CallbackInfo info) {
 		ItemStack stack = getEquippedStack(EquipmentSlot.CHEST);
 		BlockPos.Mutable pos = getBlockPos().mutableCopy();
+		World world = getWorld();
 
 		if(stack.getItem() instanceof BackpackItem item) {
 			BlockState state = item.getBlock().getDefaultState().with(Properties.WATERLOGGED, false);

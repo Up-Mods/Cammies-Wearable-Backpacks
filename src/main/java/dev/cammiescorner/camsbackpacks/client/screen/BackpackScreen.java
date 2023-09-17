@@ -109,7 +109,7 @@ public class BackpackScreen extends AbstractInventoryScreen<BackpackScreenHandle
 			handler.blockPos = player.getBlockPos().offset(player.getHorizontalFacing());
 
 		if(equipButton != null)
-			equipButton.active = (!handler.isBlockEntity && BackpackHelper.isReplaceable(player.world, handler.blockPos)) || player.getEquippedStack(EquipmentSlot.CHEST).isEmpty();
+			equipButton.active = (!handler.isBlockEntity && BackpackHelper.isReplaceable(player.getWorld(), handler.blockPos)) || player.getEquippedStack(EquipmentSlot.CHEST).isEmpty();
 	}
 
 	@Override
@@ -155,6 +155,6 @@ public class BackpackScreen extends AbstractInventoryScreen<BackpackScreenHandle
 	}
 
 	private ItemStack getBackpack() {
-		return handler.isBlockEntity ? new ItemStack(player.world.getBlockState(handler.blockPos).getBlock()) : player.getEquippedStack(EquipmentSlot.CHEST);
+		return handler.isBlockEntity ? new ItemStack(player.getWorld().getBlockState(handler.blockPos).getBlock()) : player.getEquippedStack(EquipmentSlot.CHEST);
 	}
 }

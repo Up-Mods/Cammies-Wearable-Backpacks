@@ -36,7 +36,7 @@ public class PlaceBackpackPacket {
 		BlockHitResult hitResult = buf.readBlockHitResult();
 
 		server.execute(() -> {
-			World world = player.world;
+			World world = player.getWorld();
 			BlockPos pos = BackpackHelper.isReplaceable(world, hitResult.getBlockPos()) ? hitResult.getBlockPos() : hitResult.getBlockPos().offset(hitResult.getSide());
 			ItemStack stack = player.getEquippedStack(EquipmentSlot.CHEST);
 

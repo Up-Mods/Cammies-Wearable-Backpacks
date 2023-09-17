@@ -40,7 +40,7 @@ public class EquipBackpackPacket {
 		boolean isBlockEntity = buf.readBoolean();
 
 		server.execute(() -> {
-			World world = player.world;
+			World world = player.getWorld();
 
 			if(isBlockEntity) {
 				if(world.getBlockEntity(pos) instanceof BackpackBlockEntity blockEntity) {

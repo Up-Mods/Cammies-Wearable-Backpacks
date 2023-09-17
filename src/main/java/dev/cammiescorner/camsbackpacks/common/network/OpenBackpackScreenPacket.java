@@ -98,7 +98,7 @@ public class OpenBackpackScreenPacket {
 
 				@Override
 				public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
-					return new BackpackScreenHandler(syncId, playerInventory, inventory, ScreenHandlerContext.create(player.world, player.getBlockPos()), player.getBlockPos(), false);
+					return new BackpackScreenHandler(syncId, playerInventory, inventory, ScreenHandlerContext.create(player.getWorld(), player.getBlockPos()), player.getBlockPos(), false);
 				}
 			});
 		});
