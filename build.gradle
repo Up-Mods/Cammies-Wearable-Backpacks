@@ -1,10 +1,16 @@
 plugins {
-    id 'fabric-loom' version '0.12.+'
+    id 'org.quiltmc.loom' version '1.3.+'
     id 'maven-publish'
 }
 
 version = project.mod_version
 group = project.maven_group
+
+// messy workaround for bug in quilt loom 1.3.3
+project.configurations.configureEach {
+    exclude(group: "net.fabricmc", module: "fabric-loader")
+    exclude(group: "net.fabricmc.fabric-api")
+}
 
 repositories {
     maven { url "https://maven.terraformersmc.com/" }
@@ -19,29 +25,31 @@ repositories {
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    mappings "org.quiltmc:quilt-mappings:${project.quilt_mappings}:intermediary-v2"
 
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    modImplementation "org.quiltmc:quilt-loader:${project.loader_version}"
+    modImplementation "org.quiltmc.quilted-fabric-api:quilted-fabric-api:${project.qfapi_version}"
     modImplementation "maven.modrinth:universal-graves:${project.graves_version}"
     modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
     modImplementation "maven.modrinth:midnightlib:${project.midnightlib_version}"
 
     // This is all for Universal Graves :despair:
-    modImplementation "eu.pb4:sgui:1.2.0+1.19.3"
-    modImplementation "eu.pb4:hologram-api:0.2.3+1.19.3"
-    modImplementation "eu.pb4:placeholder-api:2.0.0-pre.2+1.19.3"
-    modImplementation "eu.pb4:polymer-core:0.3.0-rc.2+1.19.3-rc3"
+    modImplementation "eu.pb4:sgui:1.2.2+1.20"
+    modImplementation "eu.pb4:placeholder-api:2.1.3+1.20.1"
+    modImplementation 'eu.pb4:polymer-core:0.5.15+1.20.1'
+    modImplementation 'eu.pb4:polymer-resource-pack:0.5.15+1.20.1'
+    modImplementation 'eu.pb4:polymer-virtual-entity:0.5.15+1.20.1'
+    modImplementation 'eu.pb4:predicate-api:0.2.1+1.20.1'
     modImplementation "eu.pb4:common-protection-api:1.0.0"
-    modImplementation "fr.catcore:server-translations-api:1.4.18+1.19.2"
-    modImplementation "me.lucko:fabric-permissions-api:0.1-SNAPSHOT"
+    modImplementation 'xyz.nucleoid:server-translations-api:2.0.0+1.20'
+    modImplementation "me.lucko:fabric-permissions-api:0.2-SNAPSHOT"
 }
 
 processResources {
     inputs.property "version", project.version
     filteringCharset "UTF-8"
 
-    filesMatching("fabric.mod.json") {
+    filesMatching("quilt.mod.json") {
         expand "version": project.version
     }
 }
