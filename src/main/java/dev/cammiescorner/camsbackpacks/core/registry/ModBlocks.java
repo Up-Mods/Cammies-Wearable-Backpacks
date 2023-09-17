@@ -54,7 +54,7 @@ public class ModBlocks {
 
 		for (Block block : BLOCKS.keySet()) {
 			Registry.register(Registries.ITEM, BLOCKS.get(block), getItem((BackpackBlock) block));
-			ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(content -> content.add(block));
+			ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS_AND_UTILITIES).register(content -> content.addItem(block));
 		}
 	}
 

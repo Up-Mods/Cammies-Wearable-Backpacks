@@ -1,5 +1,6 @@
 package dev.cammiescorner.camsbackpacks.client.renderers;
 
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.cammiescorner.camsbackpacks.CamsBackpacks;
 import dev.cammiescorner.camsbackpacks.client.CamsBackpacksClient;
 import dev.cammiescorner.camsbackpacks.client.models.BackpackModel;
@@ -7,7 +8,6 @@ import dev.cammiescorner.camsbackpacks.common.items.BackpackItem;
 import dev.cammiescorner.camsbackpacks.core.registry.ModBlocks;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;

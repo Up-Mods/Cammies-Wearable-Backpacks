@@ -57,7 +57,7 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
 
 		if(equippedStack.getItem() instanceof BackpackItem) {
 			this.addSelectableChild(new ButtonWidget.Builder(Text.literal(""), this::openBackpackScreen)
-			.dimensions(this.x + 31, this.y - 27, 28, 28).build());
+			.positionAndSize(this.x + 31, this.y - 27, 28, 28).build());
 		}
 	}
 
