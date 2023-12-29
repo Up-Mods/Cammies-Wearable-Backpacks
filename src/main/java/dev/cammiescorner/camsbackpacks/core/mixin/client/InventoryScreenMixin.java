@@ -5,11 +5,10 @@ import dev.cammiescorner.camsbackpacks.client.CamsBackpacksClient;
 import dev.cammiescorner.camsbackpacks.client.screen.BackpackScreen;
 import dev.cammiescorner.camsbackpacks.common.items.BackpackItem;
 import dev.cammiescorner.camsbackpacks.common.network.OpenBackpackScreenPacket;
-import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
@@ -30,23 +29,23 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
 	public InventoryScreenMixin(PlayerScreenHandler screenHandler, PlayerInventory playerInventory, Text text) { super(screenHandler, playerInventory, text); }
 
 	@Inject(method = "drawBackground", at = @At("TAIL"))
-	public void camsbackpacks$drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY, CallbackInfo info) {
+	public void camsbackpacks$drawBackground(GuiGraphics gui, float delta, int mouseX, int mouseY, CallbackInfo info) {
 		if(equippedStack.getItem() instanceof BackpackItem) {
 			RenderSystem.setShaderTexture(0, BackpackScreen.TEXTURE);
-			DrawableHelper.drawTexture(matrices, x + 1, y - 27, 0, 0, 190, 60, 30, 322, 220);
-			itemRenderer.renderInGui(playerInvIcon, x + 8, y - 20);
-			itemRenderer.renderInGui(equippedStack, x + 38, y - 20);
+			gui.drawTexture(BackpackScreen.TEXTURE, x + 1, y - 27, 0, 0, 190, 60, 30, 322, 220);
+			gui.drawItem(playerInvIcon, x + 8, y - 20);
+			gui.drawItem(equippedStack, x + 38, y - 20);
 			RenderSystem.setShaderTexture(0, BACKGROUND_TEXTURE);
 		}
 	}
 
 	@Inject(method = "render", at = @At("TAIL"))
-	public void camsbackpacks$render(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo info) {
+	public void camsbackpacks$render(GuiGraphics gui, int mouseX, int mouseY, float delta, CallbackInfo info) {
 		if(equippedStack.getItem() instanceof BackpackItem) {
 			if(isPointWithinBounds(3, -27, 26, 28, mouseX, mouseY))
-				renderTooltip(matrices, Text.translatable("container.camsbackpacks.player_inv"), mouseX, mouseY);
+				gui.drawTooltip(textRenderer, Text.translatable("container.camsbackpacks.player_inv"), mouseX, mouseY);
 			else if(isPointWithinBounds(32, -27, 26, 28, mouseX, mouseY))
-				renderTooltip(matrices, Text.translatable("container.camsbackpacks.backpack_inv"), mouseX, mouseY);
+				gui.drawTooltip(textRenderer, Text.translatable("container.camsbackpacks.backpack_inv"), mouseX, mouseY);
 		}
 	}
 
@@ -57,7 +56,7 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
 
 		if(equippedStack.getItem() instanceof BackpackItem) {
 			this.addSelectableChild(new ButtonWidget.Builder(Text.literal(""), this::openBackpackScreen)
-			.dimensions(this.x + 31, this.y - 27, 28, 28).build());
+			.positionAndSize(this.x + 31, this.y - 27, 28, 28).build());
 		}
 	}
 

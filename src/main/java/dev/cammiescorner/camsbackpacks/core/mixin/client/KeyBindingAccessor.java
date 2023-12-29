@@ -1,11 +1,11 @@
 package dev.cammiescorner.camsbackpacks.core.mixin.client;
 
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
+import com.mojang.blaze3d.platform.InputUtil;
+import net.minecraft.client.option.KeyBind;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(KeyBinding.class)
+@Mixin(KeyBind.class)
 public interface KeyBindingAccessor {
 	@Accessor("boundKey") InputUtil.Key getKey();
 }

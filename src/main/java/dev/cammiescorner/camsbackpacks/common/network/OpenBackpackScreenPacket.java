@@ -3,8 +3,6 @@ package dev.cammiescorner.camsbackpacks.common.network;
 import dev.cammiescorner.camsbackpacks.CamsBackpacks;
 import dev.cammiescorner.camsbackpacks.common.screen.BackpackScreenHandler;
 import io.netty.buffer.Unpooled;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,6 +20,8 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
+import org.quiltmc.qsl.networking.api.PacketSender;
+import org.quiltmc.qsl.networking.api.client.ClientPlayNetworking;
 
 public class OpenBackpackScreenPacket {
 	public static final Identifier ID = CamsBackpacks.id("open_backpack");
@@ -98,7 +98,7 @@ public class OpenBackpackScreenPacket {
 
 				@Override
 				public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
-					return new BackpackScreenHandler(syncId, playerInventory, inventory, ScreenHandlerContext.create(player.world, player.getBlockPos()), player.getBlockPos(), false);
+					return new BackpackScreenHandler(syncId, playerInventory, inventory, ScreenHandlerContext.create(player.getWorld(), player.getBlockPos()), player.getBlockPos(), false);
 				}
 			});
 		});

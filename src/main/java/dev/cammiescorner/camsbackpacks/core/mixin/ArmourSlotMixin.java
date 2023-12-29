@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(targets = "net/minecraft/screen/PlayerScreenHandler$1")
+@Mixin(targets = "net/minecraft/screen/PlayerScreenHandler$C_uhnepsyq")
 public abstract class ArmourSlotMixin extends Slot {
 	public ArmourSlotMixin(Inventory inventory, int index, int x, int y) {
 		super(inventory, index, x, y);

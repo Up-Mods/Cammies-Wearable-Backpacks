@@ -108,7 +108,7 @@ public class BackpackBlockEntity extends BlockEntity implements Inventory, Namea
 
 	@Override
 	public @Nullable ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
-		return new BackpackScreenHandler(syncId, inv, this, ScreenHandlerContext.create(player.world, getPos()), getPos(), true);
+		return new BackpackScreenHandler(syncId, inv, this, ScreenHandlerContext.create(player.getWorld(), getPos()), getPos(), true);
 	}
 
 	@Override

@@ -9,16 +9,17 @@ import dev.cammiescorner.camsbackpacks.core.registry.ModBlocks;
 import dev.cammiescorner.camsbackpacks.core.registry.ModScreenHandlers;
 import dev.cammiescorner.camsbackpacks.core.util.EventHandler;
 import eu.midnightdust.lib.config.MidnightConfig;
-import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;
+import org.quiltmc.loader.api.ModContainer;
+import org.quiltmc.loader.api.QuiltLoader;
+import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
+import org.quiltmc.qsl.networking.api.ServerPlayNetworking;
 
 public class CamsBackpacks implements ModInitializer {
 	public static final String MOD_ID = "camsbackpacks";
 
 	@Override
-	public void onInitialize() {
+	public void onInitialize(ModContainer mod) {
 		MidnightConfig.init(MOD_ID, BackpacksConfig.class);
 
 		ServerPlayNetworking.registerGlobalReceiver(PlaceBackpackPacket.ID, PlaceBackpackPacket::handle);
@@ -29,7 +30,7 @@ public class CamsBackpacks implements ModInitializer {
 		ModBlockEntities.register();
 		ModScreenHandlers.register();
 
-		if(FabricLoader.getInstance().isModLoaded("universal-graves"))
+		if(QuiltLoader.isModLoaded("universal-graves"))
 			EventHandler.gravesEvents();
 	}
 

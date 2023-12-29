@@ -8,7 +8,7 @@ import dev.cammiescorner.camsbackpacks.common.screen.BackpackScreenHandler;
 import dev.cammiescorner.camsbackpacks.core.util.BackpackHelper;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.SkullBlockEntity;
-import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -48,57 +48,58 @@ public class BackpackScreen extends AbstractInventoryScreen<BackpackScreenHandle
 	}
 
 	@Override
-	protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
-		RenderSystem.setShader(GameRenderer::getPositionTexProgram);
+	protected void drawBackground(GuiGraphics gui, float delta, int mouseX, int mouseY) {
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		RenderSystem.setShaderTexture(0, TEXTURE);
 		int x = (width - 322) / 2;
 		int y = (height - 220) / 2;
-		DrawableHelper.drawTexture(matrices, x, y, 0, 0, 0, 322, 190, 322, 220);
+		gui.drawTexture(TEXTURE, x, y, 0, 0, 0, 322, 190, 322, 220);
 
 		if(!handler.isBlockEntity) {
-			DrawableHelper.drawTexture(matrices, x + 1, y - 1, 0, 60, 190, 60, 30, 322, 220);
-			itemRenderer.renderInGui(playerInvIcon, x + 8, y + 6);
-			itemRenderer.renderInGui(backpackInvIcon, x + 38, y + 6);
+			gui.drawTexture(TEXTURE, x + 1, y - 1, 0, 60, 190, 60, 30, 322, 220);
+			gui.drawItem(playerInvIcon, x + 8, y + 6);
+			gui.drawItem(backpackInvIcon, x + 38, y + 6);
 		}
 	}
 
 	@Override
-	protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {
-		super.drawForeground(matrices, mouseX, mouseY);
+	protected void drawForeground(GuiGraphics gui, int mouseX, int mouseY) {
+		super.drawForeground(gui, mouseX, mouseY);
 
-		textRenderer.draw(matrices, Text.translatable("container.crafting"), craftingX, craftingY, 4210752);
+		gui.drawText(textRenderer, Text.translatable("container.crafting"), craftingX, craftingY, 4210752, false);
 
+		MatrixStack matrices = gui.getMatrices();
 		matrices.push();
 		String name = player.getEntityName();
 		float scale = Math.min(1F, 1 / (name.length() / 11F));
 		float translate = Math.max(0F, name.length() - 11);
 		matrices.scale(scale, scale, 1);
 		matrices.translate(translate, translate * 4, 0);
-		textRenderer.draw(matrices, player.getName(), playerNameX, playerNameY, 4210752);
+		gui.drawText(textRenderer, player.getName(), playerNameX, playerNameY, 4210752, false);
 		matrices.pop();
 	}
 
 	@Override
-	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-		renderBackground(matrices);
-		super.render(matrices, mouseX, mouseY, delta);
-		drawMouseoverTooltip(matrices, mouseX, mouseY);
+	public void render(GuiGraphics gui, int mouseX, int mouseY, float delta) {
+		renderBackground(gui);
+		super.render(gui, mouseX, mouseY, delta);
+		drawMouseoverTooltip(gui, mouseX, mouseY);
 
-		InventoryScreen.drawEntity(x + 50, y + 125, 30, (x + 50) - mouseX, (y + 125 - 50) - mouseY, player);
+		InventoryScreen.drawEntity(gui, x + 50, y + 125, 30, (x + 50) - mouseX, (y + 125 - 50) - mouseY, player);
 
 		if(equipButton.isHovered() && !equipButton.active) {
 			if(!handler.isBlockEntity)
-				renderTooltip(matrices, Text.translatable("container.camsbackpacks.obstructed_block"), mouseX, mouseY);
+				gui.drawTooltip(textRenderer, Text.translatable("container.camsbackpacks.obstructed_block"), mouseX, mouseY);
 			else
-				renderTooltip(matrices, Text.translatable("container.camsbackpacks.cant_equip"), mouseX, mouseY);
+				gui.drawTooltip(textRenderer, Text.translatable("container.camsbackpacks.cant_equip"), mouseX, mouseY);
 		}
 
 		if(!handler.isBlockEntity) {
 			if(isPointWithinBounds(3, 1, 26, 28, mouseX, mouseY))
-				renderTooltip(matrices, Text.translatable("container.camsbackpacks.player_inv"), mouseX, mouseY);
+				gui.drawTooltip(textRenderer, Text.translatable("container.camsbackpacks.player_inv"), mouseX, mouseY);
 			else if(isPointWithinBounds(32, 1, 26, 28, mouseX, mouseY))
-				renderTooltip(matrices, Text.translatable("container.camsbackpacks.backpack_inv"), mouseX, mouseY);
+				gui.drawTooltip(textRenderer, Text.translatable("container.camsbackpacks.backpack_inv"), mouseX, mouseY);
 		}
 	}
 
@@ -108,7 +109,7 @@ public class BackpackScreen extends AbstractInventoryScreen<BackpackScreenHandle
 			handler.blockPos = player.getBlockPos().offset(player.getHorizontalFacing());
 
 		if(equipButton != null)
-			equipButton.active = (!handler.isBlockEntity && BackpackHelper.isReplaceable(player.world, handler.blockPos)) || player.getEquippedStack(EquipmentSlot.CHEST).isEmpty();
+			equipButton.active = (!handler.isBlockEntity && BackpackHelper.isReplaceable(player.getWorld(), handler.blockPos)) || player.getEquippedStack(EquipmentSlot.CHEST).isEmpty();
 	}
 
 	@Override
@@ -122,10 +123,10 @@ public class BackpackScreen extends AbstractInventoryScreen<BackpackScreenHandle
 		craftingY = 34;
 		playerNameX = 8;
 		playerNameY = 38;
-		equipButton = this.addDrawableChild(new ButtonWidget.Builder(Text.translatable(handler.isBlockEntity ? "container.camsbackpacks.equip" : "container.camsbackpacks.upequip"), this::doEquipButtonShit).dimensions(x + 246, y + 156, 69, 20).build());
+		equipButton = this.addDrawableChild(new ButtonWidget.Builder(Text.translatable(handler.isBlockEntity ? "container.camsbackpacks.equip" : "container.camsbackpacks.upequip"), this::doEquipButtonShit).positionAndSize(x + 246, y + 156, 69, 20).build());
 
 		if(!handler.isBlockEntity) {
-			this.addSelectableChild(new ButtonWidget.Builder(Text.literal(""), this::openVanillaInventory).dimensions(this.x + 2, this.y - 1, 28, 28).build());
+			this.addSelectableChild(new ButtonWidget.Builder(Text.literal(""), this::openVanillaInventory).positionAndSize(this.x + 2, this.y - 1, 28, 28).build());
 		}
 	}
 
@@ -154,6 +155,6 @@ public class BackpackScreen extends AbstractInventoryScreen<BackpackScreenHandle
 	}
 
 	private ItemStack getBackpack() {
-		return handler.isBlockEntity ? new ItemStack(player.world.getBlockState(handler.blockPos).getBlock()) : player.getEquippedStack(EquipmentSlot.CHEST);
+		return handler.isBlockEntity ? new ItemStack(player.getWorld().getBlockState(handler.blockPos).getBlock()) : player.getEquippedStack(EquipmentSlot.CHEST);
 	}
 }

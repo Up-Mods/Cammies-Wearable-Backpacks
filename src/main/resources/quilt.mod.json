@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "quilt_loader": {
+    "id": "camsbackpacks",
+    "version": "${version}",
+    "group": "dev.cammiescorner",
+    "metadata": {
+      "name": "Cammie's Wearable Backpacks",
+      "description": "Just a backpack that lets you carry more items with you. Requires an empty chest slot though.",
+      "contributors": {
+        "Cammie": "Owner"
+      },
+      "contact": {
+        "homepage": "https://www.curseforge.com/minecraft/mc-mods/cammies-wearable-backpacks",
+        "sources": "https://github.com/CammiePone/Cam-s-Wearable-Backpacks/"
+      },
+      "license": {
+        "id": "Custom License",
+        "name": "Custom License",
+        "url": "https://github.com/CammiePone/Cammies-Wearable-Backpacks/blob/1.19-dev/LICENSE"
+      },
+      "icon": "assets/camsbackpacks/icon.png"
+    },
+    "entrypoints": {
+      "init": "dev.cammiescorner.camsbackpacks.CamsBackpacks",
+      "client_init": "dev.cammiescorner.camsbackpacks.client.CamsBackpacksClient",
+      "modmenu": "dev.cammiescorner.camsbackpacks.client.compat.CamsModMenu"
+    },
+    "depends": [
+      {
+        "id": "quilt_loader",
+        "versions": ">=0.20.2"
+      },
+      {
+        "id": "quilted_fabric_api"
+      },
+      {
+        "id": "minecraft",
+        "versions": "=1.20.1"
+      },
+      {
+        "id": "midnightlib",
+        "versions": ">=1.4.0"
+      }
+    ],
+    "intermediate_mappings": "net.fabricmc:intermediary"
+  },
+  "minecraft": {
+    "environment": "*"
+  },
+  "mixin": "camsbackpacks.mixins.json"
+}

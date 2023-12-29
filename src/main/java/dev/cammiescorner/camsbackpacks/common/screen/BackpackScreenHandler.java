@@ -116,7 +116,7 @@ public class BackpackScreenHandler extends ScreenHandler {
 	}
 
 	@Override
-	public ItemStack quickMove(PlayerEntity player, int index) {
+	public ItemStack quickTransfer(PlayerEntity player, int index) {
 		ItemStack newStack = ItemStack.EMPTY;
 		Slot slot = this.slots.get(index);
 
@@ -148,7 +148,7 @@ public class BackpackScreenHandler extends ScreenHandler {
 
 
 			if(oldStack.isEmpty())
-				slot.setStack(ItemStack.EMPTY);
+				slot.setStackByPlayer(ItemStack.EMPTY);
 			else
 				slot.markDirty();
 
