@@ -32,12 +32,20 @@ loom {
 
 repositories {
     maven {
-        name = "TerraformersMC"
-        url = "https://maven.terraformersmc.com/releases"
+        name = "ParchmentMC"
+        url = "https://maven.parchmentmc.org"
     }
     maven {
         name = "Ladysnake"
         url = "https://maven.ladysnake.org/releases"
+    }
+    maven {
+        name = "TerraformersMC"
+        url = "https://maven.terraformersmc.com/releases"
+    }
+    maven {
+        name = "Nucleoid"
+        url = "https://maven.nucleoid.xyz"
     }
     maven {
         name = "Modrinth"
@@ -46,18 +54,12 @@ repositories {
             includeGroup "maven.modrinth"
         }
     }
-
-    // Universal Graves dependencies go brrrrrrr
-    maven {
-        name = "Nucleoid"
-        url = "https://maven.nucleoid.xyz"
-    }
 }
 
 dependencies {
     minecraft libs.minecraft
     mappings(loom.layered {
-        it.mappings variantOf(libs.quilt.mappings) { classifier 'intermediary-v2' }
+        it.mappings variantOf(libs.quilt.mappings) { classifier "intermediary-v2" }
         it.parchment("${libs.parchment.mappings.get()}@zip")
         it.officialMojangMappings { nameSyntheticMembers = false }
     })
