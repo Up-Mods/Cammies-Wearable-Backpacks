@@ -30,10 +30,15 @@
     "depends": [
       {
         "id": "quilt_loader",
-        "versions": ">=0.22.0"
+        "versions": ">=0.20.0-"
       },
       {
-        "id": "quilted_fabric_api"
+        "id": "quilted_fabric_api",
+        "versions": ">=7.0.0-",
+        "mc-publish": {
+          "curseforge": "634179",
+          "modrinth": "qvIfYCYJ"
+        }
       },
       {
         "id": "minecraft",
@@ -41,7 +46,10 @@
       },
       {
         "id": "midnightlib",
-        "versions": ">=1.4.0"
+        "mc-publish": {
+          "curseforge": "488090",
+          "modrinth": "codAaoxh"
+        }
       }
     ],
     "intermediate_mappings": "net.fabricmc:intermediary"
@@ -49,5 +57,15 @@
   "minecraft": {
     "environment": "*"
   },
-  "mixin": "camsbackpacks.mixins.json"
+  "mixin": "camsbackpacks.mixins.json",
+  "mc-publish": {
+    "curseforge": "443091",
+    "modrinth": "s2OAgsTb",
+    "loaders": [
+      "quilt"
+    ],
+    "dependencies": [
+      "universal-graves(optional){modrinth:yn9u3ypm}{curseforge:497175}"
+    ]
+  }
 }
