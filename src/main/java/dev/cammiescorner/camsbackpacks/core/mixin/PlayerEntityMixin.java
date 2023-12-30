@@ -44,7 +44,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 				pos = pos.move(0, 1, 0);
 
 			world.setBlockState(pos.toImmutable(), state);
-			sendMessage(Text.translatable("info." + CamsBackpacks.MOD_ID + ".backpack_pos").append(Text.literal(" " + pos.getX() + ", " + pos.getY() + ", " + pos.getZ())), false);
+			sendMessage(Text.translatable("info.camsbackpacks.backpack_pos", pos.getX(), pos.getY(), pos.getZ()), false);
 
 			if(world.getBlockEntity(pos) instanceof BackpackBlockEntity backpack)
 				Inventories.readNbt(stack.getOrCreateNbt(), backpack.inventory);

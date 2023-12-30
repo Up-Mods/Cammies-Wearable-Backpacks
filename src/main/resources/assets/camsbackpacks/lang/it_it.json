@@ -2,7 +2,7 @@
 	// Info
 	"info.camsbackpacks.instructions": "1) Rimuovi le elitra/la corazza.\n2) Piazza lo zaino a terra.\n3) Inserisci gli oggetti nello zaino.\n4) %s + %s sullo zaino per indossarlo.",
 	"info.camsbackpacks.more_info": "Premi %s per le istruzioni.",
-	"info.camsbackpacks.backpack_pos": "Zaino piazzato su",
+	"info.camsbackpacks.backpack_pos": "Zaino piazzato su [%s, %s, %s]",
 
 	// Blocks
 	"block.camsbackpacks.white_backpack": "Zaino bianco",
@@ -37,7 +37,7 @@
 
 	// Container stuff
 	"container.camsbackpacks.equip": "Equipaggia",
-	"container.camsbackpacks.upequip": "Rimuovi",
+	"container.camsbackpacks.unequip": "Rimuovi",
 	"container.camsbackpacks.obstructed_block": "Il blocco davanti è ostruito!",
 	"container.camsbackpacks.cant_equip": "Stai già indossando qualcosa sulla tua schiena!",
 	"container.camsbackpacks.player_inv": "Inventario",
