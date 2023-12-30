@@ -2,167 +2,167 @@ package dev.cammiescorner.camsbackpacks.common.blocks;
 
 import dev.cammiescorner.camsbackpacks.common.blocks.entities.BackpackBlockEntity;
 import dev.cammiescorner.camsbackpacks.core.BackpacksConfig;
-import net.minecraft.block.*;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.piston.PistonBehavior;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.DirectionProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.*;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.*;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
-public class BackpackBlock extends BlockWithEntity implements Waterloggable {
-	private final DyeColor colour;
-	public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
-	public static final VoxelShape NORTH_SHAPE = VoxelShapes.union(createCuboidShape(3.5, 0, 5, 12.5, 16, 11), createCuboidShape(1.5, 1, 6, 14.5, 6, 10), createCuboidShape(5, 4, 11, 11, 12, 13));
-	public static final VoxelShape EAST_SHAPE = VoxelShapes.union(createCuboidShape(5, 0, 3.5, 11, 16, 12.5), createCuboidShape(6, 1, 1.5, 10, 6, 14.5), createCuboidShape(3, 4, 5, 5, 12, 11));
-	public static final VoxelShape SOUTH_SHAPE = VoxelShapes.union(createCuboidShape(3.5, 0, 5, 12.5, 16, 11), createCuboidShape(1.5, 1, 6, 14.5, 6, 10), createCuboidShape(5, 4, 3, 11, 12, 5));
-	public static final VoxelShape WEST_SHAPE = VoxelShapes.union(createCuboidShape(5, 0, 3.5, 11, 16, 12.5), createCuboidShape(6, 1, 1.5, 10, 6, 14.5), createCuboidShape(11, 4, 5, 13, 12, 11));
+public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
+    private final DyeColor colour;
+    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+    public static final VoxelShape NORTH_SHAPE = Shapes.or(box(3.5, 0, 5, 12.5, 16, 11), box(1.5, 1, 6, 14.5, 6, 10), box(5, 4, 11, 11, 12, 13));
+    public static final VoxelShape EAST_SHAPE = Shapes.or(box(5, 0, 3.5, 11, 16, 12.5), box(6, 1, 1.5, 10, 6, 14.5), box(3, 4, 5, 5, 12, 11));
+    public static final VoxelShape SOUTH_SHAPE = Shapes.or(box(3.5, 0, 5, 12.5, 16, 11), box(1.5, 1, 6, 14.5, 6, 10), box(5, 4, 3, 11, 12, 5));
+    public static final VoxelShape WEST_SHAPE = Shapes.or(box(5, 0, 3.5, 11, 16, 12.5), box(6, 1, 1.5, 10, 6, 14.5), box(11, 4, 5, 13, 12, 11));
 
-	public BackpackBlock(DyeColor colour) {
-		super(AbstractBlock.Settings.create().sounds(BlockSoundGroup.WOOL).strength(0.2F).nonOpaque().pistonBehavior(PistonBehavior.BLOCK));
-		this.setDefaultState(getDefaultState().with(FACING, Direction.NORTH));
-		this.colour = colour;
-	}
+    public BackpackBlock(BlockBehaviour.Properties properties, DyeColor colour) {
+        super(properties);
+        this.registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH));
+        this.colour = colour;
+    }
 
-	@Override
-	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-		return switch(state.get(FACING)) {
-			default -> NORTH_SHAPE;
-			case EAST -> EAST_SHAPE;
-			case SOUTH -> SOUTH_SHAPE;
-			case WEST -> WEST_SHAPE;
-		};
-	}
+    @Override
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+        return switch (state.getValue(FACING)) {
+            default -> NORTH_SHAPE;
+            case EAST -> EAST_SHAPE;
+            case SOUTH -> SOUTH_SHAPE;
+            case WEST -> WEST_SHAPE;
+        };
+    }
 
-	@Override
-	public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-		if(world.getBlockEntity(pos) instanceof BackpackBlockEntity backpack) {
-			backpack.setName(stack.getName());
-			Inventories.readNbt(stack.getOrCreateNbt(), backpack.inventory);
-		}
-	}
+    @Override
+    public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+        if (world.getBlockEntity(pos) instanceof BackpackBlockEntity backpack) {
+            backpack.setName(stack.getHoverName());
+            ContainerHelper.loadAllItems(stack.getOrCreateTag(), backpack.inventory);
+        }
+    }
 
-	@Override
-	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-		if(!world.isClient()) {
-			if(BackpacksConfig.sneakPlaceBackpack && player.isSneaking() && player.getEquippedStack(EquipmentSlot.CHEST).isEmpty()) {
-				if(world.getBlockEntity(pos) instanceof BackpackBlockEntity blockEntity) {
-					ItemStack stack = new ItemStack(this);
-					NbtCompound tag = stack.getOrCreateNbt();
+    @Override
+    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        if (!world.isClientSide()) {
+            if (BackpacksConfig.sneakPlaceBackpack && player.isShiftKeyDown() && player.getItemBySlot(EquipmentSlot.CHEST).isEmpty()) {
+                if (world.getBlockEntity(pos) instanceof BackpackBlockEntity blockEntity) {
+                    ItemStack stack = new ItemStack(this);
+                    CompoundTag tag = stack.getOrCreateTag();
 
-					Inventories.writeNbt(tag, blockEntity.inventory);
-					blockEntity.wasPickedUp = true;
+                    ContainerHelper.saveAllItems(tag, blockEntity.inventory);
+                    blockEntity.wasPickedUp = true;
 
-					if(blockEntity.hasCustomName())
-						stack.setCustomName(blockEntity.getName());
+                    if (blockEntity.hasCustomName())
+                        stack.setHoverName(blockEntity.getName());
 
-					player.equipStack(EquipmentSlot.CHEST, stack);
-					world.breakBlock(pos, false, player);
-				}
-			}
-			else {
-				NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
+                    player.setItemSlot(EquipmentSlot.CHEST, stack);
+                    world.destroyBlock(pos, false, player);
+                }
+            } else {
+                MenuProvider screenHandlerFactory = state.getMenuProvider(world, pos);
 
-				if(screenHandlerFactory != null) {
-					world.playSound(null, pos, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, SoundCategory.BLOCKS, 1F, 1F);
-					player.openHandledScreen(screenHandlerFactory);
-				}
-			}
-		}
+                if (screenHandlerFactory != null) {
+                    world.playSound(null, pos, SoundEvents.ARMOR_EQUIP_LEATHER, SoundSource.BLOCKS, 1F, 1F);
+                    player.openMenu(screenHandlerFactory);
+                }
+            }
+        }
 
-		return ActionResult.SUCCESS;
-	}
+        return InteractionResult.SUCCESS;
+    }
 
-	@Override
-	public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
-		if(world.getBlockEntity(pos) instanceof BackpackBlockEntity blockEntity && !blockEntity.wasPickedUp) {
-			if(!world.isClient() && state.getBlock() != newState.getBlock()) {
-				ItemScatterer.spawn(world, pos, blockEntity);
-			}
-		}
+    @Override
+    public void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean moved) {
+        if (world.getBlockEntity(pos) instanceof BackpackBlockEntity blockEntity && !blockEntity.wasPickedUp) {
+            if (!world.isClientSide() && state.getBlock() != newState.getBlock()) {
+                Containers.dropContents(world, pos, blockEntity);
+            }
+        }
 
-		super.onStateReplaced(state, world, pos, newState, moved);
-	}
+        super.onRemove(state, world, pos, newState, moved);
+    }
 
-	@Override
-	public FluidState getFluidState(BlockState state) {
-		return state.get(Properties.WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
-	}
+    @Override
+    public FluidState getFluidState(BlockState state) {
+        return state.getValue(BlockStateProperties.WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+    }
 
-	@Override
-	public BlockRenderType getRenderType(BlockState state) {
-		return BlockRenderType.MODEL;
-	}
+    @Override
+    public RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
+    }
 
-	@Override
-	public boolean isTranslucent(BlockState state, BlockView world, BlockPos pos) {
-		return true;
-	}
+    @Override
+    public boolean propagatesSkylightDown(BlockState state, BlockGetter world, BlockPos pos) {
+        return true;
+    }
 
-	@Override
-	public boolean hasSidedTransparency(BlockState state) {
-		return true;
-	}
+    @Override
+    public boolean useShapeForLightOcclusion(BlockState state) {
+        return true;
+    }
 
-	@Nullable
-	@Override
-	public BlockState getPlacementState(ItemPlacementContext ctx) {
-		return super.getPlacementState(ctx).with(FACING, ctx.getPlayerFacing()).with(Properties.WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
-	}
+    @Nullable
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+        return super.getStateForPlacement(ctx).setValue(FACING, ctx.getHorizontalDirection()).setValue(BlockStateProperties.WATERLOGGED, ctx.getLevel().getFluidState(ctx.getClickedPos()).getType() == Fluids.WATER);
+    }
 
-	@Override
-	public BlockState rotate(BlockState state, BlockRotation rotation) {
-		return state.with(FACING, rotation.rotate(state.get(FACING)));
-	}
+    @Override
+    public BlockState rotate(BlockState state, Rotation rotation) {
+        return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
+    }
 
-	@Override
-	public BlockState mirror(BlockState state, BlockMirror mirror) {
-		return state.rotate(mirror.getRotation(state.get(FACING)));
-	}
+    @Override
+    public BlockState mirror(BlockState state, Mirror mirror) {
+        return state.rotate(mirror.getRotation(state.getValue(FACING)));
+    }
 
-	@Nullable
-	@Override
-	public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-		return new BackpackBlockEntity(pos, state);
-	}
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new BackpackBlockEntity(pos, state);
+    }
 
-	@Override
-	public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState newState, WorldAccess world, BlockPos pos, BlockPos posFrom) {
-		if(state.get(Properties.WATERLOGGED)) {
-			world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
-		}
+    @Override
+    public BlockState updateShape(BlockState state, Direction direction, BlockState newState, LevelAccessor world, BlockPos pos, BlockPos posFrom) {
+        if (state.getValue(BlockStateProperties.WATERLOGGED)) {
+            world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
+        }
 
-		return super.getStateForNeighborUpdate(state, direction, newState, world, pos, posFrom);
-	}
+        return super.updateShape(state, direction, newState, world, pos, posFrom);
+    }
 
-	@Override
-	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-		builder.add(FACING, Properties.WATERLOGGED);
-	}
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(FACING, BlockStateProperties.WATERLOGGED);
+    }
 
-	public DyeColor getColour() {
-		return colour;
-	}
+    public DyeColor getColour() {
+        return colour;
+    }
 }

@@ -6,14 +6,15 @@ import dev.cammiescorner.camsbackpacks.client.screen.BackpackScreen;
 import dev.cammiescorner.camsbackpacks.common.items.BackpackItem;
 import dev.cammiescorner.camsbackpacks.common.network.OpenBackpackScreenPacket;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
-import net.minecraft.client.gui.screen.ingame.InventoryScreen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.PlayerScreenHandler;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,47 +23,59 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @SuppressWarnings("ConstantConditions")
 @Mixin(InventoryScreen.class)
-public abstract class InventoryScreenMixin extends AbstractInventoryScreen<PlayerScreenHandler> {
-	@Unique protected ItemStack playerInvIcon = ItemStack.EMPTY;
-	@Unique protected ItemStack equippedStack = ItemStack.EMPTY;
+public abstract class InventoryScreenMixin extends EffectRenderingInventoryScreen<InventoryMenu> {
 
-	public InventoryScreenMixin(PlayerScreenHandler screenHandler, PlayerInventory playerInventory, Text text) { super(screenHandler, playerInventory, text); }
+    @Unique
+    protected ItemStack playerInvIcon;
+    @Unique
+    protected ItemStack equippedStack;
 
-	@Inject(method = "drawBackground", at = @At("TAIL"))
-	public void camsbackpacks$drawBackground(GuiGraphics gui, float delta, int mouseX, int mouseY, CallbackInfo info) {
-		if(equippedStack.getItem() instanceof BackpackItem) {
-			RenderSystem.setShaderTexture(0, BackpackScreen.TEXTURE);
-			gui.drawTexture(BackpackScreen.TEXTURE, x + 1, y - 27, 0, 0, 190, 60, 30, 322, 220);
-			gui.drawItem(playerInvIcon, x + 8, y - 20);
-			gui.drawItem(equippedStack, x + 38, y - 20);
-			RenderSystem.setShaderTexture(0, BACKGROUND_TEXTURE);
-		}
-	}
+    private InventoryScreenMixin(InventoryMenu screenHandler, Inventory playerInventory, Component text) {
+        super(screenHandler, playerInventory, text);
+        throw new UnsupportedOperationException();
+    }
 
-	@Inject(method = "render", at = @At("TAIL"))
-	public void camsbackpacks$render(GuiGraphics gui, int mouseX, int mouseY, float delta, CallbackInfo info) {
-		if(equippedStack.getItem() instanceof BackpackItem) {
-			if(isPointWithinBounds(3, -27, 26, 28, mouseX, mouseY))
-				gui.drawTooltip(textRenderer, Text.translatable("container.camsbackpacks.player_inv"), mouseX, mouseY);
-			else if(isPointWithinBounds(32, -27, 26, 28, mouseX, mouseY))
-				gui.drawTooltip(textRenderer, Text.translatable("container.camsbackpacks.backpack_inv"), mouseX, mouseY);
-		}
-	}
+    @Inject(method = "renderBg", at = @At("TAIL"))
+    private void camsbackpacks$renderBg(GuiGraphics gui, float delta, int mouseX, int mouseY, CallbackInfo info) {
+        if (equippedStack.getItem() instanceof BackpackItem) {
+            RenderSystem.setShaderTexture(0, BackpackScreen.TEXTURE);
+            gui.blit(BackpackScreen.TEXTURE, leftPos + 1, topPos - 27, 0, 0, 190, 60, 30, 322, 220);
+            gui.renderItem(playerInvIcon, leftPos + 8, topPos - 20);
+            gui.renderItem(equippedStack, leftPos + 38, topPos - 20);
+            RenderSystem.setShaderTexture(0, INVENTORY_LOCATION);
+        }
+    }
 
-	@Inject(method = "init", at = @At("TAIL"))
-	public void camsbackpacks$init(CallbackInfo info) {
-		playerInvIcon = BackpackScreen.getPlayerHead(client.player);
-		equippedStack = client.player.getEquippedStack(EquipmentSlot.CHEST);
+    @Inject(method = "render", at = @At("TAIL"))
+    private void camsbackpacks$render(GuiGraphics gui, int mouseX, int mouseY, float delta, CallbackInfo info) {
+        if (equippedStack.getItem() instanceof BackpackItem) {
+            if (isHovering(3, -27, 26, 28, mouseX, mouseY))
+                gui.renderTooltip(font, Component.translatable("container.camsbackpacks.player_inv"), mouseX, mouseY);
+            else if (isHovering(32, -27, 26, 28, mouseX, mouseY))
+                gui.renderTooltip(font, Component.translatable("container.camsbackpacks.backpack_inv"), mouseX, mouseY);
+        }
+    }
 
-		if(equippedStack.getItem() instanceof BackpackItem) {
-			this.addSelectableChild(new ButtonWidget.Builder(Text.empty(), this::openBackpackScreen)
-			.positionAndSize(this.x + 31, this.y - 27, 28, 28).build());
-		}
-	}
+    @Inject(method = "init", at = @At("TAIL"))
+    private void camsbackpacks$init(CallbackInfo info) {
+        playerInvIcon = BackpackScreen.getPlayerHead(minecraft.player);
+        equippedStack = minecraft.player.getItemBySlot(EquipmentSlot.CHEST);
 
-	@Unique
-	private void openBackpackScreen(ButtonWidget button) {
-		CamsBackpacksClient.backpackScreenIsOpen = true;
-		OpenBackpackScreenPacket.send();
-	}
+        if (equippedStack.getItem() instanceof BackpackItem) {
+            this.addWidget(new Button.Builder(Component.empty(), this::openBackpackScreen)
+                    .bounds(this.leftPos + 31, this.topPos - 27, 28, 28).build());
+        }
+    }
+
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void camsbackpacks$constructor(Player player, CallbackInfo ci) {
+        playerInvIcon = ItemStack.EMPTY;
+        equippedStack = ItemStack.EMPTY;
+    }
+
+    @Unique
+    private void openBackpackScreen(Button button) {
+        CamsBackpacksClient.backpackScreenIsOpen = true;
+        OpenBackpackScreenPacket.send();
+    }
 }

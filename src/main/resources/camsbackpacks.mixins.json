@@ -4,17 +4,16 @@
 	"package": "dev.cammiescorner.camsbackpacks.core.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
-		"ArmourSlotMixin",
-		"CraftingScreenHandlerAccessor",
-		"PlayerEntityMixin",
-		"PlayerScreenHandlerAccessor"
+		"accessor.CraftingMenuAccessor",
+		"accessor.InventoryMenuAccessor",
+		"InventoryMenuSlotMixin",
+		"PlayerMixin"
 	],
 	"client": [
-		"client.ClientPlayerInteractionManagerMixin",
 		"client.InventoryScreenMixin",
-		"client.KeyBindingAccessor",
-		"client.MinecraftClientMixin",
-		"client.PlayerEntityRendererMixin"
+		"client.MinecraftMixin",
+		"client.MultiPlayerGameModeMixin",
+		"client.PlayerRendererMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

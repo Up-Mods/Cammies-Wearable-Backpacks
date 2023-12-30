@@ -2,17 +2,17 @@ package dev.cammiescorner.camsbackpacks.compat.universalgraves;
 
 import dev.cammiescorner.camsbackpacks.common.items.BackpackItem;
 import eu.pb4.graves.event.PlayerGraveItemAddedEvent;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.util.ActionResult;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EquipmentSlot;
 
 public class UniversalGravesCompat {
 
     public static void load() {
         PlayerGraveItemAddedEvent.EVENT.register((player, stack) -> {
-            if (stack.getItem() instanceof BackpackItem && stack == player.getEquippedStack(EquipmentSlot.CHEST))
-                return ActionResult.FAIL;
+            if (stack.getItem() instanceof BackpackItem && stack == player.getItemBySlot(EquipmentSlot.CHEST))
+                return InteractionResult.FAIL;
 
-            return ActionResult.PASS;
+            return InteractionResult.PASS;
         });
     }
 }

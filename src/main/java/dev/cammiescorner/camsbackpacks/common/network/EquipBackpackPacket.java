@@ -7,76 +7,75 @@ import dev.cammiescorner.camsbackpacks.common.items.BackpackItem;
 import dev.cammiescorner.camsbackpacks.common.screen.BackpackScreenHandler;
 import dev.cammiescorner.camsbackpacks.core.util.BackpackHelper;
 import io.netty.buffer.Unpooled;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayNetworkHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.quiltmc.qsl.networking.api.PacketSender;
 import org.quiltmc.qsl.networking.api.PlayerLookup;
 import org.quiltmc.qsl.networking.api.client.ClientPlayNetworking;
 
 public class EquipBackpackPacket {
-	public static final Identifier ID = CamsBackpacks.id("equip_backpack");
+    public static final ResourceLocation ID = CamsBackpacks.id("equip_backpack");
 
-	public static void send(boolean isBlockEntity, BlockPos pos) {
-		PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-		buf.writeBlockPos(pos);
-		buf.writeBoolean(isBlockEntity);
-		ClientPlayNetworking.send(ID, buf);
-	}
+    public static void send(boolean isBlockEntity, BlockPos pos) {
+        FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+        buf.writeBlockPos(pos);
+        buf.writeBoolean(isBlockEntity);
+        ClientPlayNetworking.send(ID, buf);
+    }
 
-	public static void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler network, PacketByteBuf buf, PacketSender sender) {
-		BlockPos pos = buf.readBlockPos();
-		boolean isBlockEntity = buf.readBoolean();
+    public static void handle(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl network, FriendlyByteBuf buf, PacketSender sender) {
+        BlockPos pos = buf.readBlockPos();
+        boolean isBlockEntity = buf.readBoolean();
 
-		server.execute(() -> {
-			World world = player.getWorld();
+        server.execute(() -> {
+            Level world = player.level();
 
-			if(isBlockEntity) {
-				if(world.getBlockEntity(pos) instanceof BackpackBlockEntity blockEntity) {
-					ItemStack stack = new ItemStack(world.getBlockState(pos).getBlock().asItem());
-					NbtCompound tag = stack.getOrCreateNbt();
+            if (isBlockEntity) {
+                if (world.getBlockEntity(pos) instanceof BackpackBlockEntity blockEntity) {
+                    ItemStack stack = new ItemStack(world.getBlockState(pos).getBlock().asItem());
+                    CompoundTag tag = stack.getOrCreateTag();
 
-					Inventories.writeNbt(tag, blockEntity.inventory);
-					blockEntity.wasPickedUp = true;
-					player.equipStack(EquipmentSlot.CHEST, stack);
+                    ContainerHelper.saveAllItems(tag, blockEntity.inventory);
+                    blockEntity.wasPickedUp = true;
+                    player.setItemSlot(EquipmentSlot.CHEST, stack);
 
-					if(blockEntity.hasCustomName())
-						stack.setCustomName(blockEntity.getName());
+                    if (blockEntity.hasCustomName())
+                        stack.setHoverName(blockEntity.getName());
 
-					world.breakBlock(pos, false, player);
-					PlayerLookup.tracking(blockEntity).forEach(playerEntity -> {
-						if(playerEntity.currentScreenHandler instanceof BackpackScreenHandler handler && handler.blockPos.equals(pos))
-							playerEntity.closeHandledScreen();
-					});
-				}
-			}
-			else {
-				ItemStack stack = player.getEquippedStack(EquipmentSlot.CHEST);
+                    world.destroyBlock(pos, false, player);
+                    PlayerLookup.tracking(blockEntity).forEach(playerEntity -> {
+                        if (playerEntity.containerMenu instanceof BackpackScreenHandler handler && handler.blockPos.equals(pos))
+                            playerEntity.closeContainer();
+                    });
+                }
+            } else {
+                ItemStack stack = player.getItemBySlot(EquipmentSlot.CHEST);
 
-				if(stack.getItem() instanceof BackpackItem backpackItem && BackpackHelper.isReplaceable(world, pos) && pos.isWithinDistance(player.getBlockPos(), 3)) {
-					world.playSound(null, pos, SoundEvents.BLOCK_WOOL_PLACE, SoundCategory.BLOCKS, 1F, 1F);
-					world.setBlockState(pos, backpackItem.getBlock().getDefaultState().with(BackpackBlock.FACING, player.getHorizontalFacing()).with(Properties.WATERLOGGED, !world.getFluidState(pos).isEmpty()));
-					player.closeHandledScreen();
+                if (stack.getItem() instanceof BackpackItem backpackItem && BackpackHelper.isReplaceable(world, pos) && pos.closerThan(player.blockPosition(), 3)) {
+                    world.playSound(null, pos, SoundEvents.WOOL_PLACE, SoundSource.BLOCKS, 1F, 1F);
+                    world.setBlockAndUpdate(pos, backpackItem.getBlock().defaultBlockState().setValue(BackpackBlock.FACING, player.getDirection()).setValue(BlockStateProperties.WATERLOGGED, !world.getFluidState(pos).isEmpty()));
+                    player.closeContainer();
 
-					if(world.getBlockEntity(pos) instanceof BackpackBlockEntity backpack) {
-						Inventories.readNbt(stack.getOrCreateNbt(), backpack.inventory);
-						backpack.setName(stack.getName());
-					}
+                    if (world.getBlockEntity(pos) instanceof BackpackBlockEntity backpack) {
+                        ContainerHelper.loadAllItems(stack.getOrCreateTag(), backpack.inventory);
+                        backpack.setName(stack.getHoverName());
+                    }
 
-					player.getEquippedStack(EquipmentSlot.CHEST).decrement(1);
-				}
-			}
-		});
-	}
+                    player.getItemBySlot(EquipmentSlot.CHEST).shrink(1);
+                }
+            }
+        });
+    }
 }

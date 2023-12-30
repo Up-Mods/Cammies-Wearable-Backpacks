@@ -4,103 +4,103 @@ import dev.cammiescorner.camsbackpacks.CamsBackpacks;
 import dev.cammiescorner.camsbackpacks.common.screen.BackpackScreenHandler;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.ScreenHandlerContext;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayNetworkHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.item.ItemStack;
 import org.quiltmc.qsl.networking.api.PacketSender;
 import org.quiltmc.qsl.networking.api.client.ClientPlayNetworking;
 
 public class OpenBackpackScreenPacket {
-	public static final Identifier ID = CamsBackpacks.id("open_backpack");
+    public static final ResourceLocation ID = CamsBackpacks.id("open_backpack");
 
-	public static void send() {
-		PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-		ClientPlayNetworking.send(ID, buf);
-	}
+    public static void send() {
+        FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+        ClientPlayNetworking.send(ID, buf);
+    }
 
-	public static void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler network, PacketByteBuf buf, PacketSender sender) {
-		server.execute(() -> {
-			final DefaultedList<ItemStack> stacks = DefaultedList.ofSize(36, ItemStack.EMPTY);
-			ItemStack stack = player.getEquippedStack(EquipmentSlot.CHEST);
-			NbtCompound tag = stack.getOrCreateNbt();
-			Inventories.readNbt(tag, stacks);
-			Inventory inventory = new Inventory() {
-				@Override
-				public void clear() {
-					stacks.clear();
-				}
+    public static void handle(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl network, FriendlyByteBuf buf, PacketSender sender) {
+        server.execute(() -> {
+            final NonNullList<ItemStack> stacks = NonNullList.withSize(36, ItemStack.EMPTY);
+            ItemStack stack = player.getItemBySlot(EquipmentSlot.CHEST);
+            CompoundTag tag = stack.getOrCreateTag();
+            ContainerHelper.loadAllItems(tag, stacks);
+            Container inventory = new Container() {
+                @Override
+                public void clearContent() {
+                    stacks.clear();
+                }
 
-				@Override
-				public int size() {
-					return stacks.size();
-				}
+                @Override
+                public int getContainerSize() {
+                    return stacks.size();
+                }
 
-				@Override
-				public boolean isEmpty() {
-					return stacks.isEmpty();
-				}
+                @Override
+                public boolean isEmpty() {
+                    return stacks.isEmpty();
+                }
 
-				@Override
-				public ItemStack getStack(int slot) {
-					return stacks.get(slot);
-				}
+                @Override
+                public ItemStack getItem(int slot) {
+                    return stacks.get(slot);
+                }
 
-				@Override
-				public ItemStack removeStack(int slot, int amount) {
-					return Inventories.splitStack(stacks, slot, amount);
-				}
+                @Override
+                public ItemStack removeItem(int slot, int amount) {
+                    return ContainerHelper.removeItem(stacks, slot, amount);
+                }
 
-				@Override
-				public ItemStack removeStack(int slot) {
-					return Inventories.removeStack(stacks, slot);
-				}
+                @Override
+                public ItemStack removeItemNoUpdate(int slot) {
+                    return ContainerHelper.takeItem(stacks, slot);
+                }
 
-				@Override
-				public void setStack(int slot, ItemStack stack) {
-					stacks.set(slot, stack);
-				}
+                @Override
+                public void setItem(int slot, ItemStack stack) {
+                    stacks.set(slot, stack);
+                }
 
-				@Override
-				public void markDirty() {
+                @Override
+                public void setChanged() {
 
-				}
+                }
 
-				@Override
-				public boolean canPlayerUse(PlayerEntity player) {
-					return true;
-				}
-			};
+                @Override
+                public boolean stillValid(Player player) {
+                    return true;
+                }
+            };
 
-			player.openHandledScreen(new ExtendedScreenHandlerFactory() {
-				@Override
-				public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf) {
-					buf.writeBlockPos(player.getBlockPos());
-					buf.writeBoolean(false);
-				}
+            player.openMenu(new ExtendedScreenHandlerFactory() {
+                @Override
+                public void writeScreenOpeningData(ServerPlayer player, FriendlyByteBuf buf) {
+                    buf.writeBlockPos(player.blockPosition());
+                    buf.writeBoolean(false);
+                }
 
-				@Override
-				public Text getDisplayName() {
-					return stack.getName();
-				}
+                @Override
+                public Component getDisplayName() {
+                    return stack.getHoverName();
+                }
 
-				@Override
-				public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
-					return new BackpackScreenHandler(syncId, playerInventory, inventory, ScreenHandlerContext.create(player.getWorld(), player.getBlockPos()), player.getBlockPos(), false);
-				}
-			});
-		});
-	}
+                @Override
+                public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
+                    return new BackpackScreenHandler(syncId, playerInventory, inventory, ContainerLevelAccess.create(player.level(), player.blockPosition()), player.blockPosition(), false);
+                }
+            });
+        });
+    }
 }

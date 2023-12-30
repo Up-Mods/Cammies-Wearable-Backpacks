@@ -9,13 +9,14 @@ import dev.cammiescorner.camsbackpacks.core.registry.ModBlockEntities;
 import dev.cammiescorner.camsbackpacks.core.registry.ModBlocks;
 import dev.cammiescorner.camsbackpacks.core.registry.ModScreenHandlers;
 import eu.midnightdust.lib.config.MidnightConfig;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.loader.api.QuiltLoader;
 import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
 import org.quiltmc.qsl.networking.api.ServerPlayNetworking;
 
 public class CamsBackpacks implements ModInitializer {
+
     public static final String MOD_ID = "camsbackpacks";
 
     @Override
@@ -34,7 +35,7 @@ public class CamsBackpacks implements ModInitializer {
             UniversalGravesCompat.load();
     }
 
-    public static Identifier id(String path) {
-        return new Identifier(MOD_ID, path);
+    public static ResourceLocation id(String path) {
+        return new ResourceLocation(MOD_ID, path);
     }
 }

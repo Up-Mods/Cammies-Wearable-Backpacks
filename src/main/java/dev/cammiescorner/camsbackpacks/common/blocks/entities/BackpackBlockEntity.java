@@ -3,117 +3,117 @@ package dev.cammiescorner.camsbackpacks.common.blocks.entities;
 import dev.cammiescorner.camsbackpacks.common.screen.BackpackScreenHandler;
 import dev.cammiescorner.camsbackpacks.core.registry.ModBlockEntities;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.ScreenHandlerContext;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.Nameable;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.Nameable;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-public class BackpackBlockEntity extends BlockEntity implements Inventory, Nameable, ExtendedScreenHandlerFactory {
-	public final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(36, ItemStack.EMPTY);
-	public boolean wasPickedUp = false;
-	private Text name = Text.of("");
+public class BackpackBlockEntity extends BlockEntity implements Container, Nameable, ExtendedScreenHandlerFactory {
+    public final NonNullList<ItemStack> inventory = NonNullList.withSize(36, ItemStack.EMPTY);
+    public boolean wasPickedUp = false;
+    private Component name = Component.nullToEmpty("");
 
-	public BackpackBlockEntity(BlockPos pos, BlockState state) {
-		super(ModBlockEntities.BACKPACK, pos, state);
-	}
+    public BackpackBlockEntity(BlockPos pos, BlockState state) {
+        super(ModBlockEntities.BACKPACK, pos, state);
+    }
 
-	@Override
-	public void readNbt(NbtCompound tag) {
-		super.readNbt(tag);
-		Inventories.readNbt(tag, inventory);
-		wasPickedUp = tag.getBoolean("PickedUp");
-		if(tag.contains("CustomName", NbtElement.STRING_TYPE))
-			this.name = Text.Serializer.fromJson(tag.getString("CustomName"));
-	}
+    @Override
+    public void load(CompoundTag tag) {
+        super.load(tag);
+        ContainerHelper.loadAllItems(tag, inventory);
+        wasPickedUp = tag.getBoolean("PickedUp");
+        if (tag.contains("CustomName", Tag.TAG_STRING))
+            this.name = Component.Serializer.fromJson(tag.getString("CustomName"));
+    }
 
-	@Override
-	public void writeNbt(NbtCompound tag) {
-		Inventories.writeNbt(tag, inventory);
-		tag.putBoolean("PickedUp", wasPickedUp);
+    @Override
+    public void saveAdditional(CompoundTag tag) {
+        ContainerHelper.saveAllItems(tag, inventory);
+        tag.putBoolean("PickedUp", wasPickedUp);
 
-		if(this.name != null)
-			tag.putString("CustomName", Text.Serializer.toJson(this.name));
+        if (this.name != null)
+            tag.putString("CustomName", Component.Serializer.toJson(this.name));
 
-		super.writeNbt(tag);
-	}
+        super.saveAdditional(tag);
+    }
 
-	@Override
-	public int size() {
-		return inventory.size();
-	}
+    @Override
+    public int getContainerSize() {
+        return inventory.size();
+    }
 
-	@Override
-	public boolean isEmpty() {
-		return inventory.isEmpty();
-	}
+    @Override
+    public boolean isEmpty() {
+        return inventory.isEmpty();
+    }
 
-	@Override
-	public ItemStack getStack(int slot) {
-		return inventory.get(slot);
-	}
+    @Override
+    public ItemStack getItem(int slot) {
+        return inventory.get(slot);
+    }
 
-	@Override
-	public ItemStack removeStack(int slot, int amount) {
-		return Inventories.splitStack(inventory, slot, amount);
-	}
+    @Override
+    public ItemStack removeItem(int slot, int amount) {
+        return ContainerHelper.removeItem(inventory, slot, amount);
+    }
 
-	@Override
-	public ItemStack removeStack(int slot) {
-		return Inventories.removeStack(inventory, slot);
-	}
+    @Override
+    public ItemStack removeItemNoUpdate(int slot) {
+        return ContainerHelper.takeItem(inventory, slot);
+    }
 
-	@Override
-	public void setStack(int slot, ItemStack stack) {
-		inventory.set(slot, stack);
-	}
+    @Override
+    public void setItem(int slot, ItemStack stack) {
+        inventory.set(slot, stack);
+    }
 
-	@Override
-	public boolean canPlayerUse(PlayerEntity player) {
-		return !(player.squaredDistanceTo(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) > 64.0D);
-	}
+    @Override
+    public boolean stillValid(Player player) {
+        return !(player.distanceToSqr(worldPosition.getX() + 0.5D, worldPosition.getY() + 0.5D, worldPosition.getZ() + 0.5D) > 64.0D);
+    }
 
-	@Override
-	public void clear() {
-		inventory.clear();
-	}
+    @Override
+    public void clearContent() {
+        inventory.clear();
+    }
 
-	@Override
-	public Text getName() {
-		return name;
-	}
+    @Override
+    public Component getName() {
+        return name;
+    }
 
-	public void setName(Text text) {
-		this.name = text;
-		this.markDirty();
-	}
+    public void setName(Component text) {
+        this.name = text;
+        this.setChanged();
+    }
 
-	@Override
-	public Text getDisplayName() {
-		return getName();
-	}
+    @Override
+    public Component getDisplayName() {
+        return getName();
+    }
 
-	@Override
-	public @Nullable ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
-		return new BackpackScreenHandler(syncId, inv, this, ScreenHandlerContext.create(player.getWorld(), getPos()), getPos(), true);
-	}
+    @Override
+    public @Nullable AbstractContainerMenu createMenu(int syncId, Inventory inv, Player player) {
+        return new BackpackScreenHandler(syncId, inv, this, ContainerLevelAccess.create(player.level(), getBlockPos()), getBlockPos(), true);
+    }
 
-	@Override
-	public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf) {
-		buf.writeBlockPos(getPos());
-		buf.writeBoolean(true);
-	}
+    @Override
+    public void writeScreenOpeningData(ServerPlayer player, FriendlyByteBuf buf) {
+        buf.writeBlockPos(getBlockPos());
+        buf.writeBoolean(true);
+    }
 }

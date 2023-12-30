@@ -3,49 +3,53 @@
 package dev.cammiescorner.camsbackpacks.client.models;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.model.AnimalModel;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.client.model.AgeableListModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.world.entity.LivingEntity;
 
-public class BackpackModel<T extends LivingEntity> extends AnimalModel<T> {
-	private final ModelPart root;
+public class BackpackModel<T extends LivingEntity> extends AgeableListModel<T> {
+    private final ModelPart root;
 
-	public BackpackModel(ModelPart root) {
-		this.root = root.getChild("root");
-	}
+    public BackpackModel(ModelPart root) {
+        this.root = root.getChild("root");
+    }
 
-	public static TexturedModelData getTexturedModelData() {
-		ModelData modelData = new ModelData();
-		ModelPartData modelPartData = modelData.getRoot();
-		ModelPartData modelPartData1 = modelPartData.addChild("root", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-		ModelPartData modelPartData2 = modelPartData1.addChild("straps", ModelPartBuilder.create().uv(0, 0).cuboid(-4.5F, -0.3F, -3.0F, 9.0F, 12.0F, 5.0F), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-		ModelPartData modelPartData3 = modelPartData2.addChild("backpack", ModelPartBuilder.create().uv(28, 0).cuboid(-4.5F, -3.0F, 2.0F, 9.0F, 16.0F, 6.0F), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-		modelPartData3.addChild("pocketRight", ModelPartBuilder.create().uv(0, 17).cuboid(3.5F, 7.0F, 3.0F, 3.0F, 5.0F, 4.0F), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-		modelPartData3.addChild("pocketLeft", ModelPartBuilder.create().uv(0, 17).cuboid(-6.5F, 7.0F, 3.0F, 3.0F, 5.0F, 4.0F), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-		modelPartData3.addChild("backPocket", ModelPartBuilder.create().uv(14, 20).cuboid(-3.0F, 1.0F, 8.0F, 6.0F, 8.0F, 2.0F), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+    public static LayerDefinition getTexturedModelData() {
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition modelPartData = modelData.getRoot();
+        PartDefinition modelPartData1 = modelPartData.addOrReplaceChild("root", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition modelPartData2 = modelPartData1.addOrReplaceChild("straps", CubeListBuilder.create().texOffs(0, 0).addBox(-4.5F, -0.3F, -3.0F, 9.0F, 12.0F, 5.0F), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition modelPartData3 = modelPartData2.addOrReplaceChild("backpack", CubeListBuilder.create().texOffs(28, 0).addBox(-4.5F, -3.0F, 2.0F, 9.0F, 16.0F, 6.0F), PartPose.offset(0.0F, 0.0F, 0.0F));
+        modelPartData3.addOrReplaceChild("pocketRight", CubeListBuilder.create().texOffs(0, 17).addBox(3.5F, 7.0F, 3.0F, 3.0F, 5.0F, 4.0F), PartPose.offset(0.0F, 0.0F, 0.0F));
+        modelPartData3.addOrReplaceChild("pocketLeft", CubeListBuilder.create().texOffs(0, 17).addBox(-6.5F, 7.0F, 3.0F, 3.0F, 5.0F, 4.0F), PartPose.offset(0.0F, 0.0F, 0.0F));
+        modelPartData3.addOrReplaceChild("backPocket", CubeListBuilder.create().texOffs(14, 20).addBox(-3.0F, 1.0F, 8.0F, 6.0F, 8.0F, 2.0F), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		return TexturedModelData.of(modelData, 64, 32);
-	}
+        return LayerDefinition.create(modelData, 64, 32);
+    }
 
-	@Override
-	public void setAngles(T entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
-		if(entity.isInSneakingPose()) {
-			root.pitch = 0.5F;
-			root.pivotY = 3.2F;
-		}
-		else {
-			root.pitch = 0.0F;
-			root.pivotY = 0.0F;
-		}
-	}
+    @Override
+    public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        if (entity.isCrouching()) {
+            root.xRot = 0.5F;
+            root.y = 3.2F;
+        } else {
+            root.xRot = 0.0F;
+            root.y = 0.0F;
+        }
+    }
 
-	@Override
-	protected Iterable<ModelPart> getHeadParts() {
-		return ImmutableList.of();
-	}
+    @Override
+    protected Iterable<ModelPart> headParts() {
+        return ImmutableList.of();
+    }
 
-	@Override
-	protected Iterable<ModelPart> getBodyParts() {
-		return ImmutableList.of(root);
-	}
+    @Override
+    protected Iterable<ModelPart> bodyParts() {
+        return ImmutableList.of(root);
+    }
 }

@@ -9,9 +9,13 @@ import dev.cammiescorner.camsbackpacks.core.registry.ModScreenHandlers;
 import dev.cammiescorner.camsbackpacks.core.util.BackpackHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
-import net.minecraft.client.gui.screen.ingame.HandledScreens;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.entity.model.EntityModelLayer;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
 import org.quiltmc.qsl.block.extensions.api.client.BlockRenderLayerMap;
@@ -19,33 +23,18 @@ import org.quiltmc.qsl.block.extensions.api.client.BlockRenderLayerMap;
 import static dev.cammiescorner.camsbackpacks.core.registry.ModBlocks.*;
 
 public class CamsBackpacksClient implements ClientModInitializer {
-	public static final EntityModelLayer BACKPACK = new EntityModelLayer(CamsBackpacks.id("backpack"), "main");
-	public static boolean backpackScreenIsOpen = true;
+    public static final ModelLayerLocation BACKPACK = new ModelLayerLocation(CamsBackpacks.id("backpack"), "main");
+    public static boolean backpackScreenIsOpen = true;
 
-	@Override
-	public void onInitializeClient(ModContainer mod) {
-		//-----Screen Registry-----//
-		HandledScreens.register(ModScreenHandlers.BACKPACK_SCREEN_HANDLER, BackpackScreen::new);
+    @Override
+    public void onInitializeClient(ModContainer mod) {
+        MenuScreens.register(ModScreenHandlers.BACKPACK_SCREEN_HANDLER, BackpackScreen::new);
 
-		//-----Entity Model Layers Registry-----//
-		EntityModelLayerRegistry.registerModelLayer(BACKPACK, BackpackModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(BACKPACK, BackpackModel::getTexturedModelData);
 
-		//-----Colour Registry-----//
-		ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> BackpackHelper.dyeToDecimal(((BackpackBlock) state.getBlock()).getColour()),
-				WHITE_BACKPACK, ORANGE_BACKPACK, MAGENTA_BACKPACK, LIGHT_BLUE_BACKPACK, YELLOW_BACKPACK, LIME_BACKPACK, PINK_BACKPACK,
-				GRAY_BACKPACK, LIGHT_GRAY_BACKPACK, CYAN_BACKPACK, PURPLE_BACKPACK, BLUE_BACKPACK, BROWN_BACKPACK, GREEN_BACKPACK,
-				RED_BACKPACK, BLACK_BACKPACK);
-		ColorProviderRegistry.ITEM.register((stack, tintIndex) -> BackpackHelper.dyeToDecimal(((BackpackItem) stack.getItem()).getColour()),
-				WHITE_BACKPACK.asItem(), ORANGE_BACKPACK.asItem(), MAGENTA_BACKPACK.asItem(), LIGHT_BLUE_BACKPACK.asItem(),
-				YELLOW_BACKPACK.asItem(), LIME_BACKPACK.asItem(), PINK_BACKPACK.asItem(), GRAY_BACKPACK.asItem(),
-				LIGHT_GRAY_BACKPACK.asItem(), CYAN_BACKPACK.asItem(), PURPLE_BACKPACK.asItem(), BLUE_BACKPACK.asItem(),
-				BROWN_BACKPACK.asItem(), GREEN_BACKPACK.asItem(), RED_BACKPACK.asItem(), BLACK_BACKPACK);
+        ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> BackpackHelper.dyeToDecimal(((BackpackBlock) state.getBlock()).getColour()), BuiltInRegistries.BLOCK.stream().filter(block -> block instanceof BackpackBlock backpack && (backpack.getColour() != DyeColor.WHITE || backpack == WHITE_BACKPACK)).toArray(Block[]::new));
+        ColorProviderRegistry.ITEM.register((stack, tintIndex) -> BackpackHelper.dyeToDecimal(((BackpackItem) stack.getItem()).getColour()), BuiltInRegistries.ITEM.stream().filter(item -> item instanceof BackpackItem backpack && (backpack.getColour() != DyeColor.WHITE || backpack == WHITE_BACKPACK.asItem())).toArray(Item[]::new));
 
-		//-----Block Layers Registry-----//
-		BlockRenderLayerMap.put(RenderLayer.getCutout(), WHITE_BACKPACK, ORANGE_BACKPACK, MAGENTA_BACKPACK,
-				LIGHT_BLUE_BACKPACK, YELLOW_BACKPACK, LIME_BACKPACK, PINK_BACKPACK, GRAY_BACKPACK, LIGHT_GRAY_BACKPACK, CYAN_BACKPACK,
-				PURPLE_BACKPACK, BLUE_BACKPACK, BROWN_BACKPACK, GREEN_BACKPACK, RED_BACKPACK, BLACK_BACKPACK, GAY_BACKPACK,
-				LESBIAN_BACKPACK, QPOC_BACKPACK, BI_BACKPACK, PAN_BACKPACK, TRANS_BACKPACK, GENDERQUEER_BACKPACK,
-				GENDERFLUID_BACKPACK, ENBY_BACKPACK, ACE_BACKPACK, DEMI_BACKPACK, ARO_BACKPACK, AGENDER_BACKPACK);
-	}
+        BlockRenderLayerMap.put(RenderType.cutout(), BuiltInRegistries.BLOCK.stream().filter(BackpackBlock.class::isInstance).toArray(Block[]::new));
+    }
 }

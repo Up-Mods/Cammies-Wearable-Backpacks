@@ -56,7 +56,11 @@ repositories {
 
 dependencies {
     minecraft libs.minecraft
-    mappings variantOf(libs.quilt.mappings) { classifier "intermediary-v2" }
+    mappings(loom.layered {
+        it.mappings variantOf(libs.quilt.mappings) { classifier 'intermediary-v2' }
+        it.parchment("${libs.parchment.mappings.get()}@zip")
+        it.officialMojangMappings { nameSyntheticMembers = false }
+    })
 
     modImplementation libs.quilt.loader
     modImplementation libs.quilted.fabric.api
