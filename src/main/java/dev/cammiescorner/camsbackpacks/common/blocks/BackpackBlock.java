@@ -2,9 +2,12 @@ package dev.cammiescorner.camsbackpacks.common.blocks;
 
 import dev.cammiescorner.camsbackpacks.common.blocks.entities.BackpackBlockEntity;
 import dev.cammiescorner.camsbackpacks.core.BackpacksConfig;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.*;
@@ -68,6 +71,12 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
     @Override
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (!world.isClientSide()) {
+            if(!world.mayInteract(player, pos)) {
+                ((ServerPlayer) player).sendSystemMessage(Component.translatable("error.camsbackpacks.permission_use").withStyle(ChatFormatting.RED), true);
+                return InteractionResult.FAIL;
+            }
+
+
             if (BackpacksConfig.sneakPlaceBackpack && player.isShiftKeyDown() && player.getItemBySlot(EquipmentSlot.CHEST).isEmpty()) {
                 if (world.getBlockEntity(pos) instanceof BackpackBlockEntity blockEntity) {
                     ItemStack stack = new ItemStack(this);
@@ -92,7 +101,7 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
             }
         }
 
-        return InteractionResult.SUCCESS;
+        return InteractionResult.sidedSuccess(world.isClientSide());
     }
 
     @Override

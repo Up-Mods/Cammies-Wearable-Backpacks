@@ -4,12 +4,14 @@ import dev.cammiescorner.camsbackpacks.CamsBackpacks;
 import dev.cammiescorner.camsbackpacks.common.blocks.BackpackBlock;
 import dev.cammiescorner.camsbackpacks.common.blocks.entities.BackpackBlockEntity;
 import dev.cammiescorner.camsbackpacks.common.items.BackpackItem;
-import dev.cammiescorner.camsbackpacks.common.screen.BackpackScreenHandler;
 import dev.cammiescorner.camsbackpacks.core.util.BackpackHelper;
 import io.netty.buffer.Unpooled;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -22,7 +24,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.quiltmc.qsl.networking.api.PacketSender;
-import org.quiltmc.qsl.networking.api.PlayerLookup;
 import org.quiltmc.qsl.networking.api.client.ClientPlayNetworking;
 
 public class EquipBackpackPacket {
@@ -42,6 +43,15 @@ public class EquipBackpackPacket {
         server.execute(() -> {
             Level world = player.level();
 
+            if (!world.mayInteract(player, pos)) {
+                player.closeContainer();
+                MutableComponent message = isBlockEntity
+                        ? Component.translatable("error.camsbackpacks.permission_pickup_at")
+                        : Component.translatable("error.camsbackpacks.permission_place_at");
+                player.sendSystemMessage(message.withStyle(ChatFormatting.RED), true);
+                return;
+            }
+
             if (isBlockEntity) {
                 if (world.getBlockEntity(pos) instanceof BackpackBlockEntity blockEntity) {
                     ItemStack stack = new ItemStack(world.getBlockState(pos).getBlock().asItem());
@@ -55,10 +65,7 @@ public class EquipBackpackPacket {
                         stack.setHoverName(blockEntity.getName());
 
                     world.destroyBlock(pos, false, player);
-                    PlayerLookup.tracking(blockEntity).forEach(playerEntity -> {
-                        if (playerEntity.containerMenu instanceof BackpackScreenHandler handler && handler.blockPos.equals(pos))
-                            playerEntity.closeContainer();
-                    });
+
                 }
             } else {
                 ItemStack stack = player.getItemBySlot(EquipmentSlot.CHEST);

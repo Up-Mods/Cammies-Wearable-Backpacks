@@ -43,6 +43,11 @@
 	"container.camsbackpacks.player_inv": "Inventory",
 	"container.camsbackpacks.backpack_inv": "Backpack",
 
+	// Error Messages
+	"error.camsbackpacks.permission_place_at": "You do not have permission to place a backpack at this location!",
+	"error.camsbackpacks.permission_pickup_at": "You do not have permission to pick up a backpack at this location!",
+	"error.camsbackpacks.permission_use": "You do not have permission to use this backpack!",
+
 	// Config
 	"camsbackpacks.midnightconfig.title": "CamsBackpacks",
 	"camsbackpacks.midnightconfig.sneakPlaceBackpack": "Enable Sneak-Placing Backpacks"

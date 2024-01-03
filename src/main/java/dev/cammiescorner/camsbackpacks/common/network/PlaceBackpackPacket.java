@@ -6,8 +6,10 @@ import dev.cammiescorner.camsbackpacks.common.blocks.entities.BackpackBlockEntit
 import dev.cammiescorner.camsbackpacks.common.items.BackpackItem;
 import dev.cammiescorner.camsbackpacks.core.util.BackpackHelper;
 import io.netty.buffer.Unpooled;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -38,6 +40,13 @@ public class PlaceBackpackPacket {
         server.execute(() -> {
             Level world = player.level();
             BlockPos pos = BackpackHelper.isReplaceable(world, hitResult.getBlockPos()) ? hitResult.getBlockPos() : hitResult.getBlockPos().relative(hitResult.getDirection());
+
+            if(!world.mayInteract(player, pos)) {
+                player.closeContainer();
+                player.sendSystemMessage(Component.translatable("error.camsbackpacks.permission_place_at").withStyle(ChatFormatting.RED), true);
+                return;
+            }
+
             ItemStack stack = player.getItemBySlot(EquipmentSlot.CHEST);
 
             if (BackpackHelper.isReplaceable(world, pos)) {
