@@ -20,7 +20,7 @@ public class HephaestusArmorSlotMixin extends Slot {
 
     @Inject(method = "mayPickup", at = @At("HEAD"), cancellable = true)
     private void camsbackpacks$mayPickup(Player player, CallbackInfoReturnable<Boolean> cir) {
-        if(this.getItem().getItem() instanceof BackpackItem) {
+        if (this.getItem().getItem() instanceof BackpackItem) {
             cir.setReturnValue(false);
         }
     }
