@@ -11,6 +11,7 @@ import java.util.Set;
 public class CamsBackpacksMixinConfigPlugin implements IMixinConfigPlugin {
 
     private static final String HEPHAESTUS_MOD_ID = "tconstruct";
+    private static final String INVENTORIO_MOD_ID = "inventorio";
 
     @Override
     public void onLoad(String mixinPackage) {
@@ -25,10 +26,11 @@ public class CamsBackpacksMixinConfigPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if("dev.cammiescorner.camsbackpacks.core.mixin.compat.HephaestusArmorSlotMixin".equals(mixinClassName)) {
-            return QuiltLoader.isModLoaded(HEPHAESTUS_MOD_ID);
-        }
-        return true;
+        return switch (mixinClassName) {
+            case "dev.cammiescorner.camsbackpacks.core.mixin.compat.InventorioArmorSlotMixin" -> QuiltLoader.isModLoaded(INVENTORIO_MOD_ID);
+            case "dev.cammiescorner.camsbackpacks.core.mixin.compat.HephaestusArmorSlotMixin" -> QuiltLoader.isModLoaded(HEPHAESTUS_MOD_ID);
+            default -> true;
+        };
     }
 
     @Override

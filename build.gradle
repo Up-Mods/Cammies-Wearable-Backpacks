@@ -54,6 +54,13 @@ repositories {
             includeGroup "maven.modrinth"
         }
     }
+    maven {
+        name = "CurseMaven"
+        url = "https://www.cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
 }
 
 dependencies {
@@ -73,6 +80,7 @@ dependencies {
     modImplementation libs.midnightlib
 
     modCompileOnly libs.hephaestus
+    modCompileOnly libs.inventorio
 
     modImplementation libs.universalgraves
     modLocalRuntime libs.bundles.universalgraves.runtime

@@ -9,7 +9,8 @@
     "PlayerMixin",
     "accessor.CraftingMenuAccessor",
     "accessor.InventoryMenuAccessor",
-    "compat.HephaestusArmorSlotMixin"
+    "compat.HephaestusArmorSlotMixin",
+    "compat.InventorioArmorSlotMixin"
   ],
   "client": [
     "client.InventoryScreenMixin",
