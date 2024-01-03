@@ -5,6 +5,7 @@ import dev.cammiescorner.camsbackpacks.client.models.BackpackModel;
 import dev.cammiescorner.camsbackpacks.client.screen.BackpackScreen;
 import dev.cammiescorner.camsbackpacks.common.blocks.BackpackBlock;
 import dev.cammiescorner.camsbackpacks.common.items.BackpackItem;
+import dev.cammiescorner.camsbackpacks.common.network.UpdateConfigurationPacket;
 import dev.cammiescorner.camsbackpacks.core.registry.ModScreenHandlers;
 import dev.cammiescorner.camsbackpacks.core.util.BackpackHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
@@ -19,12 +20,14 @@ import net.minecraft.world.level.block.Block;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
 import org.quiltmc.qsl.block.extensions.api.client.BlockRenderLayerMap;
+import org.quiltmc.qsl.networking.api.client.ClientPlayNetworking;
 
 import static dev.cammiescorner.camsbackpacks.core.registry.ModBlocks.*;
 
 public class CamsBackpacksClient implements ClientModInitializer {
     public static final ModelLayerLocation BACKPACK = new ModelLayerLocation(CamsBackpacks.id("backpack"), "main");
     public static boolean backpackScreenIsOpen = true;
+    public static boolean chestSlotUiEnabled = true;
 
     @Override
     public void onInitializeClient(ModContainer mod) {
@@ -36,5 +39,6 @@ public class CamsBackpacksClient implements ClientModInitializer {
         ColorProviderRegistry.ITEM.register((stack, tintIndex) -> BackpackHelper.dyeToDecimal(((BackpackItem) stack.getItem()).getColour()), BuiltInRegistries.ITEM.stream().filter(item -> item instanceof BackpackItem backpack && (backpack.getColour() != DyeColor.WHITE || backpack == WHITE_BACKPACK.asItem())).toArray(Item[]::new));
 
         BlockRenderLayerMap.put(RenderType.cutout(), BuiltInRegistries.BLOCK.stream().filter(BackpackBlock.class::isInstance).toArray(Block[]::new));
+        ClientPlayNetworking.registerGlobalReceiver(UpdateConfigurationPacket.ID, UpdateConfigurationPacket::handle);
     }
 }

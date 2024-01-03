@@ -47,8 +47,10 @@
 	"error.camsbackpacks.permission_place_at": "You do not have permission to place a backpack at this location!",
 	"error.camsbackpacks.permission_pickup_at": "You do not have permission to pick up a backpack at this location!",
 	"error.camsbackpacks.permission_use": "You do not have permission to use this backpack!",
+	"error.camsbackpacks.chest_slot_ui_disabled": "Chest slot UI is disabled on this server! Place the backpack on the ground to open it.",
 
 	// Config
 	"camsbackpacks.midnightconfig.title": "CamsBackpacks",
-	"camsbackpacks.midnightconfig.sneakPlaceBackpack": "Enable Sneak-Placing Backpacks"
+	"camsbackpacks.midnightconfig.sneakPlaceBackpack": "Enable Sneak-Placing Backpacks",
+	"camsbackpacks.midnightconfig.allowInventoryGui": "Allow using backpacks while equipped"
 }

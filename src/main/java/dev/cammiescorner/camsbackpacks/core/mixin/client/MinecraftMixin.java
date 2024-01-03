@@ -28,6 +28,10 @@ public abstract class MinecraftMixin {
     @Inject(method = "handleKeybinds", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;setScreen(Lnet/minecraft/client/gui/screens/Screen;)V", ordinal = 1), cancellable = true)
     private void camsbackpacks$setScreen(CallbackInfo info) {
         if (this.level != null && this.player != null && !this.player.isCreative() && CamsBackpacksClient.backpackScreenIsOpen && this.player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof BackpackItem) {
+            if(!CamsBackpacksClient.chestSlotUiEnabled) {
+                CamsBackpacksClient.backpackScreenIsOpen = false;
+                return;
+            }
             OpenBackpackScreenPacket.send();
             info.cancel();
         }

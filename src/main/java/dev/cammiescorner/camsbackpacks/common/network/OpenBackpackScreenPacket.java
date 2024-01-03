@@ -2,6 +2,7 @@ package dev.cammiescorner.camsbackpacks.common.network;
 
 import dev.cammiescorner.camsbackpacks.CamsBackpacks;
 import dev.cammiescorner.camsbackpacks.common.menu.BackpackMenu;
+import dev.cammiescorner.camsbackpacks.core.BackpacksConfig;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.core.NonNullList;
@@ -33,6 +34,11 @@ public class OpenBackpackScreenPacket {
 
     public static void handle(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl network, FriendlyByteBuf buf, PacketSender sender) {
         server.execute(() -> {
+            if(!BackpacksConfig.allowInventoryGui) {
+                player.sendSystemMessage(Component.translatable("error.camsbackpacks.chest_slot_ui_disabled"), true);
+                return;
+            }
+
             final NonNullList<ItemStack> stacks = NonNullList.withSize(36, ItemStack.EMPTY);
             ItemStack stack = player.getItemBySlot(EquipmentSlot.CHEST);
             CompoundTag tag = stack.getOrCreateTag();

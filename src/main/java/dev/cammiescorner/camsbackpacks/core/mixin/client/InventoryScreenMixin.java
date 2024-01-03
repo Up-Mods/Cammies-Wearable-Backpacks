@@ -37,7 +37,7 @@ public abstract class InventoryScreenMixin extends EffectRenderingInventoryScree
 
     @Inject(method = "renderBg", at = @At("TAIL"))
     private void camsbackpacks$renderBg(GuiGraphics gui, float delta, int mouseX, int mouseY, CallbackInfo info) {
-        if (equippedStack.getItem() instanceof BackpackItem) {
+        if (equippedStack.getItem() instanceof BackpackItem && CamsBackpacksClient.chestSlotUiEnabled) {
             RenderSystem.setShaderTexture(0, BackpackScreen.TEXTURE);
             gui.blit(BackpackScreen.TEXTURE, leftPos + 1, topPos - 27, 0, 0, 190, 60, 30, 322, 220);
             gui.renderItem(playerInvIcon, leftPos + 8, topPos - 20);
@@ -48,7 +48,7 @@ public abstract class InventoryScreenMixin extends EffectRenderingInventoryScree
 
     @Inject(method = "render", at = @At("TAIL"))
     private void camsbackpacks$render(GuiGraphics gui, int mouseX, int mouseY, float delta, CallbackInfo info) {
-        if (equippedStack.getItem() instanceof BackpackItem) {
+        if (equippedStack.getItem() instanceof BackpackItem && CamsBackpacksClient.chestSlotUiEnabled) {
             if (isHovering(3, -27, 26, 28, mouseX, mouseY))
                 gui.renderTooltip(font, Component.translatable("container.camsbackpacks.player_inv"), mouseX, mouseY);
             else if (isHovering(32, -27, 26, 28, mouseX, mouseY))
@@ -61,7 +61,7 @@ public abstract class InventoryScreenMixin extends EffectRenderingInventoryScree
         playerInvIcon = BackpackScreen.getPlayerHead(minecraft.player);
         equippedStack = minecraft.player.getItemBySlot(EquipmentSlot.CHEST);
 
-        if (equippedStack.getItem() instanceof BackpackItem) {
+        if (equippedStack.getItem() instanceof BackpackItem && CamsBackpacksClient.chestSlotUiEnabled) {
             this.addWidget(new Button.Builder(Component.empty(), this::openBackpackScreen)
                     .bounds(this.leftPos + 31, this.topPos - 27, 28, 28).build());
         }

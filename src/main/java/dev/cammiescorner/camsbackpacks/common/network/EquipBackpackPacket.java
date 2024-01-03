@@ -4,6 +4,7 @@ import dev.cammiescorner.camsbackpacks.CamsBackpacks;
 import dev.cammiescorner.camsbackpacks.common.blocks.BackpackBlock;
 import dev.cammiescorner.camsbackpacks.common.blocks.entities.BackpackBlockEntity;
 import dev.cammiescorner.camsbackpacks.common.items.BackpackItem;
+import dev.cammiescorner.camsbackpacks.core.BackpacksConfig;
 import dev.cammiescorner.camsbackpacks.core.util.BackpackHelper;
 import io.netty.buffer.Unpooled;
 import net.minecraft.ChatFormatting;
@@ -65,6 +66,11 @@ public class EquipBackpackPacket {
                         stack.setHoverName(blockEntity.getName());
 
                     world.destroyBlock(pos, false, player);
+
+                    if(!BackpacksConfig.allowInventoryGui) {
+                        player.closeContainer();
+                        player.sendSystemMessage(Component.translatable("error.camsbackpacks.chest_slot_ui_disabled"));
+                    }
 
                 }
             } else {
