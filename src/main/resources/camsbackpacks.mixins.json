@@ -1,21 +1,23 @@
 {
-	"required": true,
-	"minVersion": "0.8",
-	"package": "dev.cammiescorner.camsbackpacks.core.mixin",
-	"compatibilityLevel": "JAVA_17",
-	"mixins": [
-		"accessor.CraftingMenuAccessor",
-		"accessor.InventoryMenuAccessor",
-		"InventoryMenuSlotMixin",
-		"PlayerMixin"
-	],
-	"client": [
-		"client.InventoryScreenMixin",
-		"client.MinecraftMixin",
-		"client.MultiPlayerGameModeMixin",
-		"client.PlayerRendererMixin"
-	],
-	"injectors": {
-		"defaultRequire": 1
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.cammiescorner.camsbackpacks.core.mixin",
+  "plugin": "dev.cammiescorner.camsbackpacks.core.CamsBackpacksMixinConfigPlugin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "InventoryMenuSlotMixin",
+    "PlayerMixin",
+    "accessor.CraftingMenuAccessor",
+    "accessor.InventoryMenuAccessor",
+    "compat.HephaestusArmorSlotMixin"
+  ],
+  "client": [
+    "client.InventoryScreenMixin",
+    "client.MinecraftMixin",
+    "client.MultiPlayerGameModeMixin",
+    "client.PlayerRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
 	}
 }

@@ -72,6 +72,8 @@ dependencies {
 
     modImplementation libs.midnightlib
 
+    modCompileOnly libs.hephaestus
+
     modImplementation libs.universalgraves
     modLocalRuntime libs.bundles.universalgraves.runtime
 
