@@ -1,7 +1,7 @@
 package dev.cammiescorner.camsbackpacks.common.network;
 
 import dev.cammiescorner.camsbackpacks.CamsBackpacks;
-import dev.cammiescorner.camsbackpacks.common.screen.BackpackScreenHandler;
+import dev.cammiescorner.camsbackpacks.common.menu.BackpackMenu;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.core.NonNullList;
@@ -98,7 +98,7 @@ public class OpenBackpackScreenPacket {
 
                 @Override
                 public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
-                    return new BackpackScreenHandler(syncId, playerInventory, inventory, ContainerLevelAccess.create(player.level(), player.blockPosition()), player.blockPosition(), false);
+                    return new BackpackMenu(syncId, playerInventory, inventory, ContainerLevelAccess.create(player.level(), player.blockPosition()), player.blockPosition(), false);
                 }
             });
         });

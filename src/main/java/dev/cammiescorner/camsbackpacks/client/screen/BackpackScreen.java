@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import dev.cammiescorner.camsbackpacks.CamsBackpacks;
 import dev.cammiescorner.camsbackpacks.client.CamsBackpacksClient;
 import dev.cammiescorner.camsbackpacks.common.network.EquipBackpackPacket;
-import dev.cammiescorner.camsbackpacks.common.screen.BackpackScreenHandler;
+import dev.cammiescorner.camsbackpacks.common.menu.BackpackMenu;
 import dev.cammiescorner.camsbackpacks.core.util.BackpackHelper;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -25,7 +25,7 @@ import net.minecraft.world.level.block.entity.SkullBlockEntity;
 import org.lwjgl.glfw.GLFW;
 
 @SuppressWarnings("ConstantConditions")
-public class BackpackScreen extends EffectRenderingInventoryScreen<BackpackScreenHandler> {
+public class BackpackScreen extends EffectRenderingInventoryScreen<BackpackMenu> {
     public static final ResourceLocation TEXTURE = CamsBackpacks.id("textures/gui/backpack.png");
     protected Inventory playerInventory;
     protected Button equipButton;
@@ -37,7 +37,7 @@ public class BackpackScreen extends EffectRenderingInventoryScreen<BackpackScree
     protected int playerNameX;
     protected int playerNameY;
 
-    public BackpackScreen(BackpackScreenHandler screenHandler, Inventory playerInventory, Component text) {
+    public BackpackScreen(BackpackMenu screenHandler, Inventory playerInventory, Component text) {
         super(screenHandler, playerInventory, text);
         this.playerInventory = playerInventory;
         this.imageWidth = 322;

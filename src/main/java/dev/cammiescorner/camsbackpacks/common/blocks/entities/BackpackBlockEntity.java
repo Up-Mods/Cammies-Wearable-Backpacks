@@ -1,6 +1,6 @@
 package dev.cammiescorner.camsbackpacks.common.blocks.entities;
 
-import dev.cammiescorner.camsbackpacks.common.screen.BackpackScreenHandler;
+import dev.cammiescorner.camsbackpacks.common.menu.BackpackMenu;
 import dev.cammiescorner.camsbackpacks.core.registry.ModBlockEntities;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.core.BlockPos;
@@ -108,7 +108,7 @@ public class BackpackBlockEntity extends BlockEntity implements Container, Namea
 
     @Override
     public @Nullable AbstractContainerMenu createMenu(int syncId, Inventory inv, Player player) {
-        return new BackpackScreenHandler(syncId, inv, this, ContainerLevelAccess.create(player.level(), getBlockPos()), getBlockPos(), true);
+        return new BackpackMenu(syncId, inv, this, ContainerLevelAccess.create(player.level(), getBlockPos()), getBlockPos(), true);
     }
 
     @Override
