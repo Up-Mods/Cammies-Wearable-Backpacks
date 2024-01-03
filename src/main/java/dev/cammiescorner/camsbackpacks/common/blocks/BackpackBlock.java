@@ -1,5 +1,6 @@
 package dev.cammiescorner.camsbackpacks.common.blocks;
 
+import com.google.common.base.Suppliers;
 import dev.cammiescorner.camsbackpacks.common.blocks.entities.BackpackBlockEntity;
 import dev.cammiescorner.camsbackpacks.core.BackpacksConfig;
 import net.minecraft.ChatFormatting;
@@ -60,11 +61,13 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
         };
     }
 
+
+
     @Override
     public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         if (world.getBlockEntity(pos) instanceof BackpackBlockEntity backpack) {
-            backpack.setName(stack.getHoverName());
             ContainerHelper.loadAllItems(stack.getOrCreateTag(), backpack.inventory);
+            backpack.setName(stack.getHoverName());
         }
     }
 
