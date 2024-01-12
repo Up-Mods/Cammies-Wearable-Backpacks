@@ -3,6 +3,7 @@ plugins {
     alias neoforge.plugins.neogradle
     alias neoforge.plugins.mixingradle
 }
+jarJar.enable()
 
 dependencies {
     minecraft "${neoforge.neoforge.get()}"
@@ -10,6 +11,20 @@ dependencies {
     annotationProcessor "${libs.mixin.asProvider().get()}:processor"
 
     implementation fg.deobf(libs.resourcefulconfig.forge.get())
+    implementation libs.mixin.extras
+    jarJar(libs.mixin.extras) {
+        jarJar.ranged(it, "[${libs.versions.mixin.extras.get()},)")
+    }
+}
+
+jar {
+    archiveClassifier.set("slim")
+}
+
+tasks.jarJar.configure {
+    archiveClassifier.set('')
+
+    finalizedBy 'reobfJarJar'
 }
 
 minecraft {
@@ -97,4 +112,12 @@ tasks.named("sourcesJar", Jar) {
 
 tasks.withType(ProcessResources).matching(notNeoTask).configureEach {
     from project(":Common").sourceSets.main.resources
+}
+
+publishing {
+    publications {
+        "mavenJava${project.name}"(MavenPublication) {
+            jarJar.component(it)
+        }
+    }
 }
