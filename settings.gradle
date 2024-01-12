@@ -5,6 +5,10 @@ pluginManagement {
             name = 'Quilt'
             url = 'https://maven.quiltmc.org/repository/release'
         }
+        maven {
+			name = 'Sponge'
+			url = 'https://repo.spongepowered.org/repository/maven-public'
+		}
         // Currently needed for Intermediary and other temporary dependencies
         maven {
             name = 'Fabric'
@@ -17,4 +21,17 @@ plugins {
     id 'org.gradle.toolchains.foojay-resolver-convention' version '0.7.0'
 }
 
+dependencyResolutionManagement {
+    versionCatalogs {
+        libs {
+            from(files("./Common/libs.versions.toml"))
+        }
+        quilt {
+            from(files("./Quilt/libs.versions.toml"))
+        }
+    }
+}
+
 rootProject.name = 'Cammies-Wearable-Backpacks'
+
+include 'Common', 'Quilt'

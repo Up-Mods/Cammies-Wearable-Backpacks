@@ -41,9 +41,27 @@ jobs:
           MAVEN_UPLOAD_USERNAME: ${{ secrets.MAVEN_UPLOAD_USERNAME }}
           MAVEN_UPLOAD_PASSWORD: ${{ secrets.MAVEN_UPLOAD_PASSWORD }}
         run: ./gradlew publish
-      - name: Publish
+      - name: Publish (GitHub Releases)
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          github-token: ${{ github.token }}
+          files: |
+            **/build/libs/!(*-@(dev|sources|javadoc)).jar
+            **/build/libs/*-@(sources|javadoc).jar
+      - name: Publish (NeoForge)
         uses: Kir-Antipov/mc-publish@v3.3
         with:
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-          github-token: ${{ github.token }}
+          version: ${{ github.ref_name }}+NeoForge
+          files: |
+            NeoForge/build/libs/!(*-@(dev|sources|javadoc)).jar
+            NeoForge/build/libs/*-@(sources|javadoc).jar
+      - name: Publish (Quilt)
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          files: |
+            Quilt/build/libs/!(*-@(dev|sources|javadoc)).jar
+            Quilt/build/libs/*-@(sources|javadoc).jar
