@@ -29,6 +29,9 @@ dependencyResolutionManagement {
         quilt {
             from(files("./Quilt/libs.versions.toml"))
         }
+        neoforge {
+            from(files("./NeoForge/libs.versions.toml"))
+        }
     }
 }
 
