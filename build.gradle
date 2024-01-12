@@ -150,6 +150,7 @@ subprojects {
 			"mod_description"               : mod_description,
 			"sources_url"                   : sources_url,
             "issues_url"                    : issues_url,
+			"license_url"					: license_url,
 			"discord_url"                   : discord_url,
 			"homepage_url"                  : homepage_url,
 			"minecraft_version"             : libs.versions.minecraft.get(),

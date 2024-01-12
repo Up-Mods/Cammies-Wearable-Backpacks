@@ -19,7 +19,7 @@
       "license": {
         "id": "Custom License",
         "name": "Custom License",
-        "url": "https://github.com/Up-Mods/Cammies-Wearable-Backpacks/blob/HEAD/LICENSE.md"
+        "url": "${license_url}"
       },
       "icon": "assets/${mod_id}/icon.png"
     },
