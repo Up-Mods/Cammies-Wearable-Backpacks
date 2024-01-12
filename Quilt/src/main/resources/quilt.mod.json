@@ -69,7 +69,9 @@
       "quilt"
     ],
     "dependencies": [
-      "universal-graves(optional){modrinth:yn9u3ypm}{curseforge:497175}"
+      "universal-graves(optional){modrinth:yn9u3ypm}{curseforge:497175}",
+      "hephaestus(optional){modrinth:sdSn3wvy}{curseforge:667894}",
+      "inventorio(optional){curseforge:491073}#(ignore:modrinth)"
     ]
   }
 }
