@@ -33,4 +33,9 @@ public class QMenuHelper implements MenuHelper {
             }
         };
     }
+
+    @Override
+    public void openMenu(ServerPlayer player, MenuProvider menu, BackpackBlockEntity backpack) {
+        player.openMenu(menu);
+    }
 }

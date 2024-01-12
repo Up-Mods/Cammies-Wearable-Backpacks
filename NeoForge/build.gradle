@@ -1,0 +1,100 @@
+plugins {
+    id 'idea'
+    alias neoforge.plugins.neogradle
+    alias neoforge.plugins.mixingradle
+}
+
+dependencies {
+    minecraft "${neoforge.neoforge.get()}"
+    compileOnly project(":Common")
+    annotationProcessor "${libs.mixin.asProvider().get()}:processor"
+
+    implementation fg.deobf(libs.resourcefulconfig.forge.get())
+}
+
+minecraft {
+    mappings channel: 'official', version: libs.versions.minecraft.get()
+
+    copyIdeResources = true //Calls processResources when in dev
+
+    // Automatically enable forge AccessTransformers if the file exists
+    // This location is hardcoded in Forge and can not be changed.
+    // https://github.com/MinecraftForge/MinecraftForge/blob/be1698bb1554f9c8fa2f58e32b9ab70bc4385e60/fmlloader/src/main/java/net/minecraftforge/fml/loading/moddiscovery/ModFile.java#L123
+    if (file('src/main/resources/META-INF/accesstransformer.cfg').exists()) {
+        accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+    }
+
+    runs {
+        configureEach {
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+        }
+        client {
+            workingDirectory project.file('run')
+            ideaModule "${rootProject.name}.${project.name}.main"
+            mods {
+                modClientRun {
+                    source sourceSets.main
+                    source project(":Common").sourceSets.main
+                }
+            }
+
+            if (rootProject.hasProperty('mc_uuid')) {
+                args("--uuid", rootProject.mc_uuid)
+            }
+
+            if (rootProject.hasProperty('mc_username')) {
+                args("--username", rootProject.mc_username)
+            }
+
+            if (rootProject.hasProperty('mc_java_agent_path')) {
+                jvmArg("-javaagent:${rootProject.mc_java_agent_path}")
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+            ideaModule "${rootProject.name}.${project.name}.main"
+            args '--nogui'
+            mods {
+                modServerRun {
+                    source sourceSets.main
+                    source project(":Common").sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file('run')
+            ideaModule "${rootProject.name}.${project.name}.main"
+            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            mods {
+                modDataRun {
+                    source sourceSets.main
+                    source project(":Common").sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+// NeoGradle compiles the game, but we don't want to add our common code to the game's code
+Spec<Task> notNeoTask = { Task it -> !it.name.startsWith("neo") } as Spec<Task>
+
+tasks.withType(JavaCompile).matching(notNeoTask).configureEach {
+    source(project(":Common").sourceSets.main.allSource)
+}
+
+tasks.withType(Javadoc).matching(notNeoTask).configureEach {
+    source(project(":Common").sourceSets.main.allJava)
+}
+
+tasks.named("sourcesJar", Jar) {
+    from(project(":Common").sourceSets.main.allSource)
+}
+
+tasks.withType(ProcessResources).matching(notNeoTask).configureEach {
+    from project(":Common").sourceSets.main.resources
+}

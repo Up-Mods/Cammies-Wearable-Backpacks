@@ -1,11 +1,11 @@
 package dev.cammiescorner.camsbackpacks.quilt.entrypoints;
 
 import dev.cammiescorner.camsbackpacks.CamsBackpacks;
+import dev.cammiescorner.camsbackpacks.network.s2c.UpdateConfigurationPacket;
 import dev.cammiescorner.camsbackpacks.quilt.compat.universalgraves.UniversalGravesCompat;
 import dev.cammiescorner.camsbackpacks.quilt.network.c2s.QEquipBackpackPacket;
 import dev.cammiescorner.camsbackpacks.quilt.network.c2s.QOpenBackpackScreenPacket;
 import dev.cammiescorner.camsbackpacks.quilt.network.c2s.QPlaceBackpackPacket;
-import dev.cammiescorner.camsbackpacks.util.BackpackEventHooks;
 import dev.cammiescorner.camsbackpacks.util.platform.Services;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -36,11 +36,11 @@ public class Main implements ModInitializer {
             UniversalGravesCompat.load();
         }
 
-        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> BackpackEventHooks.onPlayerJoin(handler.player));
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> UpdateConfigurationPacket.sendTo(handler.player));
         ResourceLoaderEvents.END_DATA_PACK_RELOAD.register(context -> {
             var server = context.server();
             if (server != null) {
-                BackpackEventHooks.onDatapackReload(server);
+                UpdateConfigurationPacket.sendTo(server.getPlayerList().getPlayers());
             }
         });
     }

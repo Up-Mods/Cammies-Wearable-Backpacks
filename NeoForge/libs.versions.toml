@@ -1,4 +1,12 @@
 [versions]
-neoforge = "47.1.65"
+neogradle = "6.+"
+mixingradle = "0.7-SNAPSHOT"
+
+neoforge = "1.20.1-47.1.65"
 
 [libraries]
+neoforge = { module = "net.neoforged:forge", version.ref = "neoforge" }
+
+[plugins]
+neogradle = { id = "net.neoforged.gradle", version.ref = "neogradle" }
+mixingradle = { id = "org.spongepowered.mixin", version.ref = "mixingradle" }

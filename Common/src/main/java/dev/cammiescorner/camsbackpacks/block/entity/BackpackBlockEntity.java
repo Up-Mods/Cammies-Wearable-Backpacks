@@ -111,6 +111,10 @@ public class BackpackBlockEntity extends BlockEntity implements Container, Namea
         return Services.MENU.getMenuProvider(this);
     }
 
+    public void openMenu(ServerPlayer player, MenuProvider menu) {
+        Services.MENU.openMenu(player, menu, this);
+    }
+
     public @Nullable AbstractContainerMenu createMenu(int syncId, Inventory inv, Player player) {
         return new BackpackMenu(syncId, inv, this, ContainerLevelAccess.create(player.level(), getBlockPos()), getBlockPos(), true);
     }

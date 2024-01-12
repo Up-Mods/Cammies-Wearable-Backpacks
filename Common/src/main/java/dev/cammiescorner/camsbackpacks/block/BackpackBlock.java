@@ -68,7 +68,6 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
     }
 
 
-
     @Override
     public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         if (world.getBlockEntity(pos) instanceof BackpackBlockEntity backpack) {
@@ -80,32 +79,32 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
     @Override
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (!world.isClientSide()) {
-            if(!world.mayInteract(player, pos)) {
+            if (!world.mayInteract(player, pos)) {
                 ((ServerPlayer) player).sendSystemMessage(Component.translatable("error.camsbackpacks.permission_use").withStyle(ChatFormatting.RED), true);
                 return InteractionResult.FAIL;
             }
 
+            if (world.getBlockEntity(pos) instanceof BackpackBlockEntity backpack) {
+                if (ClientConfig.sneakPlaceBackpack && player.isShiftKeyDown() && player.getItemBySlot(EquipmentSlot.CHEST).isEmpty()) {
 
-            if (ClientConfig.sneakPlaceBackpack && player.isShiftKeyDown() && player.getItemBySlot(EquipmentSlot.CHEST).isEmpty()) {
-                if (world.getBlockEntity(pos) instanceof BackpackBlockEntity blockEntity) {
                     ItemStack stack = new ItemStack(this);
                     CompoundTag tag = stack.getOrCreateTag();
 
-                    ContainerHelper.saveAllItems(tag, blockEntity.inventory);
-                    blockEntity.wasPickedUp = true;
+                    ContainerHelper.saveAllItems(tag, backpack.inventory);
+                    backpack.wasPickedUp = true;
 
-                    if (blockEntity.hasCustomName())
-                        stack.setHoverName(blockEntity.getName());
+                    if (backpack.hasCustomName())
+                        stack.setHoverName(backpack.getName());
 
                     player.setItemSlot(EquipmentSlot.CHEST, stack);
                     world.destroyBlock(pos, false, player);
-                }
-            } else {
-                MenuProvider screenHandlerFactory = state.getMenuProvider(world, pos);
+                } else {
+                    MenuProvider menuProvider = state.getMenuProvider(world, pos);
 
-                if (screenHandlerFactory != null) {
-                    world.playSound(null, pos, SoundEvents.ARMOR_EQUIP_LEATHER, SoundSource.BLOCKS, 1F, 1F);
-                    player.openMenu(screenHandlerFactory);
+                    if (menuProvider != null) {
+                        world.playSound(null, pos, SoundEvents.ARMOR_EQUIP_LEATHER, SoundSource.BLOCKS, 1F, 1F);
+                        backpack.openMenu((ServerPlayer) player, menuProvider);
+                    }
                 }
             }
         }

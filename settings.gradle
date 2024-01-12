@@ -6,6 +6,10 @@ pluginManagement {
             url = 'https://maven.quiltmc.org/repository/release'
         }
         maven {
+			name = 'NeoForge'
+			url = 'https://maven.neoforged.net/releases'
+		}
+        maven {
 			name = 'Sponge'
 			url = 'https://repo.spongepowered.org/repository/maven-public'
 		}
@@ -37,4 +41,4 @@ dependencyResolutionManagement {
 
 rootProject.name = 'Cammies-Wearable-Backpacks'
 
-include 'Common', 'Quilt'
+include 'Common', 'NeoForge', 'Quilt'
