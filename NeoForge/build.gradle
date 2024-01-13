@@ -52,7 +52,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            args "-mixin.config=${mod_id}.mixins.json", "-mixin.config=${mod_id}.forge.mixins.json"
+            args "-mixin.config=${mod_id}.mixins.json", "-mixin.config=${mod_id}.neoforge.mixins.json"
         }
         client {
             workingDirectory project.file('run')
