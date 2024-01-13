@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefulconfig.client.ConfigScreen;
 import dev.cammiescorner.camsbackpacks.CamsBackpacks;
 import dev.cammiescorner.camsbackpacks.block.BackpackBlock;
 import dev.cammiescorner.camsbackpacks.client.CamsBackpacksClient;
+import dev.cammiescorner.camsbackpacks.client.models.BackpackModel;
 import dev.cammiescorner.camsbackpacks.config.BackpacksConfig;
 import dev.cammiescorner.camsbackpacks.init.ModBlocks;
 import dev.cammiescorner.camsbackpacks.item.BackpackItem;
@@ -14,16 +15,16 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.ConfigScreenHandler;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
 
 @OnlyIn(Dist.CLIENT)
-@Mod.EventBusSubscriber(modid = CamsBackpacks.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid = CamsBackpacks.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Client {
 
     public static void init() {
@@ -34,12 +35,16 @@ public class Client {
                         (minecraft, parent) -> new ConfigScreen(parent, null, CamsBackpacks.CONFIGURATOR.getConfig(BackpacksConfig.class))
                 )
         );
-
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(Client::clientSetup);
     }
 
-    private static void clientSetup(FMLClientSetupEvent event) {
+    @SubscribeEvent
+    public static void clientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(CamsBackpacksClient::init);
+    }
+
+    @SubscribeEvent
+    public static void registerModelDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(CamsBackpacksClient.BACKPACK, BackpackModel::getTexturedModelData);
     }
 
     @SubscribeEvent
