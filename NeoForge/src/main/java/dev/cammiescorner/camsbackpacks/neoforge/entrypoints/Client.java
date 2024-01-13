@@ -18,6 +18,8 @@ import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
 
 @OnlyIn(Dist.CLIENT)
@@ -25,7 +27,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class Client {
 
     public static void init() {
-        CamsBackpacksClient.init();
 
         //FIXME this is handled by resourcefulconfig in 1.20.4+
         ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
@@ -33,6 +34,12 @@ public class Client {
                         (minecraft, parent) -> new ConfigScreen(parent, null, CamsBackpacks.CONFIGURATOR.getConfig(BackpacksConfig.class))
                 )
         );
+
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(Client::clientSetup);
+    }
+
+    private static void clientSetup(FMLClientSetupEvent event) {
+        event.enqueueWork(CamsBackpacksClient::init);
     }
 
     @SubscribeEvent
