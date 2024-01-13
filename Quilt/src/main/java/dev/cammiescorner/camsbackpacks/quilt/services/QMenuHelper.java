@@ -4,6 +4,7 @@ import dev.cammiescorner.camsbackpacks.block.entity.BackpackBlockEntity;
 import dev.cammiescorner.camsbackpacks.menu.BackpackMenu;
 import dev.cammiescorner.camsbackpacks.util.platform.service.MenuHelper;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -45,10 +46,11 @@ public class QMenuHelper implements MenuHelper {
 
     @Override
     public void openMenu(ServerPlayer player, ItemStack backpackStack, Container inventory) {
+        BlockPos pos = player.blockPosition();
         player.openMenu(new ExtendedScreenHandlerFactory() {
             @Override
             public void writeScreenOpeningData(ServerPlayer player, FriendlyByteBuf buf) {
-                buf.writeBlockPos(player.blockPosition());
+                buf.writeBlockPos(pos);
                 buf.writeBoolean(false);
             }
 
@@ -59,7 +61,7 @@ public class QMenuHelper implements MenuHelper {
 
             @Override
             public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
-                return new BackpackMenu(syncId, playerInventory, inventory, ContainerLevelAccess.create(player.level(), player.blockPosition()), player.blockPosition(), false);
+                return new BackpackMenu(syncId, playerInventory, inventory, ContainerLevelAccess.create(player.level(), pos), pos, false);
             }
         });
     }
