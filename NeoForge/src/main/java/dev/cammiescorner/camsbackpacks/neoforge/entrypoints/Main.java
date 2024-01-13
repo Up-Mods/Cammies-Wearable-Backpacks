@@ -1,12 +1,15 @@
-package dev.cammiescorner.camsbackpacks.neoforge;
+package dev.cammiescorner.camsbackpacks.neoforge.entrypoints;
 
 import dev.cammiescorner.camsbackpacks.CamsBackpacks;
 import dev.cammiescorner.camsbackpacks.neoforge.services.NFRegistryHelper;
 import dev.cammiescorner.camsbackpacks.util.platform.Services;
 import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -21,6 +24,8 @@ public class Main {
         NFRegistryHelper.MENU_TYPES.register(bus);
         bus.register(this);
         CamsBackpacks.init();
+
+        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> Client::init);
     }
 
     @SubscribeEvent

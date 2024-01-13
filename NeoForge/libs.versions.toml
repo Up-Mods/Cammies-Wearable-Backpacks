@@ -2,7 +2,7 @@
 neogradle = "6.+"
 mixingradle = "0.7-SNAPSHOT"
 
-neoforge = "1.20.1-47.1.65"
+neoforge = "1.20.1-47.1.85"
 
 [libraries]
 neoforge = { module = "net.neoforged:forge", version.ref = "neoforge" }

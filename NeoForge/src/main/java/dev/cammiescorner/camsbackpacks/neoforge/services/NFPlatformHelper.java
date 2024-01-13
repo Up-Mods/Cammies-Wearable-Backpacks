@@ -3,6 +3,7 @@ package dev.cammiescorner.camsbackpacks.neoforge.services;
 import dev.cammiescorner.camsbackpacks.CamsBackpacks;
 import dev.cammiescorner.camsbackpacks.util.platform.service.PlatformHelper;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.loading.moddiscovery.ModFileInfo;
 
 public class NFPlatformHelper implements PlatformHelper {
     @Override
@@ -12,6 +13,7 @@ public class NFPlatformHelper implements PlatformHelper {
 
     @Override
     public String getIssuesUrl() {
-        return ModList.get().getModContainerById(CamsBackpacks.MOD_ID).orElseThrow().getModInfo().getOwningFile().getFileProperties().get("issueTrackerURL") instanceof String value ? value : CamsBackpacks.MOD_ID;
+        var file = ModList.get().getModContainerById(CamsBackpacks.MOD_ID).orElseThrow().getModInfo().getOwningFile();
+        return file instanceof ModFileInfo info ? info.getIssueURL().toString() : CamsBackpacks.MOD_ID;
     }
 }

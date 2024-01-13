@@ -14,8 +14,8 @@ def NOW = new Date();
 def buildTime = ENV.BUILD_TIME ?: NOW.format('yyyyMMddHHmmss')
 
 boolean isPreviewBuild = !ENV.TAG || ENV.TAG.matches(".+-.+")
-def buildNumber = !ENV.TAG ? ("${ENV.BUILD_NUMBER ? "build.${ENV.BUILD_NUMBER}" : buildTime}-${libs.versions.minecraft.get()}") : ""
-version = (ENV.TAG ?: "development") + ((isPreviewBuild && !ENV.TAG) ? "+${buildNumber}" : "")
+def buildNumber = !ENV.TAG ? ("${ENV.BUILD_NUMBER ? "build.${ENV.BUILD_NUMBER}" : buildTime}") : ""
+version = (ENV.TAG ?: "${libs.versions.minecraft.get()}-development") + ((isPreviewBuild && !ENV.TAG) ? "+${buildNumber}" : "")
 
 def mod_name = rootProject.name.replaceAll("-", "_").toLowerCase(Locale.ROOT)
 
@@ -95,6 +95,11 @@ subprojects {
 		maven {
 			name = "Fabric"
 			url = "https://maven.fabricmc.net"
+		}
+
+		maven {
+			name = 'NeoForge'
+			url = 'https://maven.neoforged.net/releases'
 		}
 
         maven {
