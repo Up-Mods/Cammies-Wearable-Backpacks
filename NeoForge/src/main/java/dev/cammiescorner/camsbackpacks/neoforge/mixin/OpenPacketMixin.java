@@ -6,7 +6,7 @@ import dev.cammiescorner.camsbackpacks.network.c2s.OpenBackpackScreenPacket;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
-@Mixin(OpenBackpackScreenPacket.class)
+@Mixin(value = OpenBackpackScreenPacket.class, remap = false)
 public class OpenPacketMixin {
 
     /**

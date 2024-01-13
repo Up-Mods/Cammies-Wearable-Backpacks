@@ -7,7 +7,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
-@Mixin(PlaceBackpackPacket.class)
+@Mixin(value = PlaceBackpackPacket.class, remap = false)
 public class PlacePacketMixin {
 
     /**

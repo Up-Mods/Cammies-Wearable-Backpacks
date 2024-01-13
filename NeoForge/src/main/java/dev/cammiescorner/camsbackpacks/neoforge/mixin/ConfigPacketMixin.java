@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 
 import java.util.Collection;
 
-@Mixin(UpdateConfigurationPacket.class)
+@Mixin(value = UpdateConfigurationPacket.class, remap = false)
 public class ConfigPacketMixin {
 
     /**

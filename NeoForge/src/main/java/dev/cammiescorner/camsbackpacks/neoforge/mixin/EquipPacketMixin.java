@@ -7,7 +7,7 @@ import net.minecraft.core.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
-@Mixin(EquipBackpackPacket.class)
+@Mixin(value = EquipBackpackPacket.class, remap = false)
 public class EquipPacketMixin {
 
     /**
