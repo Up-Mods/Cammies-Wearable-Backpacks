@@ -12,6 +12,7 @@ import net.minecraftforge.fml.ModLoadingContext;
 public class Client {
 
     public static void init() {
+        //FIXME this is handled by resourcefulconfig in 1.20.4+
         ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
                 () -> new ConfigScreenHandler.ConfigScreenFactory(
                         (minecraft, parent) -> new ConfigScreen(parent, null, CamsBackpacks.CONFIGURATOR.getConfig(BackpacksConfig.class))

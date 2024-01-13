@@ -1,6 +1,6 @@
 [versions]
 neogradle = "6.+"
-mixingradle = "0.7-SNAPSHOT"
+mixingradle = "0.7.+"
 
 neoforge = "1.20.1-47.1.85"
 

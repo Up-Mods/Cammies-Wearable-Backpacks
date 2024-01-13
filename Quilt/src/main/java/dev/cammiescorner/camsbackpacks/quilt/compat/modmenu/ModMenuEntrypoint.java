@@ -6,6 +6,7 @@ import com.terraformersmc.modmenu.api.ModMenuApi;
 import dev.cammiescorner.camsbackpacks.CamsBackpacks;
 import dev.cammiescorner.camsbackpacks.config.BackpacksConfig;
 
+//FIXME this is handled by resourcefulconfig in 1.20.4+
 public class ModMenuEntrypoint implements ModMenuApi {
 
     @Override

@@ -1,15 +1,19 @@
 package dev.cammiescorner.camsbackpacks.quilt.services;
 
 import dev.cammiescorner.camsbackpacks.block.entity.BackpackBlockEntity;
+import dev.cammiescorner.camsbackpacks.menu.BackpackMenu;
 import dev.cammiescorner.camsbackpacks.util.platform.service.MenuHelper;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 public class QMenuHelper implements MenuHelper {
@@ -37,5 +41,26 @@ public class QMenuHelper implements MenuHelper {
     @Override
     public void openMenu(ServerPlayer player, MenuProvider menu, BackpackBlockEntity backpack) {
         player.openMenu(menu);
+    }
+
+    @Override
+    public void openMenu(ServerPlayer player, ItemStack backpackStack, Container inventory) {
+        player.openMenu(new ExtendedScreenHandlerFactory() {
+            @Override
+            public void writeScreenOpeningData(ServerPlayer player, FriendlyByteBuf buf) {
+                buf.writeBlockPos(player.blockPosition());
+                buf.writeBoolean(false);
+            }
+
+            @Override
+            public Component getDisplayName() {
+                return backpackStack.getHoverName();
+            }
+
+            @Override
+            public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
+                return new BackpackMenu(syncId, playerInventory, inventory, ContainerLevelAccess.create(player.level(), player.blockPosition()), player.blockPosition(), false);
+            }
+        });
     }
 }

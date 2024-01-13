@@ -1,14 +1,12 @@
 package dev.cammiescorner.camsbackpacks.quilt.network.s2c;
 
 import com.mojang.logging.LogUtils;
-import dev.cammiescorner.camsbackpacks.config.BackpacksConfig;
 import dev.cammiescorner.camsbackpacks.CamsBackpacks;
-import dev.cammiescorner.camsbackpacks.client.CamsBackpacksClient;
-import dev.cammiescorner.camsbackpacks.client.screen.BackpackScreen;
+import dev.cammiescorner.camsbackpacks.config.BackpacksConfig;
+import dev.cammiescorner.camsbackpacks.network.s2c.UpdateConfigurationPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import org.quiltmc.loader.api.minecraft.ClientOnly;
@@ -33,7 +31,7 @@ public class QUpdateConfigurationPacket {
     }
 
     private static FriendlyByteBuf encode() {
-        var buf = PacketByteBufs.create();
+        FriendlyByteBuf buf = PacketByteBufs.create();
         buf.writeBoolean(BackpacksConfig.allowInventoryGui);
 
         return buf;
@@ -43,16 +41,6 @@ public class QUpdateConfigurationPacket {
     public static void handle(Minecraft minecraft, ClientPacketListener packetListener, FriendlyByteBuf buf, PacketSender packetSender) {
         logger.debug("Configuration received from server");
         var allowInvGui = buf.readBoolean();
-        minecraft.execute(() -> {
-            CamsBackpacksClient.chestSlotUiEnabled = allowInvGui;
-            if(CamsBackpacksClient.chestSlotUiEnabled) {
-                CamsBackpacksClient.backpackScreenIsOpen = false;
-
-                if(minecraft.screen instanceof BackpackScreen screen && !screen.getMenu().isBlockEntity) {
-                    minecraft.setScreen(null);
-                    minecraft.player.sendSystemMessage(Component.translatable("error.camsbackpacks.chest_slot_ui_disabled"));
-                }
-            }
-        });
+        minecraft.execute(() -> UpdateConfigurationPacket.handle(allowInvGui));
     }
 }
