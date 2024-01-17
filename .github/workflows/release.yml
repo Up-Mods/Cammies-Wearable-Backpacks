@@ -62,6 +62,7 @@ jobs:
         with:
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          version: ${{ github.ref_name }}+Quilt
           files: |
             Quilt/build/libs/!(*-@(dev|sources|javadoc)).jar
             Quilt/build/libs/*-@(sources|javadoc).jar
