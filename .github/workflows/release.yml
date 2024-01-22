@@ -46,7 +46,7 @@ jobs:
         with:
           github-token: ${{ github.token }}
           files: |
-            **/build/libs/!(*-@(dev|sources|javadoc)).jar
+            **/build/libs/!(*-@(dev|sources|javadoc|slim)).jar
             **/build/libs/*-@(sources|javadoc).jar
       - name: Publish (NeoForge)
         uses: Kir-Antipov/mc-publish@v3.3
@@ -55,7 +55,7 @@ jobs:
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
           version: ${{ github.ref_name }}+NeoForge
           files: |
-            NeoForge/build/libs/!(*-@(dev|sources|javadoc)).jar
+            NeoForge/build/libs/!(*-@(dev|sources|javadoc|slim)).jar
             NeoForge/build/libs/*-@(sources|javadoc).jar
       - name: Publish (Quilt)
         uses: Kir-Antipov/mc-publish@v3.3
@@ -64,5 +64,5 @@ jobs:
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
           version: ${{ github.ref_name }}+Quilt
           files: |
-            Quilt/build/libs/!(*-@(dev|sources|javadoc)).jar
+            Quilt/build/libs/!(*-@(dev|sources|javadoc|slim)).jar
             Quilt/build/libs/*-@(sources|javadoc).jar
