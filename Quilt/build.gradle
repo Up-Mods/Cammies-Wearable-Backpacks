@@ -31,10 +31,10 @@ dependencies {
     modCompileOnly quilt.hephaestus
     modCompileOnly quilt.inventorio
 
-    modImplementation quilt.universalgraves
-    modLocalRuntime(quilt.bundles.universalgraves.runtime) {
-        exclude(group: "io.github.llamalad7")
-    }
+    modCompileOnly quilt.universalgraves
+//    modLocalRuntime(quilt.bundles.universalgraves.runtime) {
+//        exclude(group: "io.github.llamalad7")
+//    }
 
     modLocalRuntime quilt.lazydfu
 }

@@ -12,8 +12,6 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -82,11 +80,11 @@ public class BackpackScreen extends EffectRenderingInventoryScreen<BackpackMenu>
 
     @Override
     public void render(GuiGraphics gui, int mouseX, int mouseY, float delta) {
-        renderBackground(gui);
+        renderBackground(gui, mouseX, mouseY, delta);
         super.render(gui, mouseX, mouseY, delta);
         renderTooltip(gui, mouseX, mouseY);
 
-        InventoryScreen.renderEntityInInventoryFollowsMouse(gui, leftPos + 50, topPos + 125, 30, (leftPos + 50) - mouseX, (topPos + 125 - 50) - mouseY, player);
+        InventoryScreen.renderEntityInInventoryFollowsMouse(gui, leftPos + 50, topPos + 125, leftPos + 80, topPos + 200, 30, 0.0625F, mouseX, mouseY, player);
 
         if (equipButton.isHovered() && !equipButton.active) {
             if (!menu.isBlockEntity)
@@ -149,8 +147,8 @@ public class BackpackScreen extends EffectRenderingInventoryScreen<BackpackMenu>
 
     public static ItemStack getPlayerHead(Player player) {
         ItemStack head = new ItemStack(Blocks.PLAYER_HEAD);
-        CompoundTag tag = head.getOrCreateTag();
-        SkullBlockEntity.updateGameprofile(player.getGameProfile(), (profile) -> tag.put("SkullOwner", NbtUtils.writeGameProfile(new CompoundTag(), profile)));
+        head.getOrCreateTag().putString("SkullOwner", player.getGameProfile().getName());
+        SkullBlockEntity.resolveGameProfile(head.getTag());
 
         return head;
     }

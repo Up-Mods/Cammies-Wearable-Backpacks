@@ -46,7 +46,7 @@ fabric-permissions-api = { module = "me.lucko:fabric-permissions-api", version.r
 # If you have multiple similar dependencies, you can declare a dependency bundle and reference it on the build script with "libs.bundles.example".
 [bundles]
 quilted_fabric_api = ["quilted_fabric_api", "quilted_fabric_api_deprecated"]
-universalgraves_runtime = ["sgui", "placeholder-api", "polymer-core", "polymer-resource-pack", "polymer-virtual-entity", "predicate-api", "common-protection-api", "server-translations-api", "fabric-permissions-api"]
+universalgraves_runtime = ["universalgraves", "sgui", "placeholder-api", "polymer-core", "polymer-resource-pack", "polymer-virtual-entity", "predicate-api", "common-protection-api", "server-translations-api", "fabric-permissions-api"]
 
 [plugins]
 quilt_loom = { id = "org.quiltmc.loom", version.ref = "quilt_loom" }
