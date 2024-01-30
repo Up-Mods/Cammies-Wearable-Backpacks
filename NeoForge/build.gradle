@@ -21,8 +21,6 @@ jar {
 
 tasks.jarJar.configure {
     archiveClassifier.set('')
-
-    finalizedBy 'reobfJarJar'
 }
 
 // Automatically enable neoforge AccessTransformers if the file exists
