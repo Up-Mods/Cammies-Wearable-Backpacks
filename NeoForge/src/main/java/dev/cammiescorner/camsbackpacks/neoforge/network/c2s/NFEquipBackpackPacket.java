@@ -3,9 +3,7 @@ package dev.cammiescorner.camsbackpacks.neoforge.network.c2s;
 import dev.cammiescorner.camsbackpacks.network.c2s.EquipBackpackPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
+import net.neoforged.neoforge.network.NetworkEvent;
 
 public class NFEquipBackpackPacket {
 
@@ -28,7 +26,7 @@ public class NFEquipBackpackPacket {
         return new NFEquipBackpackPacket(pos, isBlockEntity);
     }
 
-    public void handle(Supplier<NetworkEvent.Context> ctx) {
-        EquipBackpackPacket.handle(ctx.get().getSender(), this.pos, this.isBlockEntity);
+    public void handle(NetworkEvent.Context ctx) {
+        EquipBackpackPacket.handle(ctx.getSender(), this.pos, this.isBlockEntity);
     }
 }

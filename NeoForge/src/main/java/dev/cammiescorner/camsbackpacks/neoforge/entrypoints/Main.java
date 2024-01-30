@@ -5,13 +5,14 @@ import dev.cammiescorner.camsbackpacks.neoforge.network.NetworkHandler;
 import dev.cammiescorner.camsbackpacks.neoforge.services.NFRegistryHelper;
 import dev.cammiescorner.camsbackpacks.util.platform.Services;
 import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+
+import java.util.function.Supplier;
 
 @Mod(CamsBackpacks.MOD_ID)
 public class Main {
@@ -27,13 +28,15 @@ public class Main {
 
         NetworkHandler.registerMessages();
 
-        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> Client::init);
+        if(FMLEnvironment.dist.isClient()) {
+            Client.init();
+        }
     }
 
     @SubscribeEvent
     public void onCreativeTabSetup(BuildCreativeModeTabContentsEvent event) {
         if(event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
-            Services.REGISTRY.getModBlocks().forEach(event::accept);
+            Services.REGISTRY.getModBlocks().map(Supplier::get).forEach(event::accept);
         }
     }
 }

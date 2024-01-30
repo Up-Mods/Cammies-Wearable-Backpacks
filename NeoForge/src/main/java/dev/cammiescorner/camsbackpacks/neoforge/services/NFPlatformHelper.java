@@ -2,8 +2,8 @@ package dev.cammiescorner.camsbackpacks.neoforge.services;
 
 import dev.cammiescorner.camsbackpacks.CamsBackpacks;
 import dev.cammiescorner.camsbackpacks.util.platform.service.PlatformHelper;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.loading.moddiscovery.ModFileInfo;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.moddiscovery.ModFileInfo;
 
 public class NFPlatformHelper implements PlatformHelper {
     @Override

@@ -6,8 +6,8 @@ import dev.cammiescorner.camsbackpacks.neoforge.network.c2s.NFEquipBackpackPacke
 import dev.cammiescorner.camsbackpacks.neoforge.network.c2s.NFOpenBackpackScreenPacket;
 import dev.cammiescorner.camsbackpacks.neoforge.network.c2s.NFPlaceBackpackPacket;
 import dev.cammiescorner.camsbackpacks.neoforge.network.s2c.NFUpdateConfigurationPacket;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.neoforged.neoforge.network.NetworkRegistry;
+import net.neoforged.neoforge.network.simple.SimpleChannel;
 import org.slf4j.Logger;
 
 public class NetworkHandler {

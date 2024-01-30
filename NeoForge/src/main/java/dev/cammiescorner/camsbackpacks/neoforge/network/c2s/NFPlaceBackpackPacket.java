@@ -3,7 +3,7 @@ package dev.cammiescorner.camsbackpacks.neoforge.network.c2s;
 import dev.cammiescorner.camsbackpacks.network.c2s.PlaceBackpackPacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -24,7 +24,7 @@ public class NFPlaceBackpackPacket {
         return new NFPlaceBackpackPacket(target);
     }
 
-    public void handle(Supplier<NetworkEvent.Context> ctx) {
-        PlaceBackpackPacket.handle(ctx.get().getSender(), this.target);
+    public void handle(NetworkEvent.Context ctx) {
+        PlaceBackpackPacket.handle(ctx.getSender(), this.target);
     }
 }

@@ -5,7 +5,7 @@ import dev.cammiescorner.camsbackpacks.neoforge.network.NetworkHandler;
 import dev.cammiescorner.camsbackpacks.neoforge.network.s2c.NFUpdateConfigurationPacket;
 import dev.cammiescorner.camsbackpacks.network.s2c.UpdateConfigurationPacket;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 

@@ -1,19 +1,13 @@
 package dev.cammiescorner.camsbackpacks.neoforge.network.s2c;
 
 import com.mojang.logging.LogUtils;
-import dev.cammiescorner.camsbackpacks.client.CamsBackpacksClient;
-import dev.cammiescorner.camsbackpacks.client.screen.BackpackScreen;
 import dev.cammiescorner.camsbackpacks.network.s2c.UpdateConfigurationPacket;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.network.NetworkEvent;
 import org.slf4j.Logger;
-
-import java.util.function.Supplier;
 
 public class NFUpdateConfigurationPacket {
 
@@ -33,15 +27,17 @@ public class NFUpdateConfigurationPacket {
         return new NFUpdateConfigurationPacket(allowInventoryGui);
     }
 
-    public void handle(Supplier<NetworkEvent.Context> ctx) {
+    public void handle(NetworkEvent.Context ctx) {
         logger.debug("Configuration received from server");
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientHandler.handleMessage(this, ctx));
+        if(FMLEnvironment.dist.isClient()) {
+            ClientHandler.handleMessage(this, ctx);
+        }
     }
 
     @OnlyIn(Dist.CLIENT)
     private static class ClientHandler {
 
-        public static void handleMessage(NFUpdateConfigurationPacket msg, Supplier<NetworkEvent.Context> ctx) {
+        public static void handleMessage(NFUpdateConfigurationPacket msg, NetworkEvent.Context ctx) {
             UpdateConfigurationPacket.handle(msg.allowInventoryGui);
         }
     }

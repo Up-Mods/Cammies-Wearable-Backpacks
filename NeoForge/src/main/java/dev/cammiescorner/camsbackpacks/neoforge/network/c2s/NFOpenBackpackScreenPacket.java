@@ -2,9 +2,7 @@ package dev.cammiescorner.camsbackpacks.neoforge.network.c2s;
 
 import dev.cammiescorner.camsbackpacks.network.c2s.OpenBackpackScreenPacket;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
+import net.neoforged.neoforge.network.NetworkEvent;
 
 public class NFOpenBackpackScreenPacket {
 
@@ -16,7 +14,7 @@ public class NFOpenBackpackScreenPacket {
         return new NFOpenBackpackScreenPacket();
     }
 
-    public void handle(Supplier<NetworkEvent.Context> ctx) {
-        OpenBackpackScreenPacket.handle(ctx.get().getSender());
+    public void handle(NetworkEvent.Context ctx) {
+        OpenBackpackScreenPacket.handle(ctx.getSender());
     }
 }
