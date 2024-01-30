@@ -13,6 +13,12 @@ logoFile = "assets/${mod_id}/icon.png" #optional
 authors = "Cammie, Up" #optional
 description = '''${mod_description}''' #mandatory (Supports multiline text)
 
+[[mixins]]
+config = "${mod_id}.mixins.json"
+
+[[mixins]]
+config = "${mod_id}.neoforge.mixins.json"
+
 # https://docs.neoforged.net/docs/gettingstarted/modfiles#dependency-configurations
 [dependencies]
     "${mod_id}" = [

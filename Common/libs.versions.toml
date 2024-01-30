@@ -1,8 +1,8 @@
 [versions]
-minecraft = "1.20.1"
+minecraft = "1.20.2"
 
 # The latest versions are available at https://parchmentmc.org/docs/getting-started
-parchment = "2023.09.03"
+parchment = "2023.12.10"
 
 mixin = "0.8.5"
 mixin_extras = "0.3.2"
@@ -10,11 +10,11 @@ asm = "9.6"
 jetbrains_annotations = "24.1.0"
 vanilla_gradle = "0.2.1-SNAPSHOT"
 
-resourcefulconfig = "2.1.1"
+resourcefulconfig = "2.2.2"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
-parchment_mappings = { module = "org.parchmentmc.data:parchment-1.20.1", version.ref = "parchment" }
+parchment_mappings = { module = "org.parchmentmc.data:parchment-1.20.2", version.ref = "parchment" }
 mixin = { module = "org.spongepowered:mixin", version.ref = "mixin" }
 mixin_extras = { module = "io.github.llamalad7:mixinextras-common", version.ref = "mixin_extras" }
 asm = { module = "org.ow2.asm:asm", version.ref = "asm" }
@@ -24,9 +24,9 @@ asm_tree = { module = "org.ow2.asm:asm-tree", version.ref = "asm" }
 asm_util = { module = "org.ow2.asm:asm-util", version.ref = "asm" }
 jetbrains_annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrains_annotations" }
 
-resourcefulconfig = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-common-1.20.1", version.ref = "resourcefulconfig" }
-resourcefulconfig_fabric = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-fabric-1.20.1", version.ref = "resourcefulconfig" }
-resourcefulconfig_forge = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-forge-1.20.1", version.ref = "resourcefulconfig" }
+resourcefulconfig = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-common-1.20.2", version.ref = "resourcefulconfig" }
+resourcefulconfig_fabric = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-fabric-1.20.2", version.ref = "resourcefulconfig" }
+resourcefulconfig_neoforge = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-neoforge-1.20.2", version.ref = "resourcefulconfig" }
 
 [bundles]
 mixin = ["mixin", "mixin_extras", "asm", "asm_analysis", "asm_commons", "asm_tree", "asm_util"]

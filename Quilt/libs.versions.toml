@@ -2,20 +2,20 @@
 # The latest versions are available at https://lambdaurora.dev/tools/import_quilt.html
 quilt_loom = "1.4.+"
 
-quilt_loader = "0.23.0"
-quilted_fabric_api = "7.4.0+0.90.0-1.20.1"
+quilt_loader = "0.23.1"
+quilted_fabric_api = "8.0.0-alpha.3+0.91.2-1.20.2"
 
-modmenu = "7.2.2"
+modmenu = "8.0.1"
 lazydfu = "0.1.3"
 
 hephaestus = "1.20.1-3.6.3.241"
 inventorio = "4619078"
 
-universalgraves = "3.0.0+1.20.1"
-sgui = "1.2.2+1.20"
-placeholder-api = "2.1.3+1.20.1"
-polymer = "0.5.15+1.20.1"
-predicate-api = "0.2.1+1.20.1"
+universalgraves = "3.1.1+1.20.2"
+sgui = "1.3.0+1.20.2"
+placeholder-api = "2.2.0+1.20.2"
+polymer = "0.6.0+1.20.2"
+predicate-api = "0.3.0+1.20.2"
 common-protection-api = "1.0.0"
 server-translations-api = "2.0.0+1.20"
 fabric-permissions-api = "0.2-SNAPSHOT"
