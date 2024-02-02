@@ -59,6 +59,8 @@ public class BackpackScreen extends EffectRenderingInventoryScreen<BackpackMenu>
             gui.renderItem(playerInvIcon, x + 8, y + 6);
             gui.renderItem(backpackInvIcon, x + 38, y + 6);
         }
+
+        InventoryScreen.renderEntityInInventoryFollowsMouse(gui, leftPos + 26, topPos + 51, leftPos + 75, topPos + 139, 30, 0.0625F, mouseX, mouseY, player);
     }
 
     @Override
@@ -83,8 +85,6 @@ public class BackpackScreen extends EffectRenderingInventoryScreen<BackpackMenu>
         renderBackground(gui, mouseX, mouseY, delta);
         super.render(gui, mouseX, mouseY, delta);
         renderTooltip(gui, mouseX, mouseY);
-
-        InventoryScreen.renderEntityInInventoryFollowsMouse(gui, leftPos + 50, topPos + 125, leftPos + 80, topPos + 200, 30, 0.0625F, mouseX, mouseY, player);
 
         if (equipButton.isHovered() && !equipButton.active) {
             if (!menu.isBlockEntity)
