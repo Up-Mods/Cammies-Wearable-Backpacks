@@ -1,5 +1,6 @@
 package dev.cammiescorner.camsbackpacks.block;
 
+import com.mojang.serialization.MapCodec;
 import dev.cammiescorner.camsbackpacks.block.entity.BackpackBlockEntity;
 import dev.cammiescorner.camsbackpacks.config.ClientConfig;
 import net.minecraft.ChatFormatting;
@@ -126,6 +127,11 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
     @Override
     public FluidState getFluidState(BlockState state) {
         return state.getValue(BlockStateProperties.WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+    }
+
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return MapCodec.unit(this);
     }
 
     @Override

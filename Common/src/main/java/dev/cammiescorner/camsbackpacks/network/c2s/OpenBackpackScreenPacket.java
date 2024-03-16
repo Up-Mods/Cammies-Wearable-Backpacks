@@ -1,29 +1,33 @@
 package dev.cammiescorner.camsbackpacks.network.c2s;
 
+import dev.cammiescorner.camsbackpacks.CamsBackpacks;
 import dev.cammiescorner.camsbackpacks.config.BackpacksConfig;
-import dev.cammiescorner.camsbackpacks.menu.BackpackMenu;
 import dev.cammiescorner.camsbackpacks.util.platform.Services;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
 
-public class OpenBackpackScreenPacket {
+public record OpenBackpackScreenPacket() implements CustomPacketPayload {
+
+    public static final ResourceLocation ID = CamsBackpacks.id("open_backpack");
 
     public static void send() {
-        throw new UnsupportedOperationException();
+        //noinspection DataFlowIssue
+        Minecraft.getInstance().getConnection().send(new ServerboundCustomPayloadPacket(new OpenBackpackScreenPacket()));
     }
 
-    public static void handle(ServerPlayer player) {
+    public void handle(ServerPlayer player) {
         if (!BackpacksConfig.allowInventoryGui) {
             player.sendSystemMessage(Component.translatable("error.camsbackpacks.chest_slot_ui_disabled"), true);
             return;
@@ -81,5 +85,19 @@ public class OpenBackpackScreenPacket {
         };
 
         Services.MENU.openMenu(player, stack, inventory);
+    }
+
+    public static OpenBackpackScreenPacket decode(FriendlyByteBuf buf) {
+        return new OpenBackpackScreenPacket();
+    }
+
+    @Override
+    public void write(FriendlyByteBuf buf) {
+        // NO-OP
+    }
+
+    @Override
+    public ResourceLocation id() {
+        return ID;
     }
 }

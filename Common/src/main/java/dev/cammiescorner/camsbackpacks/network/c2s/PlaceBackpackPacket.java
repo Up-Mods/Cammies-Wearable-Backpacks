@@ -1,11 +1,17 @@
 package dev.cammiescorner.camsbackpacks.network.c2s;
 
+import dev.cammiescorner.camsbackpacks.CamsBackpacks;
 import dev.cammiescorner.camsbackpacks.block.BackpackBlock;
 import dev.cammiescorner.camsbackpacks.block.entity.BackpackBlockEntity;
 import dev.cammiescorner.camsbackpacks.item.BackpackItem;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -16,14 +22,22 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 
-public class PlaceBackpackPacket {
+public record PlaceBackpackPacket(BlockHitResult hitResult) implements CustomPacketPayload {
+
+    public static final ResourceLocation ID = CamsBackpacks.id("place_backpack");
 
     public static void send(BlockHitResult hitResult) {
-        throw new UnsupportedOperationException();
+        //noinspection DataFlowIssue
+        Minecraft.getInstance().getConnection().send(new ServerboundCustomPayloadPacket(new PlaceBackpackPacket(hitResult)));
     }
 
-    public static void handle(ServerPlayer player, BlockHitResult hitResult) {
+    public void handle(ServerPlayer player) {
         Level world = player.level();
+        var hitResult = hitResult();
+
+        // safeguard against wrong data from clients
+        if(hitResult.getType() == BlockHitResult.Type.MISS) return;
+
         BlockPos pos = BackpackBlock.isStateReplaceable(world, hitResult.getBlockPos()) ? hitResult.getBlockPos() : hitResult.getBlockPos().relative(hitResult.getDirection());
 
         if (!world.mayInteract(player, pos)) {
@@ -45,5 +59,19 @@ public class PlaceBackpackPacket {
 
             player.getItemBySlot(EquipmentSlot.CHEST).shrink(1);
         }
+    }
+
+    public static PlaceBackpackPacket decode(FriendlyByteBuf buf) {
+        return new PlaceBackpackPacket(buf.readBlockHitResult());
+    }
+
+    @Override
+    public void write(FriendlyByteBuf buf) {
+        buf.writeBlockHitResult(hitResult());
+    }
+
+    @Override
+    public ResourceLocation id() {
+        return ID;
     }
 }

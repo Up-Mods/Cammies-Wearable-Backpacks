@@ -1,14 +1,20 @@
 package dev.cammiescorner.camsbackpacks.network.c2s;
 
+import dev.cammiescorner.camsbackpacks.CamsBackpacks;
 import dev.cammiescorner.camsbackpacks.block.BackpackBlock;
 import dev.cammiescorner.camsbackpacks.block.entity.BackpackBlockEntity;
 import dev.cammiescorner.camsbackpacks.config.BackpacksConfig;
 import dev.cammiescorner.camsbackpacks.item.BackpackItem;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -18,14 +24,19 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
-public class EquipBackpackPacket {
+public record EquipBackpackPacket(boolean isBlockEntity, BlockPos pos) implements CustomPacketPayload {
+
+    public static final ResourceLocation ID = CamsBackpacks.id("equip_backpack");
 
     public static void send(boolean isBlockEntity, BlockPos pos) {
-        throw new UnsupportedOperationException();
+        //noinspection DataFlowIssue
+        Minecraft.getInstance().getConnection().send(new ServerboundCustomPayloadPacket(new EquipBackpackPacket(isBlockEntity, pos)));
     }
 
-    public static void handle(ServerPlayer player, BlockPos pos, boolean isBlockEntity) {
+    public void handle(ServerPlayer player) {
         Level world = player.level();
+        BlockPos pos = pos();
+        boolean isBlockEntity = isBlockEntity();
 
         if (!world.mayInteract(player, pos)) {
             player.closeContainer();
@@ -74,4 +85,20 @@ public class EquipBackpackPacket {
         }
     }
 
+    @Override
+    public void write(FriendlyByteBuf buf) {
+        buf.writeBoolean(isBlockEntity());
+        buf.writeBlockPos(pos());
+    }
+
+    public static EquipBackpackPacket decode(FriendlyByteBuf buf) {
+        var isBlockEntity = buf.readBoolean();
+        var pos = buf.readBlockPos();
+        return new EquipBackpackPacket(isBlockEntity, pos);
+    }
+
+    @Override
+    public ResourceLocation id() {
+        return ID;
+    }
 }

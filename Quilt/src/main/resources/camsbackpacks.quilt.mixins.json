@@ -7,11 +7,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "compat.HephaestusArmorSlotMixin",
-    "compat.InventorioArmorSlotMixin",
-    "ConfigPacketMixin",
-    "EquipPacketMixin",
-    "OpenPacketMixin",
-    "PlacePacketMixin"
+    "compat.InventorioArmorSlotMixin"
   ],
   "injectors": {
     "defaultRequire": 1

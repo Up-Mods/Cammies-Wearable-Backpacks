@@ -5,7 +5,7 @@ import dev.cammiescorner.camsbackpacks.client.CamsBackpacksClient;
 import dev.cammiescorner.camsbackpacks.client.models.BackpackModel;
 import dev.cammiescorner.camsbackpacks.init.ModBlocks;
 import dev.cammiescorner.camsbackpacks.item.BackpackItem;
-import dev.cammiescorner.camsbackpacks.quilt.network.s2c.QUpdateConfigurationPacket;
+import dev.cammiescorner.camsbackpacks.network.s2c.UpdateConfigurationPacket;
 import dev.cammiescorner.camsbackpacks.util.ColorHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
@@ -18,6 +18,7 @@ import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.loader.api.minecraft.ClientOnly;
 import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
 import org.quiltmc.qsl.block.extensions.api.client.BlockRenderLayerMap;
+import org.quiltmc.qsl.networking.api.CustomPayloads;
 import org.quiltmc.qsl.networking.api.client.ClientPlayNetworking;
 
 @ClientOnly
@@ -33,6 +34,8 @@ public class Client implements ClientModInitializer {
         ColorProviderRegistry.ITEM.register((stack, tintIndex) -> ColorHelper.dyeToDecimal(((BackpackItem) stack.getItem()).getColour()), BuiltInRegistries.ITEM.stream().filter(item -> item instanceof BackpackItem backpack && (backpack.getColour() != DyeColor.WHITE || backpack == ModBlocks.WHITE_BACKPACK.get().asItem())).toArray(Item[]::new));
 
         BlockRenderLayerMap.put(RenderType.cutout(), BuiltInRegistries.BLOCK.stream().filter(BackpackBlock.class::isInstance).toArray(Block[]::new));
-        ClientPlayNetworking.registerGlobalReceiver(QUpdateConfigurationPacket.ID, QUpdateConfigurationPacket::handle);
+
+        CustomPayloads.registerS2CPayload(UpdateConfigurationPacket.ID, UpdateConfigurationPacket::decode);
+        ClientPlayNetworking.registerGlobalReceiver(UpdateConfigurationPacket.ID, (ClientPlayNetworking.CustomChannelReceiver<UpdateConfigurationPacket>) (client, handler, payload, responseSender) -> client.execute(payload::handle));
     }
 }

@@ -42,46 +42,51 @@ runs {
         systemProperty 'forge.logging.markers', 'REGISTRIES'
         systemProperty 'forge.logging.console.level', 'debug'
 
-        workingDirectory project.file('run')
-
-        modSource project.sourceSets.main
+        dependencies {
+        }
     }
+
     client {
+        modSource project.sourceSets.main
+        workingDirectory project.file('run')
         systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
 
-        if (rootProject.hasProperty('mc_uuid')) {
-            programArguments.addAll "--uuid", rootProject.mc_uuid
+        if (project.hasProperty('mc_uuid')) {
+            programArguments.add("--uuid=${project.findProperty('mc_uuid')}")
         }
 
-        if (rootProject.hasProperty('mc_username')) {
-            programArguments.addAll "--username", rootProject.mc_username
+        if (project.hasProperty('mc_username')) {
+            programArguments.add("--username=${project.findProperty('mc_username')}")
         }
 
-        if (rootProject.hasProperty('mc_java_agent_path')) {
-            jvmArgument("-javaagent:${rootProject.mc_java_agent_path}")
+        if (project.hasProperty('mc_java_agent_path')) {
+            jvmArgument("-javaagent:${project.findProperty('mc_java_agent_path')}")
         }
     }
 
     server {
-        programArguments.addAll '--nogui'
+        modSource project.sourceSets.main
+        workingDirectory project.file('run/server')
+
+        programArguments.add('nogui')
         systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
     }
 
     data {
-        programArguments.addAll '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+        modSource project.sourceSets.main
+        workingDirectory project.file('run')
+        // this must be strings ONLY, or neogradle will not generate run configs at all!
+        programArguments.addAll('--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').absolutePath, '--existing', file('src/main/resources/').absolutePath)
     }
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
-// NeoGradle compiles the game, but we don't want to add our common code to the game's code
-Spec<Task> notNeoTask = { Task it -> !it.name.startsWith("neo") } as Spec<Task>
-
-tasks.withType(JavaCompile).matching(notNeoTask).configureEach {
+tasks.named("compileJava", JavaCompile) {
     source(project(":Common").sourceSets.main.allSource)
 }
 
-tasks.withType(Javadoc).matching(notNeoTask).configureEach {
+tasks.named("javadoc", Javadoc) {
     source(project(":Common").sourceSets.main.allJava)
 }
 
@@ -89,7 +94,7 @@ tasks.named("sourcesJar", Jar) {
     from(project(":Common").sourceSets.main.allSource)
 }
 
-tasks.withType(ProcessResources).matching(notNeoTask).configureEach {
+processResources {
     from project(":Common").sourceSets.main.resources
 }
 

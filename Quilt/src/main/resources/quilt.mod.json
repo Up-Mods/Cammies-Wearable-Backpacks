@@ -25,8 +25,7 @@
     },
     "entrypoints": {
       "init": "dev.cammiescorner.camsbackpacks.quilt.entrypoints.Main",
-      "client_init": "dev.cammiescorner.camsbackpacks.quilt.entrypoints.Client",
-      "modmenu": "dev.cammiescorner.camsbackpacks.quilt.compat.modmenu.ModMenuEntrypoint"
+      "client_init": "dev.cammiescorner.camsbackpacks.quilt.entrypoints.Client"
     },
     "depends": [
       {

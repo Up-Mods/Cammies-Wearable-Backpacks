@@ -1,54 +1,40 @@
 package dev.cammiescorner.camsbackpacks.neoforge.network;
 
-import com.mojang.logging.LogUtils;
 import dev.cammiescorner.camsbackpacks.CamsBackpacks;
-import dev.cammiescorner.camsbackpacks.neoforge.network.c2s.NFEquipBackpackPacket;
-import dev.cammiescorner.camsbackpacks.neoforge.network.c2s.NFOpenBackpackScreenPacket;
-import dev.cammiescorner.camsbackpacks.neoforge.network.c2s.NFPlaceBackpackPacket;
-import dev.cammiescorner.camsbackpacks.neoforge.network.s2c.NFUpdateConfigurationPacket;
-import net.neoforged.neoforge.network.NetworkRegistry;
-import net.neoforged.neoforge.network.simple.SimpleChannel;
-import org.slf4j.Logger;
+import dev.cammiescorner.camsbackpacks.network.c2s.EquipBackpackPacket;
+import dev.cammiescorner.camsbackpacks.network.c2s.OpenBackpackScreenPacket;
+import dev.cammiescorner.camsbackpacks.network.c2s.PlaceBackpackPacket;
+import dev.cammiescorner.camsbackpacks.network.s2c.UpdateConfigurationPacket;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
+import net.neoforged.neoforge.network.handling.IPlayPayloadHandler;
+import net.neoforged.neoforge.network.registration.IDirectionAwarePayloadHandlerBuilder;
 
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+
+@Mod.EventBusSubscriber(modid = CamsBackpacks.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class NetworkHandler {
 
-    private static final Logger logger = LogUtils.getLogger();
-    private static final String PROTOCOL_VERSION = "1";
-    public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(
-            CamsBackpacks.id("main"),
-            () -> PROTOCOL_VERSION,
-            PROTOCOL_VERSION::equals,
-            PROTOCOL_VERSION::equals
-    );
+    @SubscribeEvent
+    public static void registerMessages(RegisterPayloadHandlerEvent event) {
+        var registrar = event.registrar(CamsBackpacks.MOD_ID);
 
-    public static void registerMessages() {
+        registrar.play(EquipBackpackPacket.ID, EquipBackpackPacket::decode, server(EquipBackpackPacket::handle));
+        registrar.play(OpenBackpackScreenPacket.ID, OpenBackpackScreenPacket::decode, server(OpenBackpackScreenPacket::handle));
+        registrar.play(PlaceBackpackPacket.ID, PlaceBackpackPacket::decode, server(PlaceBackpackPacket::handle));
 
-        int id = 0;
+        registrar.play(UpdateConfigurationPacket.ID, UpdateConfigurationPacket::decode, handler -> handler.client((payload, context) -> context.workHandler().execute(payload::handle)));
+    }
 
-        INSTANCE.messageBuilder(NFEquipBackpackPacket.class, id++)
-                .encoder(NFEquipBackpackPacket::encode)
-                .decoder(NFEquipBackpackPacket::decode)
-                .consumerMainThread(NFEquipBackpackPacket::handle)
-                .add();
-
-        INSTANCE.messageBuilder(NFOpenBackpackScreenPacket.class, id++)
-                .encoder(NFOpenBackpackScreenPacket::encode)
-                .decoder(NFOpenBackpackScreenPacket::decode)
-                .consumerMainThread(NFOpenBackpackScreenPacket::handle)
-                .add();
-
-        INSTANCE.messageBuilder(NFPlaceBackpackPacket.class, id++)
-                .encoder(NFPlaceBackpackPacket::encode)
-                .decoder(NFPlaceBackpackPacket::decode)
-                .consumerMainThread(NFPlaceBackpackPacket::handle)
-                .add();
-
-        INSTANCE.messageBuilder(NFUpdateConfigurationPacket.class, id++)
-                .encoder(NFUpdateConfigurationPacket::encode)
-                .decoder(NFUpdateConfigurationPacket::decode)
-                .consumerMainThread(NFUpdateConfigurationPacket::handle)
-                .add();
-
-        logger.debug("Registered {} messages", id);
+    private static <T extends CustomPacketPayload> Consumer<IDirectionAwarePayloadHandlerBuilder<T, IPlayPayloadHandler<T>>> server(BiConsumer<T, ServerPlayer> packetHandler) {
+        return handler -> handler.server((payload, context) -> {
+            if (context.player().orElse(null) instanceof ServerPlayer player) {
+                context.workHandler().execute(() -> packetHandler.accept(payload, player));
+            }
+        });
     }
 }
